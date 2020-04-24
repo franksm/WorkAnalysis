@@ -28,6 +28,6 @@ Route::middleware(['auth'])->prefix('backend')->name('backend.')->group(function
         });
         Route::resource('vacancy','vacancyController');
         Route::resource('tool','backend\vacancy\ToolController');
-        Route::resource('Category','ToolController');
+        Route::resource('category','backend\vacancy\CategoryController');
     });
 });

@@ -16,7 +16,7 @@ class CategoryController extends Controller
     public function index()
     {
         $VacancyCategorys = VacancyCategory::orderBy('id','desc')->paginate(10);
-        return view('VacancyCategory.indexVacancyCategory')->with('VacancyCategorys',$VacancyCategorys);
+        return view('backend.vacancy.category.list')->with('VacancyCategorys',$VacancyCategorys);
     }
 
     /**
@@ -26,7 +26,7 @@ class CategoryController extends Controller
      */
     public function create()
     {
-        return view('VacancyCategory.createVacancyCategory');
+        return view('backend.vacancy.category.create');
     }
 
     /**
@@ -43,7 +43,7 @@ class CategoryController extends Controller
         $VacancyCategorys = new VacancyCategory;
         $VacancyCategorys->vacancy_category=$request->vacancy_category;
         $VacancyCategorys->save();
-        return redirect('/VacancyCategory')->with('success','VacancyCategory Create');
+        return redirect('/backend/work/category')->with('success','VacancyCategory Create');
     }
 
     /**
@@ -67,7 +67,7 @@ class CategoryController extends Controller
     public function edit($id)
     {
         $VacancyCategorys = VacancyCategory::find($id);
-        return view('VacancyCategory.editVacancyCategory')->with('VacancyCategorys',$VacancyCategorys);
+        return view('backend.vacancy.category.edit')->with('VacancyCategorys',$VacancyCategorys);
     }
 
     /**
@@ -85,7 +85,7 @@ class CategoryController extends Controller
         $VacancyCategorys = VacancyCategory::find($id);
         $VacancyCategorys->vacancy_category=$request->vacancy_category;
         $VacancyCategorys->save();
-        return redirect('/VacancyCategory')->with('success','VacancyCategory Update');
+        return redirect('/backend/work/category')->with('success','VacancyCategory Update');
     }
 
     /**

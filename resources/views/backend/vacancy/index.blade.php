@@ -8,6 +8,7 @@
                 <div class="card-header">Dashboard</div>
 
                 <div class="card-body">
+                    <input type="button" value="新增種類列表" onclick="location.href='category/'">
                     <input type="button" value="新增工具列表" onclick="location.href='tool/'">
                 </div>
             </div>
