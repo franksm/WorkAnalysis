@@ -97,7 +97,7 @@ class ToolController extends Controller
     public function destroy($id)
     {
         $VacancyTools=VacancyTool::find($id);
-        $tag->vacancy()->detach();
+        $VacancyTools->vacancy()->detach();
         $VacancyTools->destroy($id);
         $VacancyTools->save();
         return redirect('/VacancyTool')->with('success','VacancyTool Removed'); 

@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\backend\vacancy;
 
+use App\VacancyCategory;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 
@@ -14,7 +15,8 @@ class CategoryController extends Controller
      */
     public function index()
     {
-        //
+        $VacancyCategorys = VacancyCategory::orderBy('id','desc')->paginate(10);
+        return view('VacancyCategory.indexVacancyCategory')->with('VacancyCategorys',$VacancyCategorys);
     }
 
     /**
@@ -24,7 +26,7 @@ class CategoryController extends Controller
      */
     public function create()
     {
-        //
+        return view('VacancyCategory.createVacancyCategory');
     }
 
     /**
@@ -35,7 +37,13 @@ class CategoryController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $this->validate($request,[
+            'vacancy_category'=>'required|max:255',
+        ]);
+        $VacancyCategorys = new VacancyCategory;
+        $VacancyCategorys->vacancy_category=$request->vacancy_category;
+        $VacancyCategorys->save();
+        return redirect('/VacancyCategory')->with('success','VacancyCategory Create');
     }
 
     /**
@@ -46,7 +54,8 @@ class CategoryController extends Controller
      */
     public function show($id)
     {
-        //
+        $VacancyCategorys = VacancyCategory::find($id);
+        return view('VacancyCategory.showVacancyCategory')->with('VacancyCategorys',$VacancyCategorys);
     }
 
     /**
@@ -57,7 +66,8 @@ class CategoryController extends Controller
      */
     public function edit($id)
     {
-        //
+        $VacancyCategorys = VacancyCategory::find($id);
+        return view('VacancyCategory.editVacancyCategory')->with('VacancyCategorys',$VacancyCategorys);
     }
 
     /**
@@ -69,7 +79,13 @@ class CategoryController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        $this->validate($request,[
+            'vacancy_category'=>'required|max:255',
+        ]);
+        $VacancyCategorys = VacancyCategory::find($id);
+        $VacancyCategorys->vacancy_category=$request->vacancy_category;
+        $VacancyCategorys->save();
+        return redirect('/VacancyCategory')->with('success','VacancyCategory Update');
     }
 
     /**
@@ -80,6 +96,10 @@ class CategoryController extends Controller
      */
     public function destroy($id)
     {
-        //
+        $VacancyCategorys=VacancyCategory::find($id);
+        $VacancyCategorys->vacancy()->detach();
+        $VacancyCategorys->destroy($id);
+        $VacancyCategorys->save();
+        return redirect('/VacancyCategory')->with('success','VacancyCategory Removed'); 
     }
 }
