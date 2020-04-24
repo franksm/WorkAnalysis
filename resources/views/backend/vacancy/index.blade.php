@@ -8,13 +8,7 @@
                 <div class="card-header">Dashboard</div>
 
                 <div class="card-body">
-                    @if (session('status'))
-                        <div class="alert alert-success" role="alert">
-                            {{ session('status') }}
-                        </div>
-                    @endif
-
-                    You are logged in!
+                    <input type="button" value="新增工具列表" onclick="location.href='tool/'">
                 </div>
             </div>
         </div>

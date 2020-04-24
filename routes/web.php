@@ -20,3 +20,14 @@ Route::get('/', function () {
 Auth::routes();
 
 Route::get('/home', 'HomeController@index')->name('home');
+
+Route::middleware(['auth'])->prefix('backend')->name('backend.')->group(function() {
+    Route::middleware(['auth'])->prefix('work')->name('work.')->group(function() {
+        Route::get('/', function () {
+            return view('backend/vacancy/index');
+        });
+        Route::resource('vacancy','vacancyController');
+        Route::resource('tool','backend\vacancy\ToolController');
+        Route::resource('Category','ToolController');
+    });
+});
