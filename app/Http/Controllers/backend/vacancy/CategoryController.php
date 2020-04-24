@@ -16,7 +16,7 @@ class CategoryController extends Controller
     public function index()
     {
         $VacancyCategories = VacancyCategory::orderBy('id','desc')->paginate(10);
-        return view('backend.vacancy.category.list')->with('VacancyCategorys',$VacancyCategories);
+        return view('backend.vacancy.category.list')->with('VacancyCategories',$VacancyCategories);
     }
 
     /**
@@ -55,7 +55,7 @@ class CategoryController extends Controller
     public function show($id)
     {
         $VacancyCategories = VacancyCategory::find($id);
-        return view('VacancyCategory.showVacancyCategory')->with('VacancyCategorys',$VacancyCategories);
+        return view('VacancyCategory.showVacancyCategory')->with('VacancyCategories',$VacancyCategories);
     }
 
     /**
@@ -67,7 +67,7 @@ class CategoryController extends Controller
     public function edit($id)
     {
         $VacancyCategories = VacancyCategory::find($id);
-        return view('backend.vacancy.category.edit')->with('VacancyCategorys',$VacancyCategories);
+        return view('backend.vacancy.category.edit')->with('VacancyCategories',$VacancyCategories);
     }
 
     /**

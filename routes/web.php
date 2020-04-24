@@ -26,7 +26,7 @@ Route::middleware(['auth'])->prefix('backend')->name('backend.')->group(function
         Route::get('/', function () {
             return view('backend/vacancy/index');
         });
-        Route::resource('vacancy','vacancyController');
+        Route::resource('vacancy','backend\vacancy\VacancyController');
         Route::resource('tool','backend\vacancy\ToolController');
         Route::resource('category','backend\vacancy\CategoryController');
     });
