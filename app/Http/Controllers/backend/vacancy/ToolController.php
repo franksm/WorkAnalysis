@@ -15,8 +15,8 @@ class ToolController extends Controller
      */
     public function index()
     {
-        $VacancyTools = VacancyTool::orderBy('vacancy_id','desc')->paginate(10);
-        return view('VacancyTool.indexVacancyTool')->with('VacancyTools',$VacancyTools);
+        $VacancyTools = VacancyTool::orderBy('id','desc')->paginate(10);
+        return view('backend.vacancy.tool.list')->with('VacancyTools',$VacancyTools);
     }
 
     /**
@@ -26,7 +26,7 @@ class ToolController extends Controller
      */
     public function create()
     {
-        return view('VacancyTool.createVacancyTool');
+        return view('backend.vacancy.tool.create');
     }
 
     /**
@@ -43,7 +43,7 @@ class ToolController extends Controller
         $VacancyTools = new VacancyTool;
         $VacancyTools->vacancy_tool=$request->vacancy_tool;
         $VacancyTools->save();
-        return redirect('/VacancyTool')->with('success','VacancyTool Create');
+        return redirect('/backend/work/tool')->with('success','VacancyTool Create');
     }
 
     /**
@@ -67,7 +67,7 @@ class ToolController extends Controller
     public function edit($id)
     {
         $VacancyTools = VacancyTool::find($id);
-        return view('VacancyTool.editVacancyTool')->with('VacancyTools',$VacancyTools);
+        return view('backend.vacancy.tool.edit')->with('VacancyTools',$VacancyTools);
     }
 
     /**
@@ -85,7 +85,7 @@ class ToolController extends Controller
         $VacancyTools = VacancyTool::find($id);
         $VacancyTools->vacancy_tool=$request->vacancy_tool;
         $VacancyTools->save();
-        return redirect('/VacancyTool')->with('success','VacancyTool Update');
+        return redirect('/backend/work/tool')->with('success','VacancyTool Update');
     }
 
     /**
