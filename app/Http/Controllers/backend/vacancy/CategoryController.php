@@ -100,6 +100,6 @@ class CategoryController extends Controller
         $VacancyCategories->vacancy()->detach();
         $VacancyCategories->destroy($id);
         $VacancyCategories->save();
-        return redirect('/VacancyCategory')->with('success','VacancyCategory Removed'); 
+        return redirect('/backend/work/category')->with('success','VacancyCategory Removed'); 
     }
 }

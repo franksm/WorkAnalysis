@@ -9,6 +9,6 @@ class VacancyCategory extends Model
     //
     public function vacancy()
     {
-        return $this->belongsToMany('App\Vacancy','vacancy_category_tags');
+        return $this->belongsToMany('App\Vacancy','vacancy_category_tags','vacancy_id','category_id');
     }
 }

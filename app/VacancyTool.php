@@ -9,6 +9,6 @@ class VacancyTool extends Model
     //
     public function vacancy()
     {
-        return $this->belongsToMany('App\Vacancy','vacancy_tool_tags');
+        return $this->belongsToMany('App\Vacancy','vacancy_tool_tags','vacancy_id','tool_id');
     }
 }

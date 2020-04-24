@@ -1,11 +1,10 @@
 @extends('layouts.app')
 @section('title', 'Vacancy List')
 @section('content')
+<div class="container">
+<div class="col-12">
   <a href="{{ route('backend.work.vacancy.create') }}" class="btn btn-success mb-2">Add</a> 
-  <br>
-   <div class="row">
-        <div class="col-12">
-          
+  <br>      
           <table class="table table-bordered" id="laravel_crud">
            <thead>
               <tr>
@@ -31,9 +30,9 @@
                  <td>{{ $Vacancy->region }}</td>
                  <td>{{ $Vacancy->area }}</td>
                  <td>{{ date('Y-m-d', strtotime($Vacancy->created_at)) }}</td>
-                 <td><a href="{{ route('backend.work.tool.edit',$Vacancy->id)}}" class="btn btn-primary">修改</a></td>
+                 <td><a href="{{ route('backend.work.vacancy.edit',$Vacancy->id)}}" class="btn btn-primary">修改</a></td>
                  <td>
-                 <form action="{{ route('backend.work.tool.destroy', $Vacancy->id)}}" method="post">
+                 <form action="{{ route('backend.work.vacancy.destroy', $Vacancy->id)}}" method="post">
                   {{ csrf_field() }}
                   @method('DELETE')
                   <button class="btn btn-danger" type="submit">刪除</button>

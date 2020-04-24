@@ -8,6 +8,7 @@ use App\VacancyCategory;
 use App\VacancyCategoryTag;
 use App\VacancyToolTag;
 use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Redirect;
 use Illuminate\Http\Request;
 
 class VacancyController extends Controller
@@ -30,9 +31,9 @@ class VacancyController extends Controller
      */
     public function create()
     {
-        $VacancyTools = VacancyTool::all();
-        $VacancyCategories = VacancyCategory::all();
-        return view('backend.vacancy.create',compact('VacancyTools','VacancyCategories'));
+        $VacancyToolAll = VacancyTool::all();
+        $VacancyCategoryAll = VacancyCategory::all();
+        return view('backend.vacancy.create',compact('VacancyToolAll','VacancyCategoryAll'));
     }
 
     /**
@@ -83,16 +84,15 @@ class VacancyController extends Controller
     public function edit($id)
     {
         $where = array('id' => $id);
-        $Vacancise = Vacancy::where($where)->first();
-        $VacancyTools = json_decode(Vacancy::find($id)->VacancyTool,true);
-        $VacancyTools = array_column($VacancyTool,'id');
-        $VacancyCategories = json_decode(Vacancy::find($id)->VacancyCategory,true);
-        $VacancyCategories = array_column($VacancyCategory,'id');
-
+        $Vacancies = Vacancy::where($where)->first();
+        $VacancyTools = json_decode(Vacancy::find($id)->tool,true);
+        $VacancyTools = array_column($VacancyTools,'id');
+        $VacancyCategories = json_decode(Vacancy::find($id)->category,true);
+        $VacancyCategories = array_column($VacancyCategories,'id');
         $VacancyToolAll = VacancyTool::all();
         $VacancyCategoryAll = VacancyCategory::all();
 
-        return view('backend.vacancy.edit', compact('Vacancise','VacancyTools','VacancyCategories','VacancyToolAll','VacancyCategoryAll'));
+        return view('backend.vacancy.edit', compact('Vacancies','VacancyTools','VacancyCategories','VacancyToolAll','VacancyCategoryAll'));
     }
 
     /**
@@ -124,7 +124,7 @@ class VacancyController extends Controller
         $Vacancise = Vacancy::where('id',$id)->first();
         $Vacancise->update($update);
         $Vacancise->tool()->sync($VacancyTools);
-        $Vacancise->category()->sync($VacancyCategorys);
+        $Vacancise->category()->sync($VacancyCategories);
         $Vacancise->save();
 
         return Redirect::to('/backend/work/vacancy')

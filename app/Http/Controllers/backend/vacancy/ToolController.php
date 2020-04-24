@@ -100,6 +100,6 @@ class ToolController extends Controller
         $VacancyTools->vacancy()->detach();
         $VacancyTools->destroy($id);
         $VacancyTools->save();
-        return redirect('/VacancyTool')->with('success','VacancyTool Removed'); 
+        return redirect('/backend/work/tool')->with('success','VacancyTool Removed'); 
     }
 }
