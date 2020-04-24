@@ -2,7 +2,6 @@
 
 namespace App\Http\Controllers\backend\vacancy;
 
-use App\Tool;
 use App\VacancyTool;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
@@ -16,7 +15,8 @@ class ToolController extends Controller
      */
     public function index()
     {
-        //
+        $VacancyTools = VacancyTool::orderBy('vacancy_id','desc')->paginate(10);
+        return view('VacancyTool.indexVacancyTool')->with('VacancyTools',$VacancyTools);
     }
 
     /**
@@ -26,7 +26,7 @@ class ToolController extends Controller
      */
     public function create()
     {
-        //
+        return view('VacancyTool.createVacancyTool');
     }
 
     /**
@@ -37,7 +37,13 @@ class ToolController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $this->validate($request,[
+            'vacancy_tool'=>'required|max:255',
+        ]);
+        $VacancyTools = new VacancyTool;
+        $VacancyTools->vacancy_tool=$request->vacancy_tool;
+        $VacancyTools->save();
+        return redirect('/VacancyTool')->with('success','VacancyTool Create');
     }
 
     /**
@@ -48,7 +54,8 @@ class ToolController extends Controller
      */
     public function show($id)
     {
-        //
+        $VacancyTools = VacancyTool::find($id);
+        return view('VacancyTool.showVacancyTool')->with('VacancyTools',$VacancyTools);
     }
 
     /**
@@ -59,7 +66,8 @@ class ToolController extends Controller
      */
     public function edit($id)
     {
-        //
+        $VacancyTools = VacancyTool::find($id);
+        return view('VacancyTool.editVacancyTool')->with('VacancyTools',$VacancyTools);
     }
 
     /**
@@ -71,7 +79,13 @@ class ToolController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        $this->validate($request,[
+            'vacancy_tool'=>'required|max:255',
+        ]);
+        $VacancyTools = VacancyTool::find($id);
+        $VacancyTools->vacancy_tool=$request->vacancy_tool;
+        $VacancyTools->save();
+        return redirect('/VacancyTool')->with('success','VacancyTool Update');
     }
 
     /**
@@ -82,6 +96,10 @@ class ToolController extends Controller
      */
     public function destroy($id)
     {
-        //
+        $VacancyTools=VacancyTool::find($id);
+        $tag->vacancy()->detach();
+        $VacancyTools->destroy($id);
+        $VacancyTools->save();
+        return redirect('/VacancyTool')->with('success','VacancyTool Removed'); 
     }
 }
