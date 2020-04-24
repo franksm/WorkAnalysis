@@ -19,6 +19,8 @@ class CreateVacanciesTable extends Migration
             $table->string('compant_name',20);
             $table->string('claim_education',4);
             $table->string('claim_experience',4);
+            $table->string('region',4);
+            $table->string('area',4);
             $table->timestamps();
         });
     }
