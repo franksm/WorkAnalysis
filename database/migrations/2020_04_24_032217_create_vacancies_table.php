@@ -16,9 +16,11 @@ class CreateVacanciesTable extends Migration
         Schema::create('vacancies', function (Blueprint $table) {
             $table->increments('id');
             $table->string('vacancy_name',20);
-            $table->string('compant_name',20);
+            $table->string('company_name',20);
             $table->string('claim_education',4);
             $table->string('claim_experience',4);
+            $table->string('region',4);
+            $table->string('area',10);
             $table->timestamps();
         });
     }

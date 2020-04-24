@@ -17,7 +17,7 @@
               </tr>
            </thead>
            <tbody>
-              @foreach($VacancyCategorys as $VacancyCategory)
+              @foreach($VacancyCategories as $VacancyCategory)
               <tr>
                  <td>{{ $VacancyCategory->id }}</td>
                  <td>{{ $VacancyCategory->vacancy_category }}</td>
@@ -34,7 +34,7 @@
               @endforeach
            </tbody>
           </table>
-          {!! $VacancyCategorys->links() !!}
+          {!! $VacancyCategories->links() !!}
        </div> 
    </div>
  @endsection  
