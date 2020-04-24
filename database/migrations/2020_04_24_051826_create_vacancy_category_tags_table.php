@@ -16,9 +16,9 @@ class CreateVacancyCategoryTagsTable extends Migration
         Schema::create('vacancy_category_tags', function (Blueprint $table) {
             $table->increments('id');
             $table->integer('vacancy_id')->unsigned();
-            $table->foreign('vacancy_id')->references('id')->on('vacancies');
+            $table->foreign('vacancy_id')->references('id')->on('vacancies')->onDelete('cascade');
             $table->integer('category_id')->unsigned();
-            $table->foreign('category_id')->references('id')->on('vacancy_categories');
+            $table->foreign('category_id')->references('id')->on('vacancy_categories')->onDelete('cascade');
             $table->timestamps();
         });
     }

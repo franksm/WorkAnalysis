@@ -16,9 +16,9 @@ class CreateVacancyToolTagsTable extends Migration
         Schema::create('vacancy_tool_tags', function (Blueprint $table) {
             $table->increments('id');
             $table->integer('vacancy_id')->unsigned();
-            $table->foreign('vacancy_id')->references('id')->on('vacancies');
+            $table->foreign('vacancy_id')->references('id')->on('vacancies')->onDelete('cascade');
             $table->integer('tool_id')->unsigned();
-            $table->foreign('tool_id')->references('id')->on('vacancy_tools');
+            $table->foreign('tool_id')->references('id')->on('vacancy_tools')->onDelete('cascade');
             $table->timestamps();
         });
     }
