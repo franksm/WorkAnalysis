@@ -1,10 +1,11 @@
 @extends('layouts.app')
 @section('header_title', 'Tool List')
 @section('content')
+<div class="container">
+<div class="col-12">
   <a href="{{ route('backend.work.tool.create') }}" class="btn btn-success mb-2">Add</a> 
   <br>
-   <div class="row">
-        <div class="col-12">
+        
           
           <table class="table table-bordered" id="laravel_crud">
            <thead>

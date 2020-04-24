@@ -2,6 +2,11 @@
 
 namespace App\Http\Controllers\backend\vacancy;
 
+use App\Vacancy;
+use App\VacancyTool;
+use App\VacancyCategory;
+use App\VacancyCategoryTag;
+use App\VacancyToolTag;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 
@@ -14,7 +19,8 @@ class VacancyController extends Controller
      */
     public function index()
     {
-        //
+        $Vacancies = Vacancy::orderBy('id')->paginate(10);
+        return view('backend.vacancy.list')->with('Vacancies',$Vacancies);
     }
 
     /**
@@ -24,7 +30,9 @@ class VacancyController extends Controller
      */
     public function create()
     {
-        //
+        $VacancyTools = VacancyTool::all();
+        $VacancyCategories = VacancyCategory::all();
+        return view('backend.vacancy.create',compact('VacancyTools','VacancyCategories'));
     }
 
     /**
@@ -35,7 +43,24 @@ class VacancyController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $this->validate($request,[
+            'vacancy_name'=>'required|max:255',
+            'company_name'=>'required|max:255',
+            'claim_education'=>'required|max:255',
+            'claim_experience'=>'required|max:255',
+            'region'=>'required|max:255',
+            'area'=>'required|max:255',
+        ]);
+
+        $VacancyTools = $request->VacancyTools;
+        $VacancyCategories = $request->VacancyCategories;
+
+        $Vacancise = Vacancy::create($request->all()); 
+        $Vacancise->tool()->attach($VacancyTools);
+        $Vacancise->category()->attach($VacancyCategories);
+        $Vacancise->save();
+
+        return redirect('/backend/work/vacancy')->with('success','VacancyTool Create');
     }
 
     /**
@@ -57,7 +82,17 @@ class VacancyController extends Controller
      */
     public function edit($id)
     {
-        //
+        $where = array('id' => $id);
+        $Vacancise = Vacancy::where($where)->first();
+        $VacancyTools = json_decode(Vacancy::find($id)->VacancyTool,true);
+        $VacancyTools = array_column($VacancyTool,'id');
+        $VacancyCategories = json_decode(Vacancy::find($id)->VacancyCategory,true);
+        $VacancyCategories = array_column($VacancyCategory,'id');
+
+        $VacancyToolAll = VacancyTool::all();
+        $VacancyCategoryAll = VacancyCategory::all();
+
+        return view('backend.vacancy.edit', compact('Vacancise','VacancyTools','VacancyCategories','VacancyToolAll','VacancyCategoryAll'));
     }
 
     /**
@@ -69,7 +104,32 @@ class VacancyController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        $this->validate($request,[
+            'vacancy_name'=>'required|max:255',
+            'company_name'=>'required|max:255',
+            'claim_education'=>'required|max:255',
+            'claim_experience'=>'required|max:255',
+            'region'=>'required|max:255',
+            'area'=>'required|max:255',
+        ]);
+
+        $VacancyTools = $request->VacancyTools;
+        $VacancyCategories = $request->VacancyCategories;
+        
+        $update = ['vacancy_name' => $request->vacancy_name, 'company_name' => $request->company_name,
+                    'claim_education' => $request->claim_education,'claim_experience' => $request->claim_experience,
+                    'region' => $request->region,'area' => $request->area
+                ];
+        
+        $Vacancise = Vacancy::where('id',$id)->first();
+        $Vacancise->update($update);
+        $Vacancise->tool()->sync($VacancyTools);
+        $Vacancise->category()->sync($VacancyCategorys);
+        $Vacancise->save();
+
+        return Redirect::to('/backend/work/vacancy')
+       ->with('success','Great! Product updated successfully');
+
     }
 
     /**
@@ -80,6 +140,11 @@ class VacancyController extends Controller
      */
     public function destroy($id)
     {
-        //
+        $Vacancise = Vacancy::where('id',$id)->first();
+        $Vacancise->tool()->detach();
+        $Vacancise->category()->detach();
+        $Vacancise->destroy($id);
+        $Vacancise->save();
+        return Redirect::to('/backend/work/vacancy')->with('success','Product deleted successfully');
     }
 }

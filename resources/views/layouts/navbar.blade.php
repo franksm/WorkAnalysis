@@ -13,7 +13,7 @@
                         @guest
                         @else
                             <li class="nav-item">
-                                <a class="nav-link" href="backend/work/">職缺</a>
+                                <a class="nav-link" href="/backend/work/">職缺</a>
                             </li>
                         @endguest
                     </ul>
