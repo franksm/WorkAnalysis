@@ -1,5 +1,5 @@
 @extends('layouts.app')
-@section('header_title', 'Add Tool')
+@section('title', 'Add Tool')
 @section('content')
 
 <br>
