@@ -16,7 +16,7 @@ class CreateVacanciesTable extends Migration
         Schema::create('vacancies', function (Blueprint $table) {
             $table->increments('id');
             $table->string('vacancy_name',20);//職缺名稱
-            $table->string('job_category',10);//職缺類別
+            $table->string('vacancy_category',10);//職缺類別
             $table->string('salary_category',10);//薪資類型
             $table->string('salary',20);//薪資
             $table->string('work_nature',4);//工作性質

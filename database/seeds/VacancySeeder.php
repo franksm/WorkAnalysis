@@ -13,8 +13,8 @@ class VacancySeeder extends Seeder
     {
         $DB=DB::table('vacancies');
         $DB->insert([
-            'vacancy_name'=>'Java軟體工程師',
-            'job_category'=>'軟體工程師',
+            'vacancy_name'=>'Java軟體設計工程師',
+            'vacancy_category'=>'軟體設計工程師',
             'salary_category'=>'月薪',
             'salary'=>'33000~45000',
             'work_nature'=>'全職',
@@ -28,7 +28,7 @@ class VacancySeeder extends Seeder
         ]);
         $DB->insert([
             'vacancy_name'=>'遠雄房地產-數據探勘工程師',
-            'job_category'=>'軟體工程師',
+            'vacancy_category'=>'軟體設計工程師',
             'salary_category'=>'月薪',
             'salary'=>'待遇面議',
             'work_nature'=>'全職',
@@ -41,8 +41,8 @@ class VacancySeeder extends Seeder
             'link'=>'https://www.104.com.tw/job/6vi1a?jobsource=hotjob_chr',
         ]);
         $DB->insert([
-            'vacancy_name'=>'前端軟體工程師',
-            'job_category'=>'軟體工程師',
+            'vacancy_name'=>'前端軟體設計工程師',
+            'vacancy_category'=>'軟體設計工程師',
             'salary_category'=>'月薪',
             'salary'=>'50000~75000',
             'work_nature'=>'全職',
@@ -56,7 +56,7 @@ class VacancySeeder extends Seeder
         ]);
         $DB->insert([
             'vacancy_name'=>'DevOps/SRE工程師',
-            'job_category'=>'軟體工程師',
+            'vacancy_category'=>'軟體設計工程師',
             'salary_category'=>'月薪',
             'salary'=>'80000',
             'work_nature'=>'全職',
@@ -70,7 +70,7 @@ class VacancySeeder extends Seeder
         ]);
         $DB->insert([
             'vacancy_name'=>'資深WordPress工程師',
-            'job_category'=>'軟體工程師',
+            'vacancy_category'=>'軟體設計工程師',
             'salary_category'=>'月薪',
             'salary'=>'待遇面議',
             'work_nature'=>'全職',
@@ -84,7 +84,7 @@ class VacancySeeder extends Seeder
         ]);
         $DB->insert([
             'vacancy_name'=>'行政人員',
-            'job_category'=>'行政人員',
+            'vacancy_category'=>'行政人員',
             'salary_category'=>'月薪',
             'salary'=>'24000',
             'work_nature'=>'全職',
@@ -98,7 +98,7 @@ class VacancySeeder extends Seeder
         ]);
         $DB->insert([
             'vacancy_name'=>'職業安全衛生主任',
-            'job_category'=>'行政人員',
+            'vacancy_category'=>'行政人員',
             'salary_category'=>'月薪',
             'salary'=>'待遇面議',
             'work_nature'=>'全職',
@@ -112,7 +112,7 @@ class VacancySeeder extends Seeder
         ]);
         $DB->insert([
             'vacancy_name'=>'櫃檯行政人員(高儒營業所)',
-            'job_category'=>'行政人員',
+            'vacancy_category'=>'行政人員',
             'salary_category'=>'月薪',
             'salary'=>'25000',
             'work_nature'=>'全職',
@@ -126,7 +126,7 @@ class VacancySeeder extends Seeder
         ]);
         $DB->insert([
             'vacancy_name'=>'櫻女僕咖啡-行政人員',
-            'job_category'=>'行政人員',
+            'vacancy_category'=>'行政人員',
             'salary_category'=>'月薪',
             'salary'=>'23800~25000',
             'work_nature'=>'全職',
@@ -140,7 +140,7 @@ class VacancySeeder extends Seeder
         ]);
         $DB->insert([
             'vacancy_name'=>'業務行政人員',
-            'job_category'=>'行政人員',
+            'vacancy_category'=>'行政人員',
             'salary_category'=>'月薪',
             'salary'=>'27000~30000',
             'work_nature'=>'全職',

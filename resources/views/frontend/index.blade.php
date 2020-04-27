@@ -58,13 +58,12 @@
     <div class="left">
         <ul class="navbar-nav mr-auto">
             <li class="nav-item px-lg-4 my-lg-2">
-                <a title="所有工作" href="/web">所有工作</a>
-            </li>
-            <li class="nav-item px-lg-4 my-lg-2">
-                <a title="工程師" href="/a">工程師</a>
-            </li>
-            <li class="nav-item px-lg-4 my-lg-2">
-                <a title="業務" href="/b">業務</a>
+                <a title="所有工作" href="/backend/work/web/">所有工作</a>
+                @foreach ($VacancyCategoties as $VacancyCategoty)
+                    <li class="nav-item px-lg-4 my-lg-2">
+                        <a title="{{$VacancyCategoty->vacancy_category}}" href="/backend/work/web?vacancy_category={{$VacancyCategoty->vacancy_category}}">{{$VacancyCategoty->vacancy_category}}</a>
+                    </li>        
+                @endforeach
             </li>
         </ul>
     </div>
@@ -77,16 +76,13 @@
                 <th>職務名稱</th>
                 <th>公司名稱</th>
             </tr>
-            <tr>
-                <td><input type="checkbox" name="vacancy" value="前端工程師(人力銀行)/104人力銀行_一零四資訊科技股份有限公司"></td>
-                <td><a href="https://www.104.com.tw/job/69yqx?jobsource=pda_b">前端工程師(人力銀行)</a></td>
-                <td><a href="https://www.104.com.tw/company/12v3o7uw?jobsource=pda_b">104人力銀行_一零四資訊科技股份有限公司</a></td>
-            </tr>
-            <tr>
-                <td><input type="checkbox" name="vacancy" value="React Native 工程師/新加坡商海宇顧問服務有限公司台灣分公司"></td>
-                <td><a href="https://www.104.com.tw/job/6wuo1?jobsource=pda_b">React Native 工程師</a></td>
-                <td><a href="https://www.104.com.tw/company/1a2x6bkq1g?jobsource=pda_b">新加坡商海宇顧問服務有限公司台灣分公司</a></td>
-            </tr>
+            @foreach ($Vacancies as $Vacancy)
+                <tr>
+                    <td><input type="checkbox" name="works[]" value="{{$Vacancy->vacancy_name}}!{{$Companies[$Vacancy->id]['company_name']}}"></td>
+                    <td><a href="{{$Vacancy->link}}">{{$Vacancy->vacancy_name}}</a></td>
+                    <td><a href="{{$Companies[$Vacancy->id]['link']}}">{{$Companies[$Vacancy->id]['company_name']}}</a></td>
+                </tr>
+            @endforeach
         </table>
     </div>
 </div>

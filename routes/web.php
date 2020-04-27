@@ -17,10 +17,6 @@ Route::get('/', function () {
     return view('welcome');
 });
 
-Route::get('/web', function () {
-    return view('frontend/index');
-});
-
 Auth::routes();
 
 Route::get('/home', 'HomeController@index')->name('home');
@@ -30,6 +26,7 @@ Route::middleware(['auth'])->prefix('backend')->name('backend.')->group(function
         Route::get('/', function () {
             return view('backend/vacancy/index');
         });
+        Route::resource('web','backend\vacancy\FrontendController');
         Route::resource('vacancy','backend\vacancy\VacancyController');
         Route::resource('tool','backend\vacancy\ToolController');
         Route::resource('category','backend\vacancy\CategoryController');

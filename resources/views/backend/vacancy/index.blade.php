@@ -11,6 +11,7 @@
                     <input type="button" value="新增職缺列表" onclick="location.href='vacancy/'">
                     <input type="button" value="新增種類列表" onclick="location.href='category/'">
                     <input type="button" value="新增工具列表" onclick="location.href='tool/'">
+                    <input type="button" value="儲存工作" onclick="location.href='web/'">
                 </div>
             </div>
         </div>
