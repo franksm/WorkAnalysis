@@ -12,8 +12,6 @@ class Vacancy extends Model
         'company_name',
         'claim_education',
         'claim_experience',
-        'region',
-        'area',
     ];
     public function category()
     {
