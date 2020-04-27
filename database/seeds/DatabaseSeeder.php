@@ -15,5 +15,7 @@ class DatabaseSeeder extends Seeder
         $this->call(ToolSeeder::class);
         $this->call(VacancySeeder::class);
         $this->call(CompanySeeder::class);
+        $this->call(VacancyCategoryTagSeeder::class);
+        $this->call(VacancyToolTagSeeder::class);
     }
 }

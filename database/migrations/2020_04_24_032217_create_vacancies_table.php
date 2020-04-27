@@ -17,6 +17,7 @@ class CreateVacanciesTable extends Migration
             $table->increments('id');
             $table->string('vacancy_name',20);//職缺名稱
             $table->string('job_category',10);//職缺類別
+            $table->string('salary_category',10);//薪資類型
             $table->string('salary',20);//薪資
             $table->string('work_nature',4);//工作性質
             $table->string('company_id',20);//公司名稱

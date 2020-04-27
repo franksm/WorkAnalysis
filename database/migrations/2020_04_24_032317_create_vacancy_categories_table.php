@@ -15,7 +15,7 @@ class CreateVacancyCategoriesTable extends Migration
     {
         Schema::create('vacancy_categories', function (Blueprint $table) {
             $table->increments('id');
-            $table->string('vacancy_category',10);
+            $table->string('vacancy_category',20);
             $table->timestamps();
         });
     }
