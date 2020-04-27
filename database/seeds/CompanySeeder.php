@@ -1,0 +1,106 @@
+<?php
+
+use Illuminate\Database\Seeder;
+
+class CompanySeeder extends Seeder
+{
+    /**
+     * Run the database seeds.
+     *
+     * @return void
+     */
+    public function run()
+    {
+        $DB=DB::table('companies');
+        $DB->insert([
+            'company_name'=>'曜麟資訊有限公司',
+            'industry_category'=>'電腦軟體服務業',
+            'capital'=>'暫不提供',
+            'workers'=>'暫不提供',
+            'region'=>'台北市',
+            'area'=>'信義區',
+            'link'=>'https://www.104.com.tw/company/1a2x6bkubl?jobsource=hotjob_chr',
+        ]);
+        $DB->insert([
+            'company_name'=>'遠雄房地產發展股份有限公司',
+            'industry_category'=>'不動產經營業',
+            'capital'=>'2000萬',
+            'workers'=>'400',
+            'region'=>'台北市',
+            'area'=>'信義區',
+            'link'=>'https://www.104.com.tw/company/1a2x6bkcg9?jobsource=hotjob_chr',
+        ]);
+        $DB->insert([
+            'company_name'=>'威煦軟體開發有限公司',
+            'industry_category'=>'電腦軟體服務業',
+            'capital'=>'3000萬',
+            'workers'=>'暫不提供',
+            'region'=>'台北市',
+            'area'=>'信義區',
+            'link'=>'https://www.104.com.tw/company/1a2x6biwzn?jobsource=jolist_b_relevance',
+        ]);
+        $DB->insert([
+            'company_name'=>'創順科技有限公司',
+            'industry_category'=>'其它軟體及網路相關業',
+            'capital'=>'80萬',
+            'workers'=>'30',
+            'region'=>'台北市',
+            'area'=>'內湖區',
+            'link'=>'https://www.104.com.tw/company/1a2x6bk72b?jobsource=hotjob_chr',
+        ]);
+        $DB->insert([
+            'company_name'=>'竑盛科技股份有限公司',
+            'industry_category'=>'數位內容產業',
+            'capital'=>'暫不提供',
+            'workers'=>'6',
+            'region'=>'台北市',
+            'area'=>'大安區',
+            'link'=>'https://www.104.com.tw/company/olbusds?jobsource=hotjob_chr',
+        ]);
+        $DB->insert([
+            'company_name'=>'社團法人台灣畜犬協會',
+            'industry_category'=>'寵物相關服務業',
+            'capital'=>'20萬',
+            'workers'=>'6',
+            'region'=>'高雄市',
+            'area'=>'三民區',
+            'link'=>'https://www.104.com.tw/company/19tjjizk?jobsource=hotjob_chr',
+        ]);
+        $DB->insert([
+            'company_name'=>'台灣維達衛生用品股份有限公司',
+            'industry_category'=>'紙相關製造',
+            'capital'=>'14億',
+            'workers'=>'300',
+            'region'=>'台北市',
+            'area'=>'大安區',
+            'link'=>'https://www.104.com.tw/company/a7127bc?jobsource=jolist_b_relevance',
+        ]);
+        $DB->insert([
+            'company_name'=>'志光教育科技股份有限公司',
+            'industry_category'=>'其他教育服務',
+            'capital'=>'2億',
+            'workers'=>'暫不提供',
+            'region'=>'台中市',
+            'area'=>'中區',
+            'link'=>'https://www.104.com.tw/company/1a2x6biw6r?jobsource=jolist_b_relevance',
+        ]);
+        $DB->insert([
+            'company_name'=>'櫻女僕咖啡_勻翔專業攝影有限公司',
+            'industry_category'=>'寵物相關服務業',
+            'capital'=>'100萬',
+            'workers'=>'3',
+            'region'=>'高雄市',
+            'area'=>'三民區',
+            'link'=>'https://www.104.com.tw/company/1a2x6bkcne?jobsource=jolist_b_relevance',
+        ]);
+        $DB->insert([
+            'company_name'=>'千機創意科技有限公司',
+            'industry_category'=>'建築及工程技術服務業',
+            'capital'=>'暫不提供',
+            'workers'=>'暫不提供',
+            'region'=>'高雄市',
+            'area'=>'鼓山區',
+            'link'=>'https://www.104.com.tw/company/1a2x6biltt?jobsource=hotjob_chr',
+        ]);
+    }
+}

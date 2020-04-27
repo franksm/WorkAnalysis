@@ -15,9 +15,10 @@ class CreateCompaniesTable extends Migration
     {
         Schema::create('companies', function (Blueprint $table) {
             $table->increments('id');
-            $table->string('vacancy_category',10);
+            $table->string('company_name',20);
+            $table->string('industry_category',10);
             $table->string('capital',10);
-            $table->integer('workers');
+            $table->string('workers');
             $table->string('region',4);
             $table->string('area',10);
             $table->string('link');
