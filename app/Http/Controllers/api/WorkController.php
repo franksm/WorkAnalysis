@@ -30,7 +30,7 @@ class WorkController extends Controller
     public function get_vacancies(Request $request)
     {
         $works=$request->works;
-        $Vacancies=Vacancy::all()->find($works)->toarray();
+        $Vacancies=Vacancy::all()->find($works);
         return $Vacancies;
     }
     /**
@@ -101,5 +101,30 @@ class WorkController extends Controller
             $Companies[$Vacancy->id]=$Vacancy->company->toarray();
         }
         return $Companies;
+    }
+
+    
+    /**
+     * @OA\GET(
+     *     path="/api/get_categories",
+     *     tags={"給我職缺資訊"},
+     *     summary="取得職缺資訊",
+     *     description="請給我對應的id",
+     *     @OA\Parameter(name="works[]", in="query",@OA\Schema(type="array",@OA\Items(type="object"),@OA\Property(property="vacancy_category", type="string"),), required=true, description="請輸入查詢id"),
+     *     @OA\Response(
+     *      response="200",
+     *      description="請求成功"
+     *     )
+     * )
+     */
+    public function get_category_count(Request $request)
+    {
+        $works=$request->works;
+        $Vacancies=Vacancy::all()->find($works);
+        $Categories=[];
+        foreach($Vacancies as $Vacancy){
+            $Categories[$Vacancy->id]=$Vacancy->category->toarray();
+        }
+        return $Categories;
     }
 }

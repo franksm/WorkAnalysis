@@ -1,30 +1,43 @@
+<link href="{{ asset('css/app.css') }}" rel="stylesheet">
+<script language="javascript">
+    　　function openwin() {
+    　　    window.open ("/page", "newwindow", "height=100, width=400,toolbar=no,menubar=no, scrollbars=no, resizable=no, location=no, status=no")
+    　　}
+    </script>
 <div class="tag">
-        @if(count($post->tag)>0)
         <div class="row">
             <div class="col-md-12">
                 <table class="table">
                     <thead>
                         <tr>
                             <th>id</th>
-                            <th>標籤</th>
-                            <th></th>
+                            <th>需求技能</th>
+                            <th>職缺種類</th>
                             <th></th>
                         </tr>
                     </thead>
                     <tbody>
-                        @foreach ($post->tag as $tag)
+                        @foreach ($Vacancies as $Vacancy)
                         <tr>
-                            <th>{{$tag->id}}</th>
-                            <th>{{$tag->name}}</th>
-                            <th><td><a href="{{route('tag.show',$tag->id)}}" class="label label-default">觀看標籤關聯</a></td></th>
+                            <td>{{$Vacancy->id}}</td>
+                            <td>
+                                @foreach ($Tools[$Vacancy->id] as $Tool)
+                                    {{$Tool['vacancy_tool']}},
+                                @endforeach
+                            </td>
+                            <td>
+                                @foreach ($Categories[$Vacancy->id] as $Category)
+                                    {{$Category['vacancy_category']}},
+                                @endforeach
+                            </td>
+                            <td>
+                                
+                                
+                            </td>
                         </tr>
                         @endforeach
                     </tbody>
                 </table>
             </div>
         </div>       
-        @else
-            <p>未添加任何標籤</p>
-        @endcan
     </div>
-@endforeach
