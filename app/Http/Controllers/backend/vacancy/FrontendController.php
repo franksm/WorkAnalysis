@@ -48,18 +48,22 @@ class FrontendController extends Controller
      */
     public function store(Request $request)
     {
-        
-        $request=$request->all();
-        $Vacancies=Vacancy::all()->find($request['works']);
-        $Tools=[];
-        $Categories=[];
-        $Companies=[];
-        foreach($Vacancies as $Vacancy){
-            $Companies[$Vacancy->id]=$Vacancy->company->toarray();
-            $Categories[$Vacancy->id]=$Vacancy->category->toarray();
-            $Tools[$Vacancy->id]=$Vacancy->tool->toarray();
+        $works=$request->works;
+        $search = "";
+        foreach($works as $work){
+            #dd(gettype($work));
+            $search .= "works[]=".$work."&";
         }
-        dd($Vacancies->pluck('salary'));
+        $urlApi = "http://laravel.test/api/get_vacancies?".$search;
+        $Vacancies = json_decode(file_get_contents($urlApi),true);
+        $urlApi = "http://laravel.test/api/get_categories?".$search;
+        $Categories = json_decode(file_get_contents($urlApi),true);
+        $urlApi = "http://laravel.test/api/get_tools?".$search;
+        $Tools = json_decode(file_get_contents($urlApi),true);
+        $urlApi = "http://laravel.test/api/get_companies?".$search;
+        $Compamies = json_decode(file_get_contents($urlApi),true);
+        
+ 
         return view('frontend.show',compact('Vacancies','Categories','Tools','Compamies'));
     }
 
