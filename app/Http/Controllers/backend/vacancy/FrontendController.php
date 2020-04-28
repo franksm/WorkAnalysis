@@ -59,8 +59,8 @@ class FrontendController extends Controller
             $Categories[$Vacancy->id]=$Vacancy->category->toarray();
             $Tools[$Vacancy->id]=$Vacancy->tool->toarray();
         }
-        dd($Vacancies->pluck('salary'));
-        return view('frontend.show',compact('Vacancies','Categories','Tools','Compamies'));
+        // dd($Vacancies->pluck('salary'));
+        return view('frontend.show',compact('Vacancies','Categories','Tools','Companies'));
     }
 
     /**

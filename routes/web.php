@@ -20,9 +20,7 @@ Route::get('/', function () {
 Route::get('/test', function () {
     return view('frontend/analysis');
 });
-Route::get('/page', function () {
-    return view('frontend/page');
-});
+Route::get('/page','PageController@index');
 
 Auth::routes();
 

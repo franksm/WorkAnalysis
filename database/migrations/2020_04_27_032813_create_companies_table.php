@@ -21,6 +21,7 @@ class CreateCompaniesTable extends Migration
             $table->string('workers');
             $table->string('region',4);
             $table->string('area',10);
+            $table->longText('welfare');
             $table->string('link');
             $table->timestamps();
         });
