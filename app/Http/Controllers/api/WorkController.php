@@ -30,7 +30,7 @@ class WorkController extends Controller
     public function get_vacancies(Request $request)
     {
         $works=$request->works;
-        $Vacancies=Vacancy::all()->find($works)->toarray();
+        $Vacancies=Vacancy::all()->find($works);
         return $Vacancies;
     }
     /**

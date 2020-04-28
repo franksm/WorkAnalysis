@@ -55,16 +55,16 @@ class FrontendController extends Controller
             $search .= "works[]=".$work."&";
         }
         $urlApi = "http://laravel.test/api/get_vacancies?".$search;
-        $Vacancies = json_decode(file_get_contents($urlApi),true);
+        $Vacancies = json_decode(file_get_contents($urlApi));
         $urlApi = "http://laravel.test/api/get_categories?".$search;
         $Categories = json_decode(file_get_contents($urlApi),true);
         $urlApi = "http://laravel.test/api/get_tools?".$search;
         $Tools = json_decode(file_get_contents($urlApi),true);
         $urlApi = "http://laravel.test/api/get_companies?".$search;
-        $Compamies = json_decode(file_get_contents($urlApi),true);
-        
- 
-        return view('frontend.show',compact('Vacancies','Categories','Tools','Compamies'));
+        $Companies = json_decode(file_get_contents($urlApi),true);
+
+        return view('frontend.show',compact('Vacancies','Categories','Tools','Companies'));
+
     }
 
     /**
