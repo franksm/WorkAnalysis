@@ -31,12 +31,8 @@
                                 @endforeach
                             </th>
                             <th>
-                                {{-- <form action="/page" method="POST">
-                                    
-                                    <input type="submit" value="送出表單">
-                                </form> --}}
-                                <p>{{$Companies[$Vacancy->id]['welfare']}}</p>
-                                {{-- <button onclick="openwin()" value="{{$Companies[$Vacancy->id]['welfare']}}">Click me</button> --}}
+                                {{-- <p>{{$Companies[$Vacancy->id]['welfare']}}</p> --}}
+                                <button onclick="openwin()" value="{{$Companies[$Vacancy->id]['welfare']}}">Click me</button>
                             </th>
                         </tr>
                         @endforeach
