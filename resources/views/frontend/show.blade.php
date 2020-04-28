@@ -16,26 +16,44 @@
                     <table class="table">
                         <thead>
                             <tr>
-                                <th>id</th>
-                                <th>需求技能</th>
-                                <th>職缺種類</th>
-                                <th></th>
+                                <th>職缺名稱</th>
+                                <th>職缺類別</th>
+                                <th>需求工具</th>
+                                <th>薪資類型</th>
+                                <th>薪資</th>
+                                <th>工作性質</th>
+                                <th>需求學歷</th>
+                                <th>工作經歷</th>
+                                <th>需求人數</th>
+                                <th>是否附管理責任</th>
+                                <th>是否出差外派</th>
+                                <th>本職缺連結</th>
+                                <th>公司福利</th>
                             </tr>
                         </thead>
                         <tbody>
                             @foreach ($Vacancies as $Vacancy)
                             <tr>
-                                <th>{{$Vacancy->id}}</th>
-                                <th>
-                                    @foreach ($Tools[$Vacancy->id] as $Tool)
-                                        {{$Tool['vacancy_tool']}},
-                                    @endforeach
-                                </th>
+                                <th>{{$Vacancy->vacancy_name}}</th>
                                 <th>
                                     @foreach ($Categories[$Vacancy->id] as $Category)
                                         {{$Category['vacancy_category']}},
                                     @endforeach
                                 </th>
+                                <th>
+                                    @foreach ($Tools[$Vacancy->id] as $Tool)
+                                        {{$Tool['vacancy_tool']}},
+                                    @endforeach
+                                </th>
+                                <th>{{$Vacancy->salary_category}}</th>
+                                <th>{{$Vacancy->salary}}</th>
+                                <th>{{$Vacancy->work_nature}}</th>
+                                <th>{{$Vacancy->claim_education}}</th>
+                                <th>{{$Vacancy->claim_experience}}</th>
+                                <th>{{$Vacancy->claim_people}}</th>
+                                <th>{{$Vacancy->management_responsibility}}</th>
+                                <th>{{$Vacancy->expatriate}}</th>
+                                <th><a href="{{$Vacancy->link}}">導引至頁面</a></th>
                                 <th>
                                     <div class="modal fade" id="a{{$Vacancy->id}}" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
                                         <div class="modal-dialog" role="document">
