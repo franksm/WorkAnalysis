@@ -41,7 +41,7 @@
         $("[name=vacancy]:checkbox:checked").each(function(){
           selected.push($(this).val());
           });
-        alert("選擇工作 : " + selected.join());
+        alert("選擇工作 :" + selected.join());
         });
       });
     </script>
@@ -68,8 +68,10 @@
         </ul>
     </div>
     <div class="right">
-        <input id='analysis'class="btn-primary my-lg-1" type="button" value="分析"></input>
-        
+        {{-- <input id='analysis' class="btn-primary my-lg-1" type="button" value="分析"></input> --}}
+        <form action="{{ route('backend.work.web.store') }}" method="post">
+            {{ csrf_field() }}
+            <input type="submit" value="送出表單" class="btn-primary my-lg-1">
         <table class="table">
             <tr>
                 <th></th>
@@ -78,12 +80,13 @@
             </tr>
             @foreach ($Vacancies as $Vacancy)
                 <tr>
-                    <td><input type="checkbox" name="works[]" value="{{$Vacancy->vacancy_name}}!{{$Companies[$Vacancy->id]['company_name']}}"></td>
+                    <td><input type="checkbox" name="works[]" value="{{$Vacancy->id}}"></td>
                     <td><a href="{{$Vacancy->link}}">{{$Vacancy->vacancy_name}}</a></td>
                     <td><a href="{{$Companies[$Vacancy->id]['link']}}">{{$Companies[$Vacancy->id]['company_name']}}</a></td>
                 </tr>
             @endforeach
         </table>
+        </form>
     </div>
 </div>
 </body>

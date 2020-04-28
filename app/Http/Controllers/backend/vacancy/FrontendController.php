@@ -48,7 +48,19 @@ class FrontendController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        
+        $request=$request->all();
+        $Vacancies=Vacancy::all()->find($request['works']);
+        $Tools=[];
+        $Categories=[];
+        $Companies=[];
+        foreach($Vacancies as $Vacancy){
+            $Companies[$Vacancy->id]=$Vacancy->company->toarray();
+            $Categories[$Vacancy->id]=$Vacancy->category->toarray();
+            $Tools[$Vacancy->id]=$Vacancy->tool->toarray();
+        }
+        dd($Vacancies->pluck('salary'));
+        return view('frontend.show',compact('Vacancies','Categories','Tools','Compamies'));
     }
 
     /**

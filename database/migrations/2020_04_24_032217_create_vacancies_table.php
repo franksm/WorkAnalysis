@@ -20,7 +20,7 @@ class CreateVacanciesTable extends Migration
             $table->string('salary_category',10);//薪資類型
             $table->string('salary',20);//薪資
             $table->string('work_nature',4);//工作性質
-            $table->string('company_id',20);//公司名稱
+            $table->string('company_id',20);//公司id
             $table->string('claim_education',10);//需求學歷
             $table->string('claim_experience',4);//工作經歷
             $table->string('claim_people',4);//需求人數
