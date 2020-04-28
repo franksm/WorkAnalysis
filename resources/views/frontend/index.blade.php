@@ -34,18 +34,21 @@
 
     <title>存儲工作</title>
 
-    <script language="Javascript">
-    $(document).ready(function(){
-      $("#analysis").click(function(){
-        var selected=[];
-        $("[name=vacancy]:checkbox:checked").each(function(){
-          selected.push($(this).val());
-          });
-        alert("選擇工作 :" + selected.join());
-        });
-      });
+    <script language="JavaScript">
+        function validate(form1)
+        {   
+            var chk_arr =  document.getElementsByName("works[]");
+            var chklength = chk_arr.length;
+            for(k=0;k< chklength;k++)
+            {
+                if(chk_arr[k]['checked']==true){
+                    return true;
+                }
+            } 
+            alert("請勾選職缺");
+            return false;
+        }
     </script>
-
 </head>
 
 <body>
@@ -68,8 +71,7 @@
         </ul>
     </div>
     <div class="right">
-        {{-- <input id='analysis' class="btn-primary my-lg-1" type="button" value="分析"></input> --}}
-        <form action="{{ route('backend.work.web.store') }}" method="post">
+        <form action="{{ route('backend.work.web.store') }}" method="post" onSubmit="return validate(this)">
             {{ csrf_field() }}
             <input type="submit" value="送出表單" class="btn-primary my-lg-1">
         <table class="table">

@@ -22,6 +22,13 @@ Route::get('/test', function () {
 });
 Route::get('/page','PageController@index');
 
+Route::prefix('api')->name('api.')->group(function() {
+    Route::get('get_vacancies','api\WorkController@get_vacancies');
+    Route::get('get_categories','api\WorkController@get_categories');
+    Route::get('get_tools','api\WorkController@get_tools');
+    Route::get('get_companies','api\WorkController@get_companies');
+});
+
 Auth::routes();
 
 Route::get('/home', 'HomeController@index')->name('home');
