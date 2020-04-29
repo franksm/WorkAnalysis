@@ -17,7 +17,7 @@
                         @guest
                         @else
                             <li class="nav-item">
-                                <a class="nav-link" href="/backend/work/">職缺</a>
+                                <a class="nav-link" href="/user/web/">存儲工作</a>
                             </li>
                         @endguest
                     </ul>
