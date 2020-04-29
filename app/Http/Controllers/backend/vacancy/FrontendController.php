@@ -61,6 +61,7 @@ class FrontendController extends Controller
         $claimExperiences = json_decode(file_get_contents($claimExperienceUrl),true);
         $claimEducationUrl = "http://laravel.test/api/claimEducation?".$search;
         $claimEducations = json_decode(file_get_contents($claimEducationUrl),true);
+        
         return view('frontend.detail',compact('claimExperiences','claimEducations'));
     }
 }

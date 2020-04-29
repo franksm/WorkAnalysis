@@ -1,20 +1,10 @@
-<!doctype html>
-<html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
-<head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-
-    <!-- CSRF Token -->
-    <meta name="csrf-token" content="{{ csrf_token() }}">
-    
-    <!-- JS -->
-    <script src="https://code.jquery.com/jquery-3.5.0.slim.min.js" integrity="sha256-MlusDLJIP1GRgLrOflUQtshyP0TwT/RHXsI1wWGnQhs=" crossorigin="anonymous"></script>
-
-    <!-- Styles -->
-    <link href="{{ asset('css/app.css') }}" rel="stylesheet">
+@extends('layouts.app')
+@section('title', '存儲工作')
+@section('content')
 
     <style type="text/css">
         .parent{
+            top: 60px;
             position:absolute;
         }
         .left{
@@ -31,8 +21,6 @@
         }
     </style>
 
-    <title>存儲工作</title>
-
     <script language="JavaScript">
         function validate(form1)
         {   
@@ -48,30 +36,24 @@
             return false;
         }
     </script>
-</head>
 
-<body>
-
-<h1 class="text-block px-lg-4 my-lg-2">
-    存儲工作
-</h1>
 <div class="parent">
     
     <div class="left">
         <ul class="navbar-nav mr-auto">
             <li class="nav-item px-lg-4 my-lg-2">
-                <a title="所有工作" href="/backend/work/web/">所有工作</a>
-                @foreach ($VacancyCategoties as $VacancyCategoty)
-                    <li class="nav-item px-lg-4 my-lg-2">
-                        <a title="{{$VacancyCategoty->vacancy_category}}" href="/backend/work/web?vacancy_category={{$VacancyCategoty->vacancy_category}}">{{$VacancyCategoty->vacancy_category}}</a>
-                    </li>        
-                @endforeach
+                <a title="所有工作" href="/user/web/">所有工作</a>
+            </li>
+            <li class="nav-item px-lg-4 my-lg-2">
+                <a title="軟體設計工程師" href="/user/web?vacancy_category=軟體設計工程師">軟體設計工程師</a>
+            </li>
+            <li class="nav-item px-lg-4 my-lg-2">
+                <a title="所有工作" href="/user/web?vacancy_category=行政人員">行政人員</a>
             </li>
         </ul>
     </div>
     <div class="right">
-
-        <form action="{{ route('backend.work.list') }}" method="post" onSubmit="return validate(this)">
+        <form action="{{ route('analysis.list') }}" method="post" onSubmit="return validate(this)">
             {{ csrf_field() }}
             <input type="submit" value="送出表單" class="btn-primary my-lg-1">
         <table class="table">
@@ -91,5 +73,4 @@
         </form>
     </div>
 </div>
-</body>
 

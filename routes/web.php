@@ -39,17 +39,14 @@ Auth::routes();
 
 Route::get('/home', 'HomeController@index')->name('home');
 
-Route::middleware(['auth'])->prefix('backend')->name('backend.')->group(function() {
-    Route::middleware(['auth'])->prefix('work')->name('work.')->group(function() {
-        Route::get('/', function () {
-            return view('backend/vacancy/index');
-        });
+
+Route::middleware(['auth'])->prefix('user')->name('user.')->group(function() {
         Route::get('web','backend\vacancy\FrontendController@index')->name('web');
-        Route::get('list','backend\vacancy\FrontendController@form')->name('list');
-        Route::post('list','backend\vacancy\FrontendController@form')->name('list');
-        Route::get('detail','backend\vacancy\FrontendController@detail')->name('detail');
-        Route::resource('vacancy','backend\vacancy\VacancyController');
-        Route::resource('tool','backend\vacancy\ToolController');
-        Route::resource('category','backend\vacancy\CategoryController');
-    });
 });
+
+Route::middleware(['auth'])->prefix('analysis')->name('analysis.')->group(function() {
+    Route::get('list','backend\vacancy\FrontendController@form')->name('list');
+    Route::post('list','backend\vacancy\FrontendController@form')->name('list');
+    Route::get('detail','backend\vacancy\FrontendController@detail')->name('detail');
+});
+
