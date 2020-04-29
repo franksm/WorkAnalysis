@@ -108,7 +108,7 @@ class WorkController extends Controller
      * @OA\GET(
      *     path="/api/get_category_count",
      *     tags={"給我職缺資訊"},
-     *     summary="取得種類分析資訊",
+     *     summary="取得種類統計分析資訊",
      *     description="請給我對應的id",
      *     @OA\Parameter(name="works[]", in="query",@OA\Schema(type="array",@OA\Items(type="integer")), required=true, description="請輸入查詢id"),
      *     @OA\Response(
@@ -133,5 +133,35 @@ class WorkController extends Controller
         }
         $CategoryCount=array_count_values($CategoryCount);
         return $CategoryCount;
+    }
+    /**
+     * @OA\GET(
+     *     path="/api/get_tool_count",
+     *     tags={"給我職缺資訊"},
+     *     summary="取得工具統計分析資訊",
+     *     description="請給我對應的id",
+     *     @OA\Parameter(name="works[]", in="query",@OA\Schema(type="array",@OA\Items(type="integer")), required=true, description="請輸入查詢id"),
+     *     @OA\Response(
+     *      response="200",
+     *      description="請求成功"
+     *     )
+     * )
+     */
+    public function get_tool_count(Request $request)
+    {
+        $works=$request->works;
+        $Vacancies=Vacancy::all()->find($works);
+        $Tools=[];
+        foreach($Vacancies as $Vacancy){
+            $Tools[$Vacancy->id]=$Vacancy->tool->toarray();
+        }
+        $ToolCount=[];
+        foreach($Tools as $Tool){
+            foreach($Tool as $Tool){
+                $ToolCount[]=$Tool['vacancy_tool'];
+            }
+        }
+        $ToolCount=array_count_values($ToolCount);
+        return $ToolCount;
     }
 }
