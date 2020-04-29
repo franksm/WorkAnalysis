@@ -26,12 +26,13 @@ Route::prefix('api')->name('api.')->group(function() {
     Route::get('get_vacancies','api\WorkController@get_vacancies');
     Route::get('get_categories','api\WorkController@get_categories');
     Route::get('get_tools','api\WorkController@get_tools');
-    Route::get('get_companies','api\WorkController@get_companies');
     //------------------------------------------------------------------------
-    Route::get('claimEducation','api\WorkController@getVacancyClaimEducationCount');
-    Route::get('claimExperience','api\WorkController@getVacancyClaimExperienceCount');
-    Route::get('get_category_count','api\WorkController@get_category_count');
-    Route::get('get_tool_count','api\WorkController@get_tool_count');
+    Route::get('get_companies','api\CompanyController@get_companies');
+    //------------------------------------------------------------------------
+    Route::get('claimEducationCount','api\WorkController@getVacancyClaimEducationCount');
+    Route::get('claimExperienceCount','api\WorkController@getVacancyClaimExperienceCount');
+    Route::get('categoryCount','api\WorkController@getCategoryCount');
+    Route::get('toolCount','api\WorkController@getToolCount');
 
 });
 

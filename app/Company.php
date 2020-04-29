@@ -8,6 +8,6 @@ class Company extends Model
 {
     public function vacancy()
     {
-        return $this->hasMany('App\Vacancy');
+        return $this->hasMany('App\Vacancy','company_id','id');
     }
 }
