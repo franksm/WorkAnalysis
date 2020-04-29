@@ -27,6 +27,8 @@ Route::prefix('api')->name('api.')->group(function() {
     Route::get('get_categories','api\WorkController@get_categories');
     Route::get('get_tools','api\WorkController@get_tools');
     Route::get('get_companies','api\WorkController@get_companies');
+
+    Route::get('get_category_count','api\WorkController@get_category_count');
 });
 
 Auth::routes();

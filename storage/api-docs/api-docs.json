@@ -39,7 +39,7 @@
                 "tags": [
                     "給我職缺資訊"
                 ],
-                "summary": "取得職缺資訊",
+                "summary": "取得職缺種類資訊",
                 "description": "請給我對應的id",
                 "operationId": "App\\Http\\Controllers\\api\\WorkController::get_categories",
                 "parameters": [
@@ -68,7 +68,7 @@
                 "tags": [
                     "給我職缺資訊"
                 ],
-                "summary": "取得職缺資訊",
+                "summary": "取得職缺需求工具資訊",
                 "description": "請給我對應的id",
                 "operationId": "App\\Http\\Controllers\\api\\WorkController::get_tools",
                 "parameters": [
@@ -97,9 +97,38 @@
                 "tags": [
                     "給我職缺資訊"
                 ],
-                "summary": "取得職缺資訊",
+                "summary": "取得公司資訊",
                 "description": "請給我對應的id",
                 "operationId": "App\\Http\\Controllers\\api\\WorkController::get_companies",
+                "parameters": [
+                    {
+                        "name": "works[]",
+                        "in": "query",
+                        "description": "請輸入查詢id",
+                        "required": true,
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "type": "integer"
+                            }
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "請求成功"
+                    }
+                }
+            }
+        },
+        "/api/get_category_count": {
+            "get": {
+                "tags": [
+                    "給我職缺資訊"
+                ],
+                "summary": "取得種類分析資訊",
+                "description": "請給我對應的id",
+                "operationId": "App\\Http\\Controllers\\api\\WorkController::get_category_count",
                 "parameters": [
                     {
                         "name": "works[]",
