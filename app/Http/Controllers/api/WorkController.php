@@ -37,7 +37,7 @@ class WorkController extends Controller
      * @OA\GET(
      *     path="/api/get_categories",
      *     tags={"給我職缺資訊"},
-     *     summary="取得職缺資訊",
+     *     summary="取得職缺種類資訊",
      *     description="請給我對應的id",
      *     @OA\Parameter(name="works[]", in="query",@OA\Schema(type="array",@OA\Items(type="integer")), required=true, description="請輸入查詢id"),
      *     @OA\Response(
@@ -60,7 +60,7 @@ class WorkController extends Controller
      * @OA\GET(
      *     path="/api/get_tools",
      *     tags={"給我職缺資訊"},
-     *     summary="取得職缺資訊",
+     *     summary="取得職缺需求工具資訊",
      *     description="請給我對應的id",
      *     @OA\Parameter(name="works[]", in="query",@OA\Schema(type="array",@OA\Items(type="integer")), required=true, description="請輸入查詢id"),
      *     @OA\Response(
@@ -83,7 +83,7 @@ class WorkController extends Controller
      * @OA\GET(
      *     path="/api/get_companies",
      *     tags={"給我職缺資訊"},
-     *     summary="取得職缺資訊",
+     *     summary="取得公司資訊",
      *     description="請給我對應的id",
      *     @OA\Parameter(name="works[]", in="query",@OA\Schema(type="array",@OA\Items(type="integer")), required=true, description="請輸入查詢id"),
      *     @OA\Response(
@@ -106,11 +106,11 @@ class WorkController extends Controller
     
     /**
      * @OA\GET(
-     *     path="/api/get_categories",
+     *     path="/api/get_category_count",
      *     tags={"給我職缺資訊"},
-     *     summary="取得職缺資訊",
+     *     summary="取得種類分析資訊",
      *     description="請給我對應的id",
-     *     @OA\Parameter(name="works[]", in="query",@OA\Schema(type="array",@OA\Items(type="object"),@OA\Property(property="vacancy_category", type="string"),), required=true, description="請輸入查詢id"),
+     *     @OA\Parameter(name="works[]", in="query",@OA\Schema(type="array",@OA\Items(type="integer")), required=true, description="請輸入查詢id"),
      *     @OA\Response(
      *      response="200",
      *      description="請求成功"
@@ -125,6 +125,13 @@ class WorkController extends Controller
         foreach($Vacancies as $Vacancy){
             $Categories[$Vacancy->id]=$Vacancy->category->toarray();
         }
-        return $Categories;
+        $CategoryCount=[];
+        foreach($Categories as $Category){
+            foreach($Category as $Category){
+                $CategoryCount[]=$Category['vacancy_category'];
+            }
+        }
+        $CategoryCount=array_count_values($CategoryCount);
+        return $CategoryCount;
     }
 }

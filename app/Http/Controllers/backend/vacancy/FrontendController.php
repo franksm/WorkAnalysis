@@ -56,6 +56,7 @@ class FrontendController extends Controller
         }
         $urlApi = "http://laravel.test/api/get_vacancies?".$search;
         $Vacancies = json_decode(file_get_contents($urlApi));
+        dd(get_object_vars($Vacancies));
         $urlApi = "http://laravel.test/api/get_categories?".$search;
         $Categories = json_decode(file_get_contents($urlApi),true);
         $urlApi = "http://laravel.test/api/get_tools?".$search;
