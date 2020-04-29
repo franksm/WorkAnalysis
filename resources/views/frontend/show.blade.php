@@ -10,6 +10,7 @@
     <title>Document</title>
 </head>
 <body>
+    <form action="{{ route('backend.work.web.update'),}}" method="post">
     <div class="tag">
             <div class="row">
                 <div class="col-md-12">
@@ -65,7 +66,7 @@
                                                     </button>
                                                 </div>
                                                 <div>
-                                                    <p>{{$Companies[$Vacancy->id]['welfare']}}</p>
+                                                    {{$Companies[$Vacancy->id]['welfare']}}
                                                 </div>
                                             </div>
                                         </div>
@@ -80,6 +81,7 @@
                     </table>
                 </div>
             </div>       
-        </div> 
+        </div>
+    </form>
 </body>
 </html>
