@@ -108,7 +108,7 @@ class WorkController extends Controller
      * @OA\GET(
      *     path="/api/get_category_count",
      *     tags={"給我職缺資訊"},
-     *     summary="取得種類分析資訊",
+     *     summary="取得種類統計分析資訊",
      *     description="請給我對應的id",
      *     @OA\Parameter(name="works[]", in="query",@OA\Schema(type="array",@OA\Items(type="integer")), required=true, description="請輸入查詢id"),
      *     @OA\Response(
@@ -134,15 +134,17 @@ class WorkController extends Controller
                 else{
                     $CategoryCount[$category['vacancy_category']]=1;
                 }
+
             }
         }
         return $CategoryCount;
     }
     /**
      * @OA\GET(
-     *     path="/api/getVacancyClaimEducationCount",
+     *     path="/api/claimEducation",
      *     tags={"給我職缺資訊"},
      *     summary="取得需求學歷分析資訊",
+
      *     description="請給我對應的id",
      *     @OA\Parameter(name="works[]", in="query",@OA\Schema(type="array",@OA\Items(type="integer")), required=true, description="請輸入查詢id"),
      *     @OA\Response(
@@ -151,12 +153,15 @@ class WorkController extends Controller
      *     )
      * )
      */
+
     public function getVacancyClaimEducationCount(Request $request)
     {
         $works=$request->works;
         $Vacancies=Vacancy::all()->find($works);
         $vacanciesClaimEducation=[];
+        $countClaimEducation=0;
         foreach($Vacancies as $Vacancy){
+            $countClaimEducation++;
             if (isset($vacanciesClaimEducation[$Vacancy->claim_education])){
                 $vacanciesClaimEducation[$Vacancy->claim_education]++;
             }
@@ -164,11 +169,12 @@ class WorkController extends Controller
                 $vacanciesClaimEducation[$Vacancy->claim_education]=1;
             }
         }
+        $vacanciesClaimEducation['total']=$countClaimEducation;
         return $vacanciesClaimEducation;
     }
     /**
      * @OA\GET(
-     *     path="/api/getVacancyClaimExperienceCount",
+     *     path="/api/claimExperience",
      *     tags={"給我職缺資訊"},
      *     summary="取得工作經歷分析資訊",
      *     description="請給我對應的id",
@@ -184,7 +190,9 @@ class WorkController extends Controller
         $works=$request->works;
         $Vacancies=Vacancy::all()->find($works);
         $vacanciesClaimexperience=[];
+        $countClaimExperience=0;
         foreach($Vacancies as $Vacancy){
+            $countClaimExperience++;
             if (isset($vacanciesClaimexperience[$Vacancy->claim_experience])){
                 $vacanciesClaimexperience[$Vacancy->claim_experience]++;
             }
@@ -192,6 +200,37 @@ class WorkController extends Controller
                 $vacanciesClaimexperience[$Vacancy->claim_experience]=1;
             }
         }
+        $vacanciesClaimexperience['total']=$countClaimExperience;
         return $vacanciesClaimexperience;
+    }
+    
+     /**
+     * @OA\GET(
+     *     path="/api/get_tool_count",
+     *     tags={"給我職缺資訊"},
+     *     summary="取得工具統計分析資訊",
+     *     description="請給我對應的id",
+     *     @OA\Parameter(name="works[]", in="query",@OA\Schema(type="array",@OA\Items(type="integer")), required=true, description="請輸入查詢id"),
+     *     @OA\Response(
+     *      response="200",
+     *      description="請求成功"
+     *     )
+     * )
+     */
+    public function get_tool_count(Request $request){
+        $works=$request->works;
+        $Vacancies=Vacancy::all()->find($works);
+        $Tools=[];
+        foreach($Vacancies as $Vacancy){
+            $Tools[$Vacancy->id]=$Vacancy->tool->toarray();
+        }
+        $ToolCount=[];
+        foreach($Tools as $Tool){
+            foreach($Tool as $Tool){
+                $ToolCount[]=$Tool['vacancy_tool'];
+            }
+        }
+        $ToolCount=array_count_values($ToolCount);
+        return $ToolCount;
     }
 }

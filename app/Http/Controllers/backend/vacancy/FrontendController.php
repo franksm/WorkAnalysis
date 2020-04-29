@@ -25,10 +25,19 @@ class FrontendController extends Controller
         return view('frontend.index')->with('Vacancies',$Vacancies)->with('Companies',$Companies)->with('VacancyCategoties',$VacancyCategoties);
     }
     public function form(Request $request){
-        $works=$request->works;
+        // $request->isMethod('post');
+        // if($request->isMethod('post')){
+        //     session('works',$request->works);
+        // }
+        if(isset($request->works) and $request->isMethod('post')){
+            $works=$request->works;
+            session(['works' =>$works]);
+        }
+        else{
+            $works=session('works');
+        }
         $search = "";
         foreach($works as $work){
-            #dd(gettype($work));
             $search .= "works[]=".$work."&";
         }
         $urlApi = "http://laravel.test/api/get_vacancies?".$search;
@@ -41,8 +50,17 @@ class FrontendController extends Controller
         $Companies = json_decode(file_get_contents($urlApi),true);
         return view('frontend.show',compact('Vacancies','Categories','Tools','Companies'));
     }
-    public function show(Request $request)
+    public function detail(Request $request)
     {
-        # code...
+        $works=session('works');   
+        $search = "";
+        foreach($works as $work){
+            $search .= "works[]=".$work."&";
+        }
+        $claimExperienceUrl = "http://laravel.test/api/claimExperience?".$search;
+        $claimExperiences = json_decode(file_get_contents($claimExperienceUrl),true);
+        $claimEducationUrl = "http://laravel.test/api/claimEducation?".$search;
+        $claimEducations = json_decode(file_get_contents($claimEducationUrl),true);
+        return view('frontend.detail',compact('claimExperiences','claimEducations'));
     }
 }

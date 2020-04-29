@@ -28,10 +28,11 @@ Route::prefix('api')->name('api.')->group(function() {
     Route::get('get_tools','api\WorkController@get_tools');
     Route::get('get_companies','api\WorkController@get_companies');
     //------------------------------------------------------------------------
-    Route::get('getVacancyClaimEducationCount','api\WorkController@getVacancyClaimEducationCount');
-    Route::get('getVacancyClaimExperienceCount','api\WorkController@getVacancyClaimExperienceCount');
+    Route::get('claimEducation','api\WorkController@getVacancyClaimEducationCount');
+    Route::get('claimExperience','api\WorkController@getVacancyClaimExperienceCount');
     Route::get('get_category_count','api\WorkController@get_category_count');
-    
+    Route::get('get_tool_count','api\WorkController@get_tool_count');
+
 });
 
 Auth::routes();
@@ -43,9 +44,10 @@ Route::middleware(['auth'])->prefix('backend')->name('backend.')->group(function
         Route::get('/', function () {
             return view('backend/vacancy/index');
         });
-        Route::resource('web','backend\vacancy\FrontendController');
-        Route::get('index','backend\vacancy\FrontendController@index');
-        Route::post('form','backend\vacancy\FrontendController@form')->name('form');
+        Route::get('web','backend\vacancy\FrontendController@index')->name('web');
+        Route::get('list','backend\vacancy\FrontendController@form')->name('list');
+        Route::post('list','backend\vacancy\FrontendController@form')->name('list');
+        Route::get('detail','backend\vacancy\FrontendController@detail')->name('detail');
         Route::resource('vacancy','backend\vacancy\VacancyController');
         Route::resource('tool','backend\vacancy\ToolController');
         Route::resource('category','backend\vacancy\CategoryController');
