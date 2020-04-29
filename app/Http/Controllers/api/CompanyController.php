@@ -26,15 +26,11 @@ class CompanyController extends Controller
     {
         $works=$request->works;
         $Vacancies=Vacancy::all()->find($works);
-        $Companies=[];
+        $companies=[];
         foreach($Vacancies as $Vacancy){
-            $Companies[$Vacancy->id]=$Vacancy->company->toarray();
+            $companies[$Vacancy->id]=$Vacancy->company->toarray();
+            $companies[$Vacancy->id]['vacancy_name']=$Vacancy->vacancy_name;
         }
-        // $Companies=[];
-        // foreach($Vacancies as $Vacancy){
-        //     $Companies[$Vacancy->id]=$Vacancy->company->toarray();
-        // }
-
-        return $Vacancies;
+        return $companies;
     }
 }
