@@ -27,8 +27,11 @@ Route::prefix('api')->name('api.')->group(function() {
     Route::get('get_categories','api\WorkController@get_categories');
     Route::get('get_tools','api\WorkController@get_tools');
     Route::get('get_companies','api\WorkController@get_companies');
-
+    //------------------------------------------------------------------------
+    Route::get('getVacancyClaimEducationCount','api\WorkController@getVacancyClaimEducationCount');
+    Route::get('getVacancyClaimExperienceCount','api\WorkController@getVacancyClaimExperienceCount');
     Route::get('get_category_count','api\WorkController@get_category_count');
+    
 });
 
 Auth::routes();
@@ -41,6 +44,8 @@ Route::middleware(['auth'])->prefix('backend')->name('backend.')->group(function
             return view('backend/vacancy/index');
         });
         Route::resource('web','backend\vacancy\FrontendController');
+        Route::get('index','backend\vacancy\FrontendController@index');
+        Route::post('form','backend\vacancy\FrontendController@form')->name('form');
         Route::resource('vacancy','backend\vacancy\VacancyController');
         Route::resource('tool','backend\vacancy\ToolController');
         Route::resource('category','backend\vacancy\CategoryController');

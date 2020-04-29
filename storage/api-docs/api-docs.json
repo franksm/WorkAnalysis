@@ -149,6 +149,64 @@
                     }
                 }
             }
+        },
+        "/api/getVacancyClaimEducationCount": {
+            "get": {
+                "tags": [
+                    "給我職缺資訊"
+                ],
+                "summary": "取得需求學歷分析資訊",
+                "description": "請給我對應的id",
+                "operationId": "App\\Http\\Controllers\\api\\WorkController::getVacancyClaimEducationCount",
+                "parameters": [
+                    {
+                        "name": "works[]",
+                        "in": "query",
+                        "description": "請輸入查詢id",
+                        "required": true,
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "type": "integer"
+                            }
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "請求成功"
+                    }
+                }
+            }
+        },
+        "/api/getVacancyClaimExperienceCount": {
+            "get": {
+                "tags": [
+                    "給我職缺資訊"
+                ],
+                "summary": "取得工作經歷分析資訊",
+                "description": "請給我對應的id",
+                "operationId": "App\\Http\\Controllers\\api\\WorkController::getVacancyClaimExperienceCount",
+                "parameters": [
+                    {
+                        "name": "works[]",
+                        "in": "query",
+                        "description": "請輸入查詢id",
+                        "required": true,
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "type": "integer"
+                            }
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "請求成功"
+                    }
+                }
+            }
         }
     }
 }

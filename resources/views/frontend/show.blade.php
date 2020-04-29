@@ -10,7 +10,7 @@
     <title>Document</title>
 </head>
 <body>
-    <form action="{{ route('backend.work.web.update'),}}" method="post">
+    {{Form::open()}}
     <div class="tag">
             <div class="row">
                 <div class="col-md-12">
@@ -18,6 +18,7 @@
                         <thead>
                             <tr>
                                 <th>職缺名稱</th>
+                                <th>公司名稱</th>
                                 <th>職缺類別</th>
                                 <th>需求工具</th>
                                 <th>薪資類型</th>
@@ -26,7 +27,6 @@
                                 <th>需求學歷</th>
                                 <th>工作經歷</th>
                                 <th>需求人數</th>
-                                <th>是否附管理責任</th>
                                 <th>是否出差外派</th>
                                 <th>本職缺連結</th>
                                 <th>公司福利</th>
@@ -36,6 +36,7 @@
                             @foreach ($Vacancies as $Vacancy)
                             <tr>
                                 <th>{{$Vacancy->vacancy_name}}</th>
+                                <th>{{$Companies[$Vacancy->id]['company_name']}}</th>
                                 <th>
                                     @foreach ($Categories[$Vacancy->id] as $Category)
                                         {{$Category['vacancy_category']}},
@@ -52,7 +53,6 @@
                                 <th>{{$Vacancy->claim_education}}</th>
                                 <th>{{$Vacancy->claim_experience}}</th>
                                 <th>{{$Vacancy->claim_people}}</th>
-                                <th>{{$Vacancy->management_responsibility}}</th>
                                 <th>{{$Vacancy->expatriate}}</th>
                                 <th><a href="{{$Vacancy->link}}">導引至頁面</a></th>
                                 <th>

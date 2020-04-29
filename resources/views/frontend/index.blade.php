@@ -71,7 +71,7 @@
         </ul>
     </div>
     <div class="right">
-        <form action="{{ route('backend.work.web.store') }}" method="post" onSubmit="return validate(this)">
+        <form action="{{ route('backend.work.form') }}" method="post" onSubmit="return validate(this)">
             {{ csrf_field() }}
             <input type="submit" value="送出表單" class="btn-primary my-lg-1">
         <table class="table">

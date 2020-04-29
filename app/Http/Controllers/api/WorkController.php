@@ -127,12 +127,71 @@ class WorkController extends Controller
         }
         $CategoryCount=[];
         foreach($Categories as $Category){
-            foreach($Category as $Category){
-                // dd($Category['vacancy_category']);
-                $CategoryCount[]=$Category['vacancy_category'];
+            foreach($Category as $category){
+                if (isset($CategoryCount[$category['vacancy_category']])){
+                    $CategoryCount[$category['vacancy_category']]++;
+                }
+                else{
+                    $CategoryCount[$category['vacancy_category']]=1;
+                }
             }
         }
-        $CategoryCount=array_count_values($CategoryCount);
         return $CategoryCount;
+    }
+    /**
+     * @OA\GET(
+     *     path="/api/getVacancyClaimEducationCount",
+     *     tags={"給我職缺資訊"},
+     *     summary="取得需求學歷分析資訊",
+     *     description="請給我對應的id",
+     *     @OA\Parameter(name="works[]", in="query",@OA\Schema(type="array",@OA\Items(type="integer")), required=true, description="請輸入查詢id"),
+     *     @OA\Response(
+     *      response="200",
+     *      description="請求成功"
+     *     )
+     * )
+     */
+    public function getVacancyClaimEducationCount(Request $request)
+    {
+        $works=$request->works;
+        $Vacancies=Vacancy::all()->find($works);
+        $vacanciesClaimEducation=[];
+        foreach($Vacancies as $Vacancy){
+            if (isset($vacanciesClaimEducation[$Vacancy->claim_education])){
+                $vacanciesClaimEducation[$Vacancy->claim_education]++;
+            }
+            else{
+                $vacanciesClaimEducation[$Vacancy->claim_education]=1;
+            }
+        }
+        return $vacanciesClaimEducation;
+    }
+    /**
+     * @OA\GET(
+     *     path="/api/getVacancyClaimExperienceCount",
+     *     tags={"給我職缺資訊"},
+     *     summary="取得工作經歷分析資訊",
+     *     description="請給我對應的id",
+     *     @OA\Parameter(name="works[]", in="query",@OA\Schema(type="array",@OA\Items(type="integer")), required=true, description="請輸入查詢id"),
+     *     @OA\Response(
+     *      response="200",
+     *      description="請求成功"
+     *     )
+     * )
+     */
+    public function getVacancyClaimExperienceCount(Request $request)
+    {
+        $works=$request->works;
+        $Vacancies=Vacancy::all()->find($works);
+        $vacanciesClaimexperience=[];
+        foreach($Vacancies as $Vacancy){
+            if (isset($vacanciesClaimexperience[$Vacancy->claim_experience])){
+                $vacanciesClaimexperience[$Vacancy->claim_experience]++;
+            }
+            else{
+                $vacanciesClaimexperience[$Vacancy->claim_experience]=1;
+            }
+        }
+        return $vacanciesClaimexperience;
     }
 }
