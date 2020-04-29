@@ -62,7 +62,7 @@
                                                     </button>
                                                 </div>
                                                 <div>
-                                                    {{$Companies[$Vacancy->id]['welfare']}}
+                                                    <p>{{$Companies[$Vacancy->id]['welfare']}}</p>
                                                 </div>
                                             </div>
                                         </div>
