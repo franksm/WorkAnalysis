@@ -25,12 +25,16 @@ class CompanyController extends Controller
     public function get_companies(Request $request)
     {
         $works=$request->works;
-        $Vacancies=Vacancy::all()->find($works);
-        $companies=[];
+        $Vacancies=Vacancy::select('id','company_id')->find($works);
+        $vacancyArray=[];
         foreach($Vacancies as $Vacancy){
-            $companies[$Vacancy->id]=$Vacancy->company->toarray();
-            $companies[$Vacancy->id]['vacancy_name']=$Vacancy->vacancy_name;
+            $vacancyArray[$Vacancy->company_id]=$Vacancy->company_id;
         }
-        return $companies;
+        $Companies=Company::all()->find($vacancyArray);
+        $companiesArray=[];
+        foreach($Companies as $Company){
+            $Company->vacancy;
+        };
+        return $Companies;
     }
 }

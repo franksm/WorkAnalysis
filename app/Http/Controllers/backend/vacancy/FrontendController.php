@@ -13,16 +13,15 @@ class FrontendController extends Controller
 {
     public function index(Request $request){
         if(isset($request->vacancy_category)){
-            $Vacancies= Vacancy::all()->where('vacancy_category',$request->vacancy_category);
+            $Vacancies= Vacancy::all('id','vacancy_name','company_id','vacancy_category','link')->where('vacancy_category',$request->vacancy_category);
         }else{
-            $Vacancies= Vacancy::all();
+            $Vacancies= Vacancy::all('id','vacancy_name','company_id','link');
         }
         $Companies=[];
         foreach($Vacancies as $Vacancy){
             $Companies[$Vacancy->id]=$Vacancy->company;
         }
-        $VacancyCategoties=VacancyCategory::all();
-        return view('frontend.index')->with('Vacancies',$Vacancies)->with('Companies',$Companies)->with('VacancyCategoties',$VacancyCategoties);
+        return view('frontend.index',compact('Vacancies','Companies'));
     }
     public function form(Request $request){
         if(isset($request->works) and $request->isMethod('post')){

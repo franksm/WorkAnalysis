@@ -12,7 +12,7 @@
                         <thead>
                             <tr>
                                 <th>職缺名稱</th>
-                                <th>公司名稱</th>
+                                {{-- <th>公司名稱</th> --}}
                                 <th>職缺類別</th>
                                 <th>需求工具</th>
                                 <th>薪資類型</th>
@@ -29,7 +29,7 @@
                             @foreach ($Vacancies as $Vacancy)
                             <tr>
                                 <th>{{$Vacancy->vacancy_name}}</th>
-                                <th>{{$Companies[$Vacancy->id]['company_name']}}</th>
+                                {{-- <th>{{$Companies[$Vacancy->id]['company_name']}}</th> --}}
                                 <th>
                                     @foreach ($Categories[$Vacancy->id] as $Category)
                                         {{$Category['vacancy_category']}},
@@ -70,7 +70,11 @@
                                 @foreach ($Companies as $Company)
                                 <tr>
                                     <th>{{$Company['company_name']}}</th>
-                                    <th>{{$Company['vacancy_name']}}</th>
+                                    <th>
+                                        @foreach ($Company['vacancy'] as $companyVacancyName)
+                                            {{$companyVacancyName['vacancy_name']}},
+                                        @endforeach
+                                    </th>
                                     <th>{{$Company['industry_category']}}</th>
                                     <th>{{$Company['capital']}}</th>
                                     <th>{{$Company['workers']}}</th>
@@ -86,7 +90,7 @@
                                                         </button>
                                                     </div>
                                                     <div>
-                                                        <p>{{$Companies[$Vacancy->id]['welfare']}}</p>
+                                                        <p>{{$Company['welfare']}}</p>
                                                     </div>
                                                 </div>
                                             </div>
