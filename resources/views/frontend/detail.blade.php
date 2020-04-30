@@ -3,6 +3,8 @@
 @section('content')
 <link rel="stylesheet" href="https://www.104.com.tw/jobs/apply/static/css/app.min.css?id=7bc7c107a1569c7cfad5">
 <div class="content_full analysis-section">
+    <h1>職缺比一比</h1>
+    <hr size="64px" width="100%">
     <section id="analysisSection" class="rpt_box">  
                 <div class="bar-row">
                     <div class="bar_analysis">
@@ -67,6 +69,8 @@
                         </div>
                     </div>
                 </div>
+                <hr size="64px" width="100%">
+                <h1>企業比一比</h1>
                 <div class="col-md-12">
                     <table class="table">
                         <thead>

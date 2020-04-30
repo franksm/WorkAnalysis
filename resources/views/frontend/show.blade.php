@@ -7,6 +7,7 @@
             white-space: pre-line;
         }
 </style>
+    <h3>職缺綜合資訊</h3>
                 <div class="col-md-12">
                     <table class="table">
                         <thead>
@@ -52,6 +53,7 @@
                             @endforeach
                         </tbody>
                     </table>
+                    <h3>公司綜合資訊</h3>
                     <div class="col-md-12">
                         <table class="table">
                             <thead>

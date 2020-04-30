@@ -72,4 +72,5 @@ class CompanyController extends Controller
         $industryCategories['total']=$countindustryCategory;
         return $industryCategories;
     }
+    
 }
