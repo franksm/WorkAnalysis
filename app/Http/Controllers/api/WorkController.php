@@ -81,7 +81,7 @@ class WorkController extends Controller
     }
     /**
      * @OA\GET(
-     *     path="/api/get_category_count",
+     *     path="/api/categoryCount",
      *     tags={"給我職缺資訊"},
      *     summary="取得種類統計分析資訊",
      *     description="請給我對應的id",
@@ -183,7 +183,7 @@ class WorkController extends Controller
     
      /**
      * @OA\GET(
-     *     path="/api/get_tool_count",
+     *     path="/api/toolCount",
      *     tags={"給我職缺資訊"},
      *     summary="取得工具統計分析資訊",
      *     description="請給我對應的id",

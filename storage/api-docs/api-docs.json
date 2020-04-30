@@ -5,6 +5,64 @@
         "version": "0.1"
     },
     "paths": {
+        "/api/get_companies": {
+            "get": {
+                "tags": [
+                    "給我職缺資訊"
+                ],
+                "summary": "取得公司資訊",
+                "description": "請給我對應的id",
+                "operationId": "App\\Http\\Controllers\\api\\CompanyController::get_companies",
+                "parameters": [
+                    {
+                        "name": "works[]",
+                        "in": "query",
+                        "description": "請輸入查詢id",
+                        "required": true,
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "type": "integer"
+                            }
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "請求成功"
+                    }
+                }
+            }
+        },
+        "/api/industryCategoryCount": {
+            "get": {
+                "tags": [
+                    "給我職缺資訊"
+                ],
+                "summary": "取得產業類別資訊",
+                "description": "請給我對應的id",
+                "operationId": "App\\Http\\Controllers\\api\\CompanyController::getIndustryCategoryCount",
+                "parameters": [
+                    {
+                        "name": "works[]",
+                        "in": "query",
+                        "description": "請輸入查詢id",
+                        "required": true,
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "type": "integer"
+                            }
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "請求成功"
+                    }
+                }
+            }
+        },
         "/api/get_vacancies": {
             "get": {
                 "tags": [
@@ -92,43 +150,14 @@
                 }
             }
         },
-        "/api/get_companies": {
-            "get": {
-                "tags": [
-                    "給我職缺資訊"
-                ],
-                "summary": "取得公司資訊",
-                "description": "請給我對應的id",
-                "operationId": "App\\Http\\Controllers\\api\\WorkController::get_companies",
-                "parameters": [
-                    {
-                        "name": "works[]",
-                        "in": "query",
-                        "description": "請輸入查詢id",
-                        "required": true,
-                        "schema": {
-                            "type": "array",
-                            "items": {
-                                "type": "integer"
-                            }
-                        }
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "請求成功"
-                    }
-                }
-            }
-        },
-        "/api/get_category_count": {
+        "/api/categoryCount": {
             "get": {
                 "tags": [
                     "給我職缺資訊"
                 ],
                 "summary": "取得種類統計分析資訊",
                 "description": "請給我對應的id",
-                "operationId": "App\\Http\\Controllers\\api\\WorkController::get_category_count",
+                "operationId": "App\\Http\\Controllers\\api\\WorkController::getCategoryCount",
                 "parameters": [
                     {
                         "name": "works[]",
@@ -208,14 +237,14 @@
                 }
             }
         },
-        "/api/get_tool_count": {
+        "/api/toolCount": {
             "get": {
                 "tags": [
                     "給我職缺資訊"
                 ],
                 "summary": "取得工具統計分析資訊",
                 "description": "請給我對應的id",
-                "operationId": "App\\Http\\Controllers\\api\\WorkController::get_tool_count",
+                "operationId": "App\\Http\\Controllers\\api\\WorkController::getToolCount",
                 "parameters": [
                     {
                         "name": "works[]",

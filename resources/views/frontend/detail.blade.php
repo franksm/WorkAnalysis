@@ -39,18 +39,18 @@
     <div class="col-md-12">
         <table class="table">
             <thead>
-                        <tr>
-                        <th>職務種類</th>
-                        <th>出現數量</th>
-                        </tr>
+                <tr>
+                <th>職務種類</th>
+                <th>出現數量</th>
+                </tr>
             </thead>
             <tbody>
-                            @foreach ($categories as $category=>$categoryQuantity)
-                            <tr>
-                                <th>{{$category}}</th>
-                                <th>{{$categoryQuantity}}</th>
-                            </tr>
-                            @endforeach
+                @foreach ($categories as $category=>$categoryQuantity)
+                    <tr>
+                        <th>{{$category}}</th>
+                        <th>{{$categoryQuantity}}</th>
+                    </tr>
+                @endforeach
             </tbody>
         </table>
     </div>
@@ -71,5 +71,22 @@
                 @endforeach
             </tbody>
         </table>
+    </div>
+    <div class="col-md-12">
+        <table class="table">
+            <thead>
+                <tr>
+                <th>產業類別</th>
+                <th>出現數量</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach ($industryCategories as $industryCategory=>$industryCategoryQuantity)
+                    <tr>
+                    <th>{{$industryCategory}}</th>
+                    <th>{{$industryCategoryQuantity}}</th>
+                    </tr>
+                @endforeach
+            </tbody>
     </div>
 @endsection
