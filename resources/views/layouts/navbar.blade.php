@@ -19,6 +19,9 @@
                             <li class="nav-item">
                                 <a class="nav-link" href="/user/web/">存儲工作</a>
                             </li>
+                            <li class="nav-item">
+                                <a class="nav-link" href="/user/resume/">履歷資料</a>
+                            </li>
                         @endguest
                     </ul>
 

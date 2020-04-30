@@ -3,7 +3,7 @@
 @section('content')
 
 <link rel="stylesheet" href="https://www.104.com.tw/jobs/apply/static/css/app.min.css?id=7bc7c107a1569c7cfad5">
-
+<div class="col-md-12">
 <div class="content_full analysis-section">
     <section id="analysisSection" class="rpt_box">  
                 <div class="bar-row">
@@ -70,5 +70,6 @@
                     </div>
                 </div>
     </section>
+</div>
 </div>
 @endsection

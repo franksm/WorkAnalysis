@@ -42,7 +42,8 @@ Route::get('/home', 'HomeController@index')->name('home');
 
 
 Route::middleware(['auth'])->prefix('user')->name('user.')->group(function() {
-        Route::get('web','backend\vacancy\FrontendController@index')->name('web');
+    Route::get('web','backend\vacancy\FrontendController@index')->name('web');
+    Route::resource('resume','ResumeController');
 });
 
 Route::middleware(['auth'])->prefix('analysis')->name('analysis.')->group(function() {
