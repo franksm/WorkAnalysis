@@ -2,6 +2,9 @@
 @section('nav_detail', 'active')
 @section('content')
 <link rel="stylesheet" href="https://www.104.com.tw/jobs/apply/static/css/app.min.css?id=7bc7c107a1569c7cfad5">
+
+<div class="col-md-12">
+
 <div class="content_full analysis-section">
     <h1>職缺比一比</h1>
     <hr size="64px" width="100%">
@@ -89,5 +92,6 @@
                         </tbody>
                 </div>
     </section>
+</div>
 </div>
 @endsection
