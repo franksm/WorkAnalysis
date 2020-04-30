@@ -60,6 +60,8 @@ class FrontendController extends Controller
         $categories = json_decode(file_get_contents($categoryUrl),true);
         $toolUrl = "http://laravel.test/api/toolCount?".$search;
         $tools = json_decode(file_get_contents($toolUrl),true);
-        return view('frontend.detail',compact('claimExperiences','claimEducations','tools','categories'));
+        $industryCategoryUrl = "http://laravel.test/api/industryCategoryCount?".$search;
+        $industryCategories = json_decode(file_get_contents($industryCategoryUrl),true);
+        return view('frontend.detail',compact('claimExperiences','claimEducations','tools','categories','industryCategories'));
     }
 }
