@@ -25,10 +25,6 @@ class FrontendController extends Controller
         return view('frontend.index')->with('Vacancies',$Vacancies)->with('Companies',$Companies)->with('VacancyCategoties',$VacancyCategoties);
     }
     public function form(Request $request){
-        // $request->isMethod('post');
-        // if($request->isMethod('post')){
-        //     session('works',$request->works);
-        // }
         if(isset($request->works) and $request->isMethod('post')){
             $works=$request->works;
             session(['works' =>$works]);
@@ -48,6 +44,11 @@ class FrontendController extends Controller
         $Tools = json_decode(file_get_contents($urlApi),true);
         $urlApi = "http://laravel.test/api/get_companies?".$search;
         $Companies = json_decode(file_get_contents($urlApi),true);
+        $works=$request->works;
+        $Vacancies=Vacancy::all()->find($works);
+        dd($Vacancies);
+        $Companies=Company::all()->where('id',$Vacancies->company_id);
+        
         return view('frontend.show',compact('Vacancies','Categories','Tools','Companies'));
     }
     public function detail(Request $request)
@@ -57,11 +58,14 @@ class FrontendController extends Controller
         foreach($works as $work){
             $search .= "works[]=".$work."&";
         }
-        $claimExperienceUrl = "http://laravel.test/api/claimExperience?".$search;
+        $claimExperienceUrl = "http://laravel.test/api/claimExperienceCount?".$search;
         $claimExperiences = json_decode(file_get_contents($claimExperienceUrl),true);
-        $claimEducationUrl = "http://laravel.test/api/claimEducation?".$search;
+        $claimEducationUrl = "http://laravel.test/api/claimEducationCount?".$search;
         $claimEducations = json_decode(file_get_contents($claimEducationUrl),true);
-        
-        return view('frontend.detail',compact('claimExperiences','claimEducations'));
+        $categoryUrl = "http://laravel.test/api/categoryCount?".$search;
+        $categories = json_decode(file_get_contents($categoryUrl),true);
+        $toolUrl = "http://laravel.test/api/toolCount?".$search;
+        $tools = json_decode(file_get_contents($toolUrl),true);
+        return view('frontend.detail',compact('claimExperiences','claimEducations','tools','categories'));
     }
 }

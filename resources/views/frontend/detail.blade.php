@@ -1,6 +1,7 @@
 @extends('frontend.layouts.master')
 @section('nav_detail', 'active')
 @section('content')
+
 <link rel="stylesheet" href="https://www.104.com.tw/jobs/apply/static/css/app.min.css?id=7bc7c107a1569c7cfad5">
 
 <div class="content_full analysis-section">
@@ -8,10 +9,21 @@
                 <div class="bar-row">
                     <div class="bar_analysis">
                         <div class="bar-title">
-                            <h3>性別分佈</h3>
+                            <h3>工作經驗</h3>
                         </div>
-                        <div class="box_analysis" id="box_sex"><dl><dt title="男">男</dt><dd class="bar"><div style="width: 92%;"></div></dd><dd class="ratio">92%</dd></dl><dl><dt title="女">女</dt><dd class="bar"><div style="width: 7%;"></div></dd><dd class="ratio">7%</dd></dl></div>
+                        <div class="box_analysis" id="box_sex">
+                            @foreach ($claimExperiences as $claimExperience=>$claimExperienceQuantity)
+                                @if ($claimExperience!='total')
+                                <dl>
+                                    <dt title="{{$claimExperience}}">{{$claimExperience}}</dt>
+                                    <dd class="bar"><div style="width: 50%;"></div></dd>
+                                    <dd class="ratio">{{round($claimExperienceQuantity/$claimExperiences['total']*100,1)}}%</dd>
+                                </dl>
+                                @endif
+                            @endforeach
+                        </div>
                     </div>
+
 
                     <div class="bar_analysis">
                         <div class="bar-title">
