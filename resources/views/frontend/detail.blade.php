@@ -1,92 +1,89 @@
 @extends('frontend.layouts.master')
 @section('nav_detail', 'active')
 @section('content')
-    <div class="col-md-12">
-        <table class="table">
-                <thead>
-                    <tr>
-                    <th>需求工作經驗</th>
-                    <th>出現數量</th>
-                    </tr>
-                </thead>
-                <tbody>
-                        @foreach ($claimExperiences as $claimExperience=>$claimExperienceQuantity)
-                        <tr>
-                            <th>{{$claimExperience}}</th>
-                            <th>{{$claimExperienceQuantity}}</th>
-                        </tr>
-                        @endforeach
-                </tbody>
-    </div>
-    <div class="col-md-12">
-        <table class="table">
-            <thead>
-                <tr>
-                <th>需求學歷</th>
-                <th>出現數量</th>
-                </tr>
-            </thead>
-            <tbody>
-                    @foreach ($claimEducations as $claimEducation=>$claimEducationQuantity)
-                    <tr>
-                        <th>{{$claimEducation}}</th>
-                        <th>{{$claimEducationQuantity}}</th>
-                    </tr>
-                    @endforeach
-            </tbody>
-        </table>
-    </div>
-    <div class="col-md-12">
-        <table class="table">
-            <thead>
-                <tr>
-                <th>職務種類</th>
-                <th>出現數量</th>
-                </tr>
-            </thead>
-            <tbody>
-                @foreach ($categories as $category=>$categoryQuantity)
-                    <tr>
-                        <th>{{$category}}</th>
-                        <th>{{$categoryQuantity}}</th>
-                    </tr>
-                @endforeach
-            </tbody>
-        </table>
-    </div>
-    <div class="col-md-12">
-        <table class="table">
-            <thead>
-                <tr>
-                    <th>需求工具種類</th>
-                    <th>出現數量</th>
-                </tr>
-            </thead>
-            <tbody>
-                @foreach ($tools as $tool=>$toolQuantity)
-                <tr>
-                    <th>{{$tool}}</th>
-                    <th>{{$toolQuantity}}</th>
-                </tr>
-                @endforeach
-            </tbody>
-        </table>
-    </div>
-    <div class="col-md-12">
-        <table class="table">
-            <thead>
-                <tr>
-                <th>產業類別</th>
-                <th>出現數量</th>
-                </tr>
-            </thead>
-            <tbody>
-                @foreach ($industryCategories as $industryCategory=>$industryCategoryQuantity)
-                    <tr>
-                    <th>{{$industryCategory}}</th>
-                    <th>{{$industryCategoryQuantity}}</th>
-                    </tr>
-                @endforeach
-            </tbody>
-    </div>
+<link rel="stylesheet" href="https://www.104.com.tw/jobs/apply/static/css/app.min.css?id=7bc7c107a1569c7cfad5">
+<div class="content_full analysis-section">
+    <section id="analysisSection" class="rpt_box">  
+                <div class="bar-row">
+                    <div class="bar_analysis">
+                        <div class="bar-title">
+                            <h3>工作經驗</h3>
+                        </div>
+                        <div class="box_analysis" id="box_experience">
+                            @foreach ($claimExperiences as $claimExperience=>$claimExperienceQuantity)
+                                <dl>
+                                    <dt title="{{$claimExperience}}">{{$claimExperience}}</dt>
+                                    <dd class="bar"><div style="width: {{$claimExperienceQuantity}}%;"></div></dd>
+                                    <dd class="ratio">{{$claimExperienceQuantity}}%</dd>
+                                </dl>
+                            @endforeach
+                        </div>
+                    </div>
+
+                    <div class="bar_analysis">
+                        <div class="bar-title">
+                            <h3>學歷分佈</h3>
+                        </div>
+                        <div class="box_analysis" id="box_education">
+                            @foreach ($claimEducations as $claimEducation=>$claimEducationQuantity)
+                                <dl>
+                                    <dt title="{{$claimEducation}}">{{$claimEducation}}</dt>
+                                    <dd class="bar"><div style="width: {{$claimEducationQuantity}}%;"></div></dd>
+                                    <dd class="ratio">{{$claimEducationQuantity}}%</dd>
+                                </dl>
+                            @endforeach
+                        </div>
+                    </div>
+                </div>
+
+                <div class="bar-row">
+                    <div class="bar_analysis">
+                        <div class="bar-title">
+                            <h3>職務種類</h3>
+                        </div>
+                        <div class="box_analysis" id="box_category">
+                            @foreach ($categories as $category=>$categoryQuantity)
+                                <dl>
+                                    <dt title="{{$category}}">{{$category}}</dt>
+                                    <dd class="bar"><div style="width: {{$categoryQuantity}}%;"></div></dd>
+                                    <dd class="ratio">{{$categoryQuantity}}%</dd>
+                                </dl>
+                            @endforeach
+                        </div>
+                    </div>
+
+                    <div class="bar_analysis">
+                        <div class="bar-title">
+                            <h3>工具種類</h3>
+                        </div>
+                        <div class="box_analysis" id="box_tool">
+                            @foreach ($tools as $tool=>$toolQuantity)
+                                <dl>
+                                    <dt title="{{$tool}}">{{$tool}}</dt>
+                                    <dd class="bar"><div style="width: {{$toolQuantity}}%;"></div></dd>
+                                    <dd class="ratio">{{$toolQuantity}}%</dd>
+                                </dl>
+                            @endforeach
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-12">
+                    <table class="table">
+                        <thead>
+                            <tr>
+                            <th>產業類別</th>
+                            <th>出現數量</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach ($industryCategories as $industryCategory=>$industryCategoryQuantity)
+                                <tr>
+                                <th>{{$industryCategory}}</th>
+                                <th>{{$industryCategoryQuantity}}</th>
+                                </tr>
+                            @endforeach
+                        </tbody>
+                </div>
+    </section>
+</div>
 @endsection

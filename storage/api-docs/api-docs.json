@@ -179,7 +179,7 @@
                 }
             }
         },
-        "/api/claimEducation": {
+        "/api/claimEducationCount": {
             "get": {
                 "tags": [
                     "給我職缺資訊"
@@ -208,7 +208,7 @@
                 }
             }
         },
-        "/api/claimExperience": {
+        "/api/claimExperienceCount": {
             "get": {
                 "tags": [
                     "給我職缺資訊"

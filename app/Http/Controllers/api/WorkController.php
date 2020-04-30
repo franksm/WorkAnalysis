@@ -97,14 +97,12 @@ class WorkController extends Controller
         $works=$request->works;
         $Vacancies=Vacancy::all()->find($works);
         $Categories=[];
-        $countCategory=0;
         foreach($Vacancies as $Vacancy){
             $Categories[$Vacancy->id]=$Vacancy->category->toarray();
         }
         $CategoryCount=[];
         foreach($Categories as $Category){
             foreach($Category as $categoryItem){
-                $countCategory++;
                 if (isset($CategoryCount[$categoryItem['vacancy_category']])){
                     $CategoryCount[$categoryItem['vacancy_category']]++;
                 }
@@ -113,12 +111,14 @@ class WorkController extends Controller
                 }
             }
         }
-        $CategoryCount['total']=$countCategory;
+        foreach($CategoryCount as $Category => $Count){
+            $CategoryCount[$Category]=round($Count/count($works)*100,1); 
+        }
         return $CategoryCount;
     }
     /**
      * @OA\GET(
-     *     path="/api/claimEducation",
+     *     path="/api/claimEducationCount",
      *     tags={"給我職缺資訊"},
      *     summary="取得需求學歷分析資訊",
 
@@ -136,9 +136,7 @@ class WorkController extends Controller
         $works=$request->works;
         $Vacancies=Vacancy::all()->find($works);
         $vacanciesClaimEducation=[];
-        $countClaimEducation=0;
         foreach($Vacancies as $Vacancy){
-            $countClaimEducation++;
             if (isset($vacanciesClaimEducation[$Vacancy->claim_education])){
                 $vacanciesClaimEducation[$Vacancy->claim_education]++;
             }
@@ -146,12 +144,14 @@ class WorkController extends Controller
                 $vacanciesClaimEducation[$Vacancy->claim_education]=1;
             }
         }
-        $vacanciesClaimEducation['total']=$countClaimEducation;
+        foreach($vacanciesClaimEducation as $Education => $Count){
+            $vacanciesClaimEducation[$Education]=round($Count/count($works)*100,1); 
+        }
         return $vacanciesClaimEducation;
     }
     /**
      * @OA\GET(
-     *     path="/api/claimExperience",
+     *     path="/api/claimExperienceCount",
      *     tags={"給我職缺資訊"},
      *     summary="取得工作經歷分析資訊",
      *     description="請給我對應的id",
@@ -166,19 +166,19 @@ class WorkController extends Controller
     {
         $works=$request->works;
         $Vacancies=Vacancy::all()->find($works);
-        $vacanciesClaimexperience=[];
-        $countClaimExperience=0;
+        $vacanciesClaimExperience=[];
         foreach($Vacancies as $Vacancy){
-            $countClaimExperience++;
-            if (isset($vacanciesClaimexperience[$Vacancy->claim_experience])){
-                $vacanciesClaimexperience[$Vacancy->claim_experience]++;
+            if (isset($vacanciesClaimExperience[$Vacancy->claim_experience])){
+                $vacanciesClaimExperience[$Vacancy->claim_experience]++;
             }
             else{
-                $vacanciesClaimexperience[$Vacancy->claim_experience]=1;
+                $vacanciesClaimExperience[$Vacancy->claim_experience]=1;
             }
         }
-        $vacanciesClaimexperience['total']=$countClaimExperience;
-        return $vacanciesClaimexperience;
+        foreach($vacanciesClaimExperience as $Experience => $Count){
+            $vacanciesClaimExperience[$Experience]=round($Count/count($works)*100,1); 
+        }
+        return $vacanciesClaimExperience;
     }
     
      /**
@@ -201,11 +201,9 @@ class WorkController extends Controller
         foreach($Vacancies as $Vacancy){
             $Tools[$Vacancy->id]=$Vacancy->tool->toarray();
         }
-        $countTool=0;
         $ToolCount=[];
         foreach($Tools as $Tool){
             foreach($Tool as $toolItem){
-                $countTool++;
                 if (isset($ToolCount[$toolItem['vacancy_tool']])){
                     $ToolCount[$toolItem['vacancy_tool']]++;
                 }
@@ -214,7 +212,9 @@ class WorkController extends Controller
                 }
             }
         }
-        $ToolCount['total']=$countTool;
+        foreach($ToolCount as $Tool => $Count){
+            $ToolCount[$Tool]=round($Count/count($works)*100,1); 
+        }
         return $ToolCount;
     }
 }
