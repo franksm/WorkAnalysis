@@ -83,6 +83,20 @@ class VacancySeeder extends Seeder
             'link'=>'https://www.104.com.tw/job/6tvkx?jobsource=hotjob_chr',
         ]);
         $DB->insert([
+            'vacancy_name'=>'遠雄房地產-行政人員-新北市中和區',
+            'vacancy_category'=>'行政人員',
+            'salary_category'=>'月薪',
+            'salary'=>'30000',
+            'work_nature'=>'全職',
+            'company_id'=>'2',
+            'claim_education'=>"專科",
+            'claim_experience'=>"不拘",
+            'claim_people'=>"1",
+            'management_responsibility'=>'0',
+            'expatriate'=>'0',
+            'link'=>'https://www.104.com.tw/job/6wx80?jobsource=hotjob_chr',
+        ]);
+        $DB->insert([
             'vacancy_name'=>'行政人員',
             'vacancy_category'=>'行政人員',
             'salary_category'=>'月薪',
