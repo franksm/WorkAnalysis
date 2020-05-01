@@ -10,14 +10,11 @@
 <script type="text/javascript">
     $(document).ready(function() {
         $('.selectTool').select2({placeholder: "Select Tool"});
-    });
-    $(document).ready(function() {
         $('.selectCategory').select2({placeholder: "Select Category"});
     });
 </script>
 
-<br>
- 
+<div class="m-lg-4">
 <form action="{{ route('user.resume.store') }}" method="POST" name="add_resume">
 {{ csrf_field() }}
  
@@ -96,4 +93,5 @@
 </div>
  
 </form>
+</div>
 @endsection

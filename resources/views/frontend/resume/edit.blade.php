@@ -1,0 +1,107 @@
+@extends('layouts.app')
+@section('title', '履歷資料')
+@section('content')
+<script
+  src="https://code.jquery.com/jquery-3.4.1.min.js"
+  integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo="
+  crossorigin="anonymous"></script>
+<link href="https://cdn.jsdelivr.net/npm/select2@4.0.13/dist/css/select2.min.css" rel="stylesheet" />
+<script src="https://cdn.jsdelivr.net/npm/select2@4.0.13/dist/js/select2.min.js"></script>
+<script type="text/javascript">
+    $(document).ready(function() {
+        $('.selectTool').select2({placeholder: "Select Tool"});
+        var Tools = {!! json_encode($Tools); !!};
+        $(".selectTool").val(Tools).trigger("change");
+        $('.selectCategory').select2({placeholder: "Select Category"});
+        var Categories = {!! json_encode($Categories); !!};
+        $(".selectCategory").val(Categories).trigger("change");
+
+        var Resume = {!! json_encode($Resume) !!};
+        $('.selectEduction').val(Resume['eduction']).trigger("change");
+        $('.selectExperience').val(Resume['experience']).trigger("change");
+    });
+
+</script>
+
+<div class="m-lg-4">
+<form action="{{ route('user.resume.update',$Resume->id) }}" method="POST" name="update_resume">
+{{ csrf_field() }}
+@method('PATCH')
+ 
+<div class="row">
+    <div class="col-md-12">
+        <div class="form-group">
+            <strong>姓名</strong>
+            <input type="text" name="name" class="form-control" placeholder="Enter Name" value="{{ $Resume->name }}">
+            <span class="text-danger">{{ $errors->first('name') }}</span>
+        </div>
+    </div>
+    <div class="col-md-12">
+        <div class="form-group">
+            <strong>年齡</strong>
+            <input type="text" name="age" class="form-control" placeholder="Enter Age" value="{{ $Resume->age }}">
+            <span class="text-danger">{{ $errors->first('age') }}</span>
+        </div>
+    </div>
+    <div class="col-md-12">
+        <div class="form-group">
+            <strong>出生日期</strong>
+            <input type="text" name="born" class="form-control" placeholder="Enter Born" value="{{ $Resume->born }}">
+            <span class="text-danger">{{ $errors->first('born') }}</span>
+        </div>
+    </div>
+    <div class="col-md-12">
+        <strong>學歷</strong><br>
+        <select class="selectEduction" style="width:100%;" name="eduction"  required lay-verify="required">
+            <option value="" style="display:none" >請選擇學歷</option>
+            <option value="高中">高中</option>
+            <option value="專科">專科</option>
+            <option value="大學">大學</option>
+            <option value="碩士">碩士</option>
+            <option value="博士">博士</option>
+        </select>
+    </div>
+    <div class="col-md-12">
+        <strong>工作經歷</strong><br>
+        <select class="selectExperience" style="width:100%;" name="experience"  required lay-verify="required">
+            <option value="" style="display:none" >請選擇工作經歷</option>
+            <option value="無經歷">無經歷</option>
+            <option value="一年">一年</option>
+            <option value="兩年">兩年</option>
+            <option value="三年">三年</option>
+            <option value="四年">四年</option>
+            <option value="五年">五年</option>
+            <option value="六年">六年</option>
+            <option value="七年">七年</option>
+            <option value="八年">八年</option>
+            <option value="九年">九年</option>
+            <option value="十年">十年</option>
+        </select>
+    </div>
+    <div class="col-md-12">
+        <strong>希望職類</strong><br>
+        <select class="selectCategory" style="width:100%;" name="categories[]" multiple="multiple" required>
+            @foreach ($CategoryAll as $Category)
+                <option value='{{ $Category->id }}'>{{$Category->vacancy_category}}</option>
+            @endforeach
+        </select>
+    </div>
+    <div class="col-md-12">
+        <strong>擅長工具</strong><br>
+        <select class="selectTool" style="width:100%;" name="tools[]" multiple="multiple" required>
+            @foreach ($ToolAll as $Tool)
+                @if ($Tool->vacancy_tool != '不拘')
+                <option value='{{ $Tool->id }}'>{{$Tool->vacancy_tool}}</option>
+                @endif
+            @endforeach
+        </select>
+    </div>
+    <br>
+    <div class="col-md-12">
+        <button type="submit" class="btn btn-primary">Submit</button>
+    </div>
+</div>
+ 
+</form>
+</div>
+@endsection
