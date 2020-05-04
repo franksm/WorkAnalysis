@@ -58,10 +58,8 @@ class CompanyController extends Controller
     {
         $works=$request->works;
         $Companies=$this->useCompanyIdGetCompanyInfo($works);
-        $countindustryCategory=0;
         $industryCategories=[];
         foreach($Companies as $Company){
-            $countindustryCategory++;
             if (isset($industryCategories[$Company['industry_category']])){
                 $industryCategories[$Company['industry_category']]++;
             }
@@ -69,7 +67,9 @@ class CompanyController extends Controller
                 $industryCategories[$Company['industry_category']]=1;
             }
         }
-        $industryCategories['total']=$countindustryCategory;
+        foreach($industryCategories as $Category => $Count){
+            $industryCategories[$Category]=round($Count/count($works)*100,1); 
+        }
         return $industryCategories;
     }
 }

@@ -8,6 +8,7 @@ use App\Http\Controllers\Controller;
 use App\Company;
 use App\Vacancy;
 use App\VacancyCategory;
+use Redirect;
 
 class FrontendController extends Controller
 {
@@ -28,8 +29,10 @@ class FrontendController extends Controller
             $works=$request->works;
             session(['works' =>$works]);
         }
-        else{
+        else if($request->session()->has('works')){
             $works=session('works');
+        }else{
+            return Redirect::to('/user/web/');
         }
         $search = "";
         foreach($works as $work){
@@ -47,6 +50,11 @@ class FrontendController extends Controller
     }
     public function detail(Request $request)
     {
+        if($request->session()->has('works')){
+            $works=session('works');
+        }else{
+            return Redirect::to('/user/web/');
+        }
         $works=session('works');   
         $search = "";
         foreach($works as $work){
