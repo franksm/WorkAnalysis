@@ -14,6 +14,11 @@ use Illuminate\Http\Request;
 
 class WorkController extends Controller
 {
+    public function getVacancyId()
+    {
+        $vacancyId=Vacancy::all('id');
+        return $vacancyId;
+    }
     /**
      * @OA\GET(
      *     path="/api/get_vacancies",
@@ -96,23 +101,25 @@ class WorkController extends Controller
     {
         $works=$request->works;
         $Vacancies=Vacancy::all()->find($works);
-        $Categories=[];
-        foreach($Vacancies as $Vacancy){
-            $Categories[$Vacancy->id]=$Vacancy->category->toarray();
-        }
         $CategoryCount=[];
-        foreach($Categories as $Category){
+        foreach($Vacancies as $Vacancy){
+            $Category=$Vacancy->category->toarray();
+            $Company=$Vacancy->company;
             foreach($Category as $categoryItem){
-                if (isset($CategoryCount[$categoryItem['vacancy_category']])){
-                    $CategoryCount[$categoryItem['vacancy_category']]++;
+                if (isset($CategoryCount[$categoryItem['vacancy_category']]['percentage'])){
+                    $CategoryCount[$categoryItem['vacancy_category']]['percentage']++;
                 }
                 else{
-                    $CategoryCount[$categoryItem['vacancy_category']]=1;
+                    $CategoryCount[$categoryItem['vacancy_category']]['percentage']=1;
                 }
+                $CategoryCount[$categoryItem['vacancy_category']]['vacancy'][$Vacancy->id]['vacancy_name']=$Vacancy->vacancy_name;
+                $CategoryCount[$categoryItem['vacancy_category']]['vacancy'][$Vacancy->id]['vacancy_link']=$Vacancy->link;
+                $CategoryCount[$categoryItem['vacancy_category']]['vacancy'][$Vacancy->id]['company_name']=$Company->company_name;
+                $CategoryCount[$categoryItem['vacancy_category']]['vacancy'][$Vacancy->id]['company_link']=$Company->link;
             }
         }
         foreach($CategoryCount as $Category => $Count){
-            $CategoryCount[$Category]=round($Count/count($works)*100,1); 
+            $CategoryCount[$Category]['percentage']=round($Count['percentage']/count($works)*100,1);
         }
         return $CategoryCount;
     }
@@ -135,19 +142,24 @@ class WorkController extends Controller
     {
         $works=$request->works;
         $Vacancies=Vacancy::all()->find($works);
-        $vacanciesClaimEducation=[];
+        $ClaimEducationCount=[];
         foreach($Vacancies as $Vacancy){
-            if (isset($vacanciesClaimEducation[$Vacancy->claim_education])){
-                $vacanciesClaimEducation[$Vacancy->claim_education]++;
-            }
-            else{
-                $vacanciesClaimEducation[$Vacancy->claim_education]=1;
-            }
+                $Company=$Vacancy->company;
+                if (isset($ClaimEducationCount[$Vacancy->claim_education]['percentage'])){
+                    $ClaimEducationCount[$Vacancy->claim_education]['percentage']++;
+                }
+                else{
+                    $ClaimEducationCount[$Vacancy->claim_education]['percentage']=1;
+                }
+                $ClaimEducationCount[$Vacancy->claim_education]['vacancy'][$Vacancy->id]['vacancy_name']=$Vacancy->vacancy_name;
+                $ClaimEducationCount[$Vacancy->claim_education]['vacancy'][$Vacancy->id]['vacancy_link']=$Vacancy->link;
+                $ClaimEducationCount[$Vacancy->claim_education]['vacancy'][$Vacancy->id]['company_name']=$Company->company_name;
+                $ClaimEducationCount[$Vacancy->claim_education]['vacancy'][$Vacancy->id]['company_link']=$Company->link;
         }
-        foreach($vacanciesClaimEducation as $Education => $Count){
-            $vacanciesClaimEducation[$Education]=round($Count/count($works)*100,1); 
+        foreach($ClaimEducationCount as $Education => $Count){
+            $ClaimEducationCount[$Education]['percentage']=round($Count['percentage']/count($works)*100,1); 
         }
-        return $vacanciesClaimEducation;
+        return $ClaimEducationCount;
     }
     /**
      * @OA\GET(
@@ -166,19 +178,24 @@ class WorkController extends Controller
     {
         $works=$request->works;
         $Vacancies=Vacancy::all()->find($works);
-        $vacanciesClaimExperience=[];
+        $ClaimExperienceCount=[];
         foreach($Vacancies as $Vacancy){
-            if (isset($vacanciesClaimExperience[$Vacancy->claim_experience])){
-                $vacanciesClaimExperience[$Vacancy->claim_experience]++;
-            }
-            else{
-                $vacanciesClaimExperience[$Vacancy->claim_experience]=1;
-            }
+                $Company=$Vacancy->company;
+                if (isset($ClaimExperienceCount[$Vacancy->claim_experience]['percentage'])){
+                    $ClaimExperienceCount[$Vacancy->claim_experience]['percentage']++;
+                }
+                else{
+                    $ClaimExperienceCount[$Vacancy->claim_experience]['percentage']=1;
+                }
+                $ClaimExperienceCount[$Vacancy->claim_experience]['vacancy'][$Vacancy->id]['vacancy_name']=$Vacancy->vacancy_name;
+                $ClaimExperienceCount[$Vacancy->claim_experience]['vacancy'][$Vacancy->id]['vacancy_link']=$Vacancy->link;
+                $ClaimExperienceCount[$Vacancy->claim_experience]['vacancy'][$Vacancy->id]['company_name']=$Company->company_name;
+                $ClaimExperienceCount[$Vacancy->claim_experience]['vacancy'][$Vacancy->id]['company_link']=$Company->link;
         }
-        foreach($vacanciesClaimExperience as $Experience => $Count){
-            $vacanciesClaimExperience[$Experience]=round($Count/count($works)*100,1); 
+        foreach($ClaimExperienceCount as $Experience => $Count){
+            $ClaimExperienceCount[$Experience]['percentage']=round($Count['percentage']/count($works)*100,1); 
         }
-        return $vacanciesClaimExperience;
+        return $ClaimExperienceCount;
     }
     
      /**
@@ -197,24 +214,27 @@ class WorkController extends Controller
     public function getToolCount(Request $request){
         $works=$request->works;
         $Vacancies=Vacancy::all()->find($works);
-        $Tools=[];
-        foreach($Vacancies as $Vacancy){
-            $Tools[$Vacancy->id]=$Vacancy->tool->toarray();
-        }
         $ToolCount=[];
-        foreach($Tools as $Tool){
-            foreach($Tool as $toolItem){
-                if (isset($ToolCount[$toolItem['vacancy_tool']])){
-                    $ToolCount[$toolItem['vacancy_tool']]++;
+        foreach($Vacancies as $Vacancy){
+            $Tool=$Vacancy->tool->toarray();
+            $Company=$Vacancy->company;
+            foreach($Tool as $ToolItem){
+                if (isset($ToolCount[$ToolItem['vacancy_tool']]['percentage'])){
+                    $ToolCount[$ToolItem['vacancy_tool']]['percentage']++;
                 }
                 else{
-                    $ToolCount[$toolItem['vacancy_tool']]=1;
+                    $ToolCount[$ToolItem['vacancy_tool']]['percentage']=1;
                 }
+                $ToolCount[$ToolItem['vacancy_tool']]['vacancy'][$Vacancy->id]['vacancy_name']=$Vacancy->vacancy_name;
+                $ToolCount[$ToolItem['vacancy_tool']]['vacancy'][$Vacancy->id]['vacancy_link']=$Vacancy->link;
+                $ToolCount[$ToolItem['vacancy_tool']]['vacancy'][$Vacancy->id]['company_name']=$Company->company_name;
+                $ToolCount[$ToolItem['vacancy_tool']]['vacancy'][$Vacancy->id]['company_link']=$Company->link;
             }
         }
         foreach($ToolCount as $Tool => $Count){
-            $ToolCount[$Tool]=round($Count/count($works)*100,1); 
+            $ToolCount[$Tool]['percentage']=round($Count['percentage']/count($works)*100,1);
         }
         return $ToolCount;
     }
+
 }
