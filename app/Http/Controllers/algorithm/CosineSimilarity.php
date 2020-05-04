@@ -1,8 +1,8 @@
 <?php
 
-namespace App;
+namespace App\Http\Controllers\algorithm;
 
-class cosineSimilarityKernel
+class CosineSimilarity
 {
 
 /**
@@ -54,13 +54,14 @@ public function getMarkMod($arrParam){
     * @param unknown_type $intLenth 向量的长度
     *
     */
-    public function getCosine($arrMark, $arrAnaly,$intLenth){
+    public function getCosine( $arrMark, $arrAnaly, $intLenth){
         $strVector = 0;
         $strCosine = 0;
         for($i = 0; $i < $intLenth; $i++){
-        $strMarkVal = $arrMark['k'.$i];
-        $strAnalyVal = $arrAnaly['j'.$i];
-        $strVector += $strMarkVal * $strAnalyVal;
+            $strMarkVal = $arrMark['k'.$i];
+            $strAnalyVal = $arrAnaly['j'.$i];
+            $innerProduct=$strMarkVal * $strAnalyVal;
+            $strVector += $innerProduct;
         }
         $arrAnalyMod = getMarkMod($arrAnaly); //求分析向量的模
         $strMarkMod = getMarkMod($arrMark);
@@ -68,7 +69,7 @@ public function getMarkMod($arrParam){
         $strFenMu = $arrAnalyMod * $strMarkMod;
         $strCosine = $strFenzi / $strFenMu;
         if(0 !== (int)$strFenMu){
-        $strCosine = $strFenzi / $strFenMu;
+            $strCosine = $strFenzi / $strFenMu;
         }
         return $strCosine;
     }    

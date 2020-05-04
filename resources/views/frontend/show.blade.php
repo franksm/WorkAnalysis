@@ -7,8 +7,8 @@
             white-space: pre-line;
         }
 </style>
-    <h3>職缺綜合資訊</h3>
                 <div class="col-md-12">
+                    <h3>職缺綜合資訊</h3>
                     <table class="table">
                         <thead>
                             <tr>
@@ -23,7 +23,7 @@
                                 <th>工作經歷</th>
                                 <th>需求人數</th>
                                 <th>是否出差外派</th>
-                                <th>本職缺連結</th>
+                                <th>職缺連結</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -64,8 +64,8 @@
                                     <th>資本額</th>
                                     <th>員工數</th>
                                     <th>公司地點</th>
-                                    <th>公司連結</th>
                                     <th>公司福利</th>
+                                    <th>公司連結</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -81,7 +81,6 @@
                                     <th>{{$Company['capital']}}</th>
                                     <th>{{$Company['workers']}}</th>
                                     <th>{{$Company['region'].$Company['area']}}</th>
-                                    <th><a href="{{$Company['link']}}">公司連結</a></th>
                                         <div class="modal fade" id="a{{$Company['id']}}" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
                                             <div class="modal-dialog" role="document">
                                                 <div class="modal-content">
@@ -98,10 +97,11 @@
                                             </div>
                                         </div>
                                     <th>
-                                        <div class="text-center">
-                                            <a href="" class="btn btn-default btn-rounded mb-4" data-toggle="modal" data-target="#a{{$Company['id']}}">公司福利</a>
+                                        <div>
+                                            <a href="" data-toggle="modal" data-target="#a{{$Company['id']}}">公司福利</a>
                                         </div>
                                     </th>
+                                    <th><a href="{{$Company['link']}}">公司連結</a></th>
                                 </tr>
                                 @endforeach
                             </tbody>

@@ -30,10 +30,14 @@ Route::prefix('api')->name('api.')->group(function() {
     Route::get('get_companies','api\CompanyController@get_companies');
     Route::get('industryCategoryCount','api\CompanyController@getIndustryCategoryCount');
     //------------------------------------------------------------------------
+    Route::get('getVacancyId','api\WorkController@getVacancyId');
     Route::get('claimEducationCount','api\WorkController@getVacancyClaimEducationCount');
     Route::get('claimExperienceCount','api\WorkController@getVacancyClaimExperienceCount');
     Route::get('categoryCount','api\WorkController@getCategoryCount');
     Route::get('toolCount','api\WorkController@getToolCount');
+    //------------------------------------------------------------------------
+    Route::get('claimInfo','api\processVacancyResumeController@processClaimInfo');
+    Route::get('toolCategory','api\processVacancyResumeController@processToolOrCategory');
 
 });
 
