@@ -42,13 +42,13 @@
     <div class="left">
         <ul class="navbar-nav mr-auto">
             <li class="nav-item px-lg-4 my-lg-2">
-                <a title="所有工作" href="/user/web/">所有工作</a>
+                <a title="所有工作" href="/user/saveWork/">所有工作</a>
             </li>
             <li class="nav-item px-lg-4 my-lg-2">
-                <a title="軟體設計工程師" href="/user/web?vacancy_category=軟體設計工程師">軟體設計工程師</a>
+                <a title="軟體設計工程師" href="/user/saveWork?vacancy_category=軟體設計工程師">軟體設計工程師</a>
             </li>
             <li class="nav-item px-lg-4 my-lg-2">
-                <a title="所有工作" href="/user/web?vacancy_category=行政人員">行政人員</a>
+                <a title="所有工作" href="/user/saveWork?vacancy_category=行政人員">行政人員</a>
             </li>
         </ul>
     </div>

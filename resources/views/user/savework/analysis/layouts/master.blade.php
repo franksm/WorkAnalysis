@@ -15,7 +15,7 @@
 
 <body>
     <div id="app">
-        @include('frontend.layouts.navbar')
+        @include('user.savework.analysis.layouts.navbar')
         @yield('content')
     </div>
 </body>

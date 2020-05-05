@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers\backend\vacancy;
+namespace App\Http\Controllers;
 
 use Illuminate\Support\Facades\Session;
 use Illuminate\Http\Request;
@@ -11,7 +11,7 @@ use App\Vacancy;
 use App\VacancyCategory;
 use Redirect;
 use App\Resume;
-class FrontendController extends Controller
+class WorkAnalysisController extends Controller
 {
     public function index(Request $request){
         if(isset($request->vacancy_category)){
@@ -23,7 +23,7 @@ class FrontendController extends Controller
         foreach($Vacancies as $Vacancy){
             $Companies[$Vacancy->id]=$Vacancy->company;
         }
-        return view('frontend.index',compact('Vacancies','Companies'));
+        return view('user.savework.index',compact('Vacancies','Companies'));
     }
     public function form(Request $request){
         if(isset($request->works) and $request->isMethod('post')){
@@ -33,7 +33,7 @@ class FrontendController extends Controller
         else if($request->session()->has('works')){
             $works=session('works');
         }else{
-            return Redirect::to('/user/web/');
+            return Redirect::to('/user/saveWork/');
         }
         $search = "";
         foreach($works as $work){
@@ -63,7 +63,7 @@ class FrontendController extends Controller
             $score+=count(array_intersect($vacancyCategory,$resumeCategories));
             $Vacancies[$key]->score=$score;
         }
-        return view('frontend.show',compact('Vacancies','Categories','Tools','Companies'));
+        return view('user.savework.analysis.show',compact('Vacancies','Categories','Tools','Companies'));
     }
     
     public function detail(Request $request)
@@ -102,7 +102,7 @@ class FrontendController extends Controller
         if($request->session()->has('works')){
             $works=session('works');
         }else{
-            return Redirect::to('/user/web/');
+            return Redirect::to('/user/saveWork/');
         }
         $works=session('works');   
         $search = "";
@@ -120,6 +120,6 @@ class FrontendController extends Controller
         $Eductions = ['不拘','高中','專科','大學','碩士','博士'];
         $Experiences = ['不拘','1年','2年','3年','4年','5年','6年','7年','8年','9年','10年'];
 
-        return view('frontend.detail',compact('claimExperiences','claimEducations','tools','categories','industryCategories','capitals','workers','resumes','resumeTools','resumeCategories','Eductions','Experiences'));
+        return view('user.savework.analysis.detail',compact('claimExperiences','claimEducations','tools','categories','industryCategories','capitals','workers','resumes','resumeTools','resumeCategories','Eductions','Experiences'));
     }
 }

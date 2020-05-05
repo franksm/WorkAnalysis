@@ -1,5 +1,5 @@
 
-@extends('frontend.layouts.master')
+@extends('user.savework.analysis.layouts.master')
 @section('nav_list', 'active')
 @section('content')
 <style type="text/css">
