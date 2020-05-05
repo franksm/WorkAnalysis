@@ -63,14 +63,14 @@
                 }
             }
         },
-        "/api/get_vacancies": {
+        "/api/capital": {
             "get": {
                 "tags": [
                     "給我職缺資訊"
                 ],
-                "summary": "取得職缺資訊",
+                "summary": "取得資本額",
                 "description": "請給我對應的id",
-                "operationId": "App\\Http\\Controllers\\api\\WorkController::get_vacancies",
+                "operationId": "App\\Http\\Controllers\\api\\CompanyController::getCapital",
                 "parameters": [
                     {
                         "name": "works[]",
@@ -92,14 +92,72 @@
                 }
             }
         },
-        "/api/get_categories": {
+        "/api/workers": {
+            "get": {
+                "tags": [
+                    "給我職缺資訊"
+                ],
+                "summary": "取得員工人數",
+                "description": "請給我對應的id",
+                "operationId": "App\\Http\\Controllers\\api\\CompanyController::getWorkers",
+                "parameters": [
+                    {
+                        "name": "works[]",
+                        "in": "query",
+                        "description": "請輸入查詢id",
+                        "required": true,
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "type": "integer"
+                            }
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "請求成功"
+                    }
+                }
+            }
+        },
+        "/api/getVacancies": {
+            "get": {
+                "tags": [
+                    "給我職缺資訊"
+                ],
+                "summary": "取得職缺資訊",
+                "description": "請給我對應的id",
+                "operationId": "App\\Http\\Controllers\\api\\WorkController::getVacancies",
+                "parameters": [
+                    {
+                        "name": "works[]",
+                        "in": "query",
+                        "description": "請輸入查詢id",
+                        "required": true,
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "type": "integer"
+                            }
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "請求成功"
+                    }
+                }
+            }
+        },
+        "/api/getCategories": {
             "get": {
                 "tags": [
                     "給我職缺資訊"
                 ],
                 "summary": "取得職缺種類資訊",
                 "description": "請給我對應的id",
-                "operationId": "App\\Http\\Controllers\\api\\WorkController::get_categories",
+                "operationId": "App\\Http\\Controllers\\api\\WorkController::getCategories",
                 "parameters": [
                     {
                         "name": "works[]",
@@ -128,7 +186,7 @@
                 ],
                 "summary": "取得職缺需求工具資訊",
                 "description": "請給我對應的id",
-                "operationId": "App\\Http\\Controllers\\api\\WorkController::get_tools",
+                "operationId": "App\\Http\\Controllers\\api\\WorkController::getTools",
                 "parameters": [
                     {
                         "name": "works[]",

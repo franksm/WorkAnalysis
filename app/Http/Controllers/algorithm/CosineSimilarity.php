@@ -4,7 +4,6 @@ namespace App\Http\Controllers\algorithm;
 
 class CosineSimilarity
 {
-
 /**
  * 数据分析引擎
  * 分析向量的元素 必须和基准向量的元素一致，取最大个数，分析向量不足元素以0填补。

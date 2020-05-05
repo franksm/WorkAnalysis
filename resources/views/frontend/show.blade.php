@@ -48,7 +48,7 @@
                                 <th>{{$Vacancy->claim_experience}}</th>
                                 <th>{{$Vacancy->claim_people}}</th>
                                 <th>{{$Vacancy->expatriate}}</th>
-                                <th><a href="{{$Vacancy->link}}">導引至頁面</a></th>
+                                <th><a href="{{$Vacancy->link}}">職缺連結</a></th>
                             </tr>
                             @endforeach
                         </tbody>
