@@ -29,14 +29,14 @@ Route::prefix('api')->name('api.')->group(function() {
     Route::get('capital','api\CompanyController@getCapital');
     Route::get('workers','api\CompanyController@getWorkers');
     //Vacancy------------------------------------------------------------------------
-    Route::get('getVacancies','api\WorkController@getVacancies');
+    Route::get('getVacancy','api\WorkController@getVacancy');
     Route::get('getCategories','api\WorkController@getCategories');
     Route::get('getTools','api\WorkController@getTools');
-    Route::get('getResumeId','api\WorkController@getResumeId');
-    Route::get('claimEducationCount','api\WorkController@getVacancyClaimEducationCount');
-    Route::get('claimExperienceCount','api\WorkController@getVacancyClaimExperienceCount');
-    Route::get('categoryCount','api\WorkController@getCategoryCount');
-    Route::get('toolCount','api\WorkController@getToolCount');
+    //StatisticsVacancy------------------------------------------------------------------------
+    Route::get('claimEducationCount','api\StatisticsWorksController@getVacancyClaimEducationCount');
+    Route::get('claimExperienceCount','api\StatisticsWorksController@getVacancyClaimExperienceCount');
+    Route::get('categoryCount','api\StatisticsWorksController@getCategoryCount');
+    Route::get('toolCount','api\StatisticsWorksController@getToolCount');
     //Resume------------------------------------------------------------------------
     Route::get('ResumeTool','api\ResumeController@getResumeTool');
     Route::get('ResumeCategory','api\ResumeController@getResumeCategory');

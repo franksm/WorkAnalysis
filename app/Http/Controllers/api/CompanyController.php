@@ -9,7 +9,7 @@ use Illuminate\Http\Request;
 
 class CompanyController extends Controller
 {
-    public function useCompanyIdGetCompanyInfo($works)
+    public function GetCompanyInfo($works)
     {
         $Vacancies=Vacancy::select('id','company_id')->find($works);
         $vacancyArray=[];
@@ -35,7 +35,7 @@ class CompanyController extends Controller
     public function get_companies(Request $request)
     {
         $works=$request->works;
-        $Companies=$this->useCompanyIdGetCompanyInfo($works);
+        $Companies=$this->getCompanyInfo($works);
         foreach($Companies as $Company){
             $Company->vacancy;
         };
@@ -57,7 +57,7 @@ class CompanyController extends Controller
     public function getIndustryCategoryCount(Request $request)
     {
         $works=$request->works;
-        $Companies=$this->useCompanyIdGetCompanyInfo($works);
+        $Companies=$this->getCompanyInfo($works);
         $industryCategories=[];
         foreach($Companies as $Company){
             if (isset($industryCategories[$Company['industry_category']]['percentage'])){
@@ -90,7 +90,7 @@ class CompanyController extends Controller
     public function getCapital(Request $request)
     {
         $works=$request->works;
-        $Companies=$this->useCompanyIdGetCompanyInfo($works);
+        $Companies=$this->getCompanyInfo($works);
         $capital=[];
         foreach($Companies as $Company){
             if($Company->capital=="暫不提供"){

@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\backend\vacancy;
 
+use App\Http\Controllers\api\Statistics as Statistics;
 use Illuminate\Support\Facades\Session;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
@@ -39,7 +40,7 @@ class FrontendController extends Controller
         foreach($works as $work){
             $search .= "works[]=".$work."&";
         }
-        $urlApi = "http://laravel.test/api/getVacancies?".$search;
+        $urlApi = "http://laravel.test/api/getVacancy?".$search;
         $Vacancies = json_decode(file_get_contents($urlApi));
         $urlApi = "http://laravel.test/api/getCategories?".$search;
         $Categories = json_decode(file_get_contents($urlApi),true);
@@ -80,6 +81,7 @@ class FrontendController extends Controller
         $resumeTools = json_decode(file_get_contents($resumeToolsUrl),true);
         $resumeCategoryUrl = "http://laravel.test/api/ResumeCategory?id=".$user_id;
         $resumeCategories = json_decode(file_get_contents($resumeCategoryUrl),true);
+        
         return view('frontend.detail',compact('claimExperiences','claimEducations','tools','categories','industryCategories','capitals','workers','resumeTools','resumeCategories'));
     }
 }

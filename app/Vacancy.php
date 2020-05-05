@@ -25,8 +25,4 @@ class Vacancy extends Model
     {
         return $this->hasone('App\Company','id','company_id');
     }
-    public function vacancyweight()
-    {
-        return $this->hasone('App\VacancyWeight','vacancy_id','id');
-    }
 }
