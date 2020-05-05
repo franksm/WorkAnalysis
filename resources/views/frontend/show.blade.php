@@ -54,8 +54,7 @@
                         </tbody>
                     </table>
                     <h3>公司綜合資訊</h3>
-                    <div class="col-md-12">
-                        <table class="table">
+                    <table class="table">
                             <thead>
                                 <tr>
                                     <th>公司名稱</th>
@@ -106,7 +105,6 @@
                                 @endforeach
                             </tbody>
                         </table>
-                    </div>    
                 </div>
 @endsection
 

@@ -9,21 +9,75 @@
         var chart = new Chart(ctx, {
             type: 'bar',
             data: {
-                labels: ["Red", "Blue", "Yellow", "Green", "Purple", "Orange"],
-                datasets: [{
-                    label: '# of Votes',
-                    data: [12, 19, 3, 5, 2, 3],
-                    backgroundColor: 'rgba(255, 159, 64, 0.2)',
-                    borderColor: 'rgba(255, 159, 64, 1)',
-                    borderWidth: 1
-                }]
+                labels: ["Red", "Blue", "Yellow", "Green", "Purple"],
+                datasets: [
+                    {
+                        label: '# of Votes',
+                        type: 'bar',
+                        data: [1200, 1900, 300, 500, 300],
+                        backgroundColor: 'rgba(255, 159, 64, 0.2)',
+                        borderColor: 'rgba(255, 159, 64, 1)',
+                        borderWidth: 1
+                    },
+                    {
+                        label: '# of Votes',
+                        type: 'line',
+                        data: [100, 1000, 200, 500, 200],
+                        backgroundColor: 'rgba(255, 255, 255, 0.2)',
+                        borderColor: 'rgba(255, 159, 64, 1)',
+                        borderWidth: 1
+                    }
+                ],
+            },
+            options: { 
+                //barShowStroke: false, 
+                scales: { 
+                    yAxes: [{
+                        id: 'y-axis-1',
+                        ticks: {min: 0},
+                        scaleLabel: {
+                            display: true,
+                            labelString: '資本額(萬)'
+                        }
+                    }],
+                    xAxes: [{
+                        id: 'x-axis-1',
+                        scaleLabel: {
+                            display: true,
+                            labelString: '公司名稱'
+                        }
+                    }] 
+                },
+                hover: {
+                    animationDuration: 0  // 防止鼠标移上去，数字闪烁
+                },
+                animation: {           // 这部分是数值显示的功能实现
+                    onComplete: function () {
+                        var chartInstance = this.chart,
+    
+                        ctx = chartInstance.ctx;
+                        // 以下属于canvas的属性（font、fillStyle、textAlign...）
+                        ctx.font = Chart.helpers.fontString(Chart.defaults.global.defaultFontSize, Chart.defaults.global.defaultFontStyle, Chart.defaults.global.defaultFontFamily);
+                        ctx.fillStyle = "black";
+                        ctx.textAlign = 'center';
+                        ctx.textBaseline = 'bottom';
+    
+                        var dataset = this.data.datasets[0];
+                        var meta = chartInstance.controller.getDatasetMeta(0);
+                        meta.data.forEach(function (bar, index) {
+                            var data = dataset.data[index];
+                            ctx.fillText(data, bar._model.x, bar._model.y - 5);
+                        });
+                        
+                    }
+                }
             }
         });
     });
 </script>
 
 
-<div class="m-lg-4">
+<div class="mr-lg-4 ml-lg-4">
 <div class="content_full analysis-section">
     <h1>職缺比一比</h1>
     <hr size="64px" width="100%">
@@ -39,7 +93,7 @@
                                     <dt>
                                         <a href="" data-toggle="modal" data-target="#a{{$claimExperience}}">{{$claimExperience}}</a>
                                     </dt>
-                                    <dd class="bar"><div style="width: {{$claimExperienceQuantity['percentage']}}%;"></div></dd>
+                                    <dd class="bar" ><div style="width: {{$claimExperienceQuantity['percentage']}}%;"></div></dd>
                                     <dd class="ratio">{{$claimExperienceQuantity['percentage']}}%</dd>
                                     <div class="modal fade" id="a{{$claimExperience}}" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
                                         <div class="modal-dialog" role="document">
@@ -153,7 +207,13 @@
                                     <dt>
                                         <a href="" data-toggle="modal" data-target="#a{{$tool}}">{{$tool}}</a>
                                     </dt>
-                                    <dd class="bar"><div style="width: {{$toolQuantity['percentage']}}%;"></div></dd>
+                                    <dd class="bar">
+                                        @if(in_array($tool,$sameTools))
+                                            <div style="width: {{$toolQuantity['percentage']}}%;"></div>
+                                        @else
+                                            <div style="width: {{$toolQuantity['percentage']}}%;background-color:pink;"></div>
+                                        @endif
+                                    </dd>
                                     <dd class="ratio">{{$toolQuantity['percentage']}}%</dd>
                                     <div class="modal fade" id="a{{$tool}}" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
                                         <div class="modal-dialog" role="document">
@@ -180,8 +240,8 @@
                         </div>
                     </div>
                 </div>
-                <hr size="64px" width="100%">
                 <h1>企業比一比</h1>
+                <hr size="64px" width="100%">
                 <div class="bar-row">
                     <div class="bar_analysis">
                         <div class="bar-title">

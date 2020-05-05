@@ -22,7 +22,7 @@ class CompanyController extends Controller
     /**
      * @OA\GET(
      *     path="/api/get_companies",
-     *     tags={"給我職缺資訊"},
+     *     tags={"公司資訊"},
      *     summary="取得公司資訊",
      *     description="請給我對應的id",
      *     @OA\Parameter(name="works[]", in="query",@OA\Schema(type="array",@OA\Items(type="integer")), required=true, description="請輸入查詢id"),
@@ -44,7 +44,7 @@ class CompanyController extends Controller
     /**
      * @OA\GET(
      *     path="/api/industryCategoryCount",
-     *     tags={"給我職缺資訊"},
+     *     tags={"公司資訊"},
      *     summary="取得產業類別資訊",
      *     description="請給我對應的id",
      *     @OA\Parameter(name="works[]", in="query",@OA\Schema(type="array",@OA\Items(type="integer")), required=true, description="請輸入查詢id"),

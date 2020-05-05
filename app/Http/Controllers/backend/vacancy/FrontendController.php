@@ -4,7 +4,9 @@ namespace App\Http\Controllers\backend\vacancy;
 
 use Illuminate\Support\Facades\Session;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use App\Http\Controllers\Controller;
+use App\Resume;
 use App\Company;
 use App\Vacancy;
 use App\VacancyCategory;
@@ -60,6 +62,10 @@ class FrontendController extends Controller
         foreach($works as $work){
             $search .= "works[]=".$work."&";
         }
+        $resume = Resume::where(['user_id' => Auth::id()])->first();
+        $resumeTools=$resume->tool->toarray();
+        $resumeTools=array_column($resumeTools,'vacancy_tool');
+
         $claimExperienceUrl = "http://laravel.test/api/claimExperienceCount?".$search;
         $claimExperiences = json_decode(file_get_contents($claimExperienceUrl),true);
         $claimEducationUrl = "http://laravel.test/api/claimEducationCount?".$search;
@@ -70,6 +76,8 @@ class FrontendController extends Controller
         $tools = json_decode(file_get_contents($toolUrl),true);
         $industryCategoryUrl = "http://laravel.test/api/industryCategoryCount?".$search;
         $industryCategories = json_decode(file_get_contents($industryCategoryUrl),true);
-        return view('frontend.detail',compact('claimExperiences','claimEducations','tools','categories','industryCategories'));
+        
+        $sameTools = array_intersect(array_keys($tools),$resumeTools);
+        return view('frontend.detail',compact('claimExperiences','claimEducations','tools','categories','industryCategories','sameTools'));
     }
 }

@@ -22,7 +22,7 @@ class WorkController extends Controller
     /**
      * @OA\GET(
      *     path="/api/get_vacancies",
-     *     tags={"給我職缺資訊"},
+     *     tags={"職缺資訊"},
      *     summary="取得職缺資訊",
      *     description="請給我對應的id",
      *     @OA\Parameter(name="works[]", in="query",@OA\Schema(type="array",@OA\Items(type="integer")), required=true, description="請輸入查詢id"),
@@ -41,7 +41,7 @@ class WorkController extends Controller
     /**
      * @OA\GET(
      *     path="/api/get_categories",
-     *     tags={"給我職缺資訊"},
+     *     tags={"職缺資訊"},
      *     summary="取得職缺種類資訊",
      *     description="請給我對應的id",
      *     @OA\Parameter(name="works[]", in="query",@OA\Schema(type="array",@OA\Items(type="integer")), required=true, description="請輸入查詢id"),
@@ -64,7 +64,7 @@ class WorkController extends Controller
     /**
      * @OA\GET(
      *     path="/api/get_tools",
-     *     tags={"給我職缺資訊"},
+     *     tags={"職缺資訊"},
      *     summary="取得職缺需求工具資訊",
      *     description="請給我對應的id",
      *     @OA\Parameter(name="works[]", in="query",@OA\Schema(type="array",@OA\Items(type="integer")), required=true, description="請輸入查詢id"),
@@ -87,7 +87,7 @@ class WorkController extends Controller
     /**
      * @OA\GET(
      *     path="/api/categoryCount",
-     *     tags={"給我職缺資訊"},
+     *     tags={"職缺資訊"},
      *     summary="取得種類統計分析資訊",
      *     description="請給我對應的id",
      *     @OA\Parameter(name="works[]", in="query",@OA\Schema(type="array",@OA\Items(type="integer")), required=true, description="請輸入查詢id"),
@@ -126,7 +126,7 @@ class WorkController extends Controller
     /**
      * @OA\GET(
      *     path="/api/claimEducationCount",
-     *     tags={"給我職缺資訊"},
+     *     tags={"職缺資訊"},
      *     summary="取得需求學歷分析資訊",
 
      *     description="請給我對應的id",
@@ -164,7 +164,7 @@ class WorkController extends Controller
     /**
      * @OA\GET(
      *     path="/api/claimExperienceCount",
-     *     tags={"給我職缺資訊"},
+     *     tags={"職缺資訊"},
      *     summary="取得工作經歷分析資訊",
      *     description="請給我對應的id",
      *     @OA\Parameter(name="works[]", in="query",@OA\Schema(type="array",@OA\Items(type="integer")), required=true, description="請輸入查詢id"),
@@ -201,7 +201,7 @@ class WorkController extends Controller
      /**
      * @OA\GET(
      *     path="/api/toolCount",
-     *     tags={"給我職缺資訊"},
+     *     tags={"職缺資訊"},
      *     summary="取得工具統計分析資訊",
      *     description="請給我對應的id",
      *     @OA\Parameter(name="works[]", in="query",@OA\Schema(type="array",@OA\Items(type="integer")), required=true, description="請輸入查詢id"),
