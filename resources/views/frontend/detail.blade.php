@@ -110,7 +110,13 @@
                                     <dt>
                                         <a href="" data-toggle="modal" data-target="#a{{$claimExperience}}">{{$claimExperience}}</a>
                                     </dt>
-                                    <dd class="bar" ><div style="width: {{$claimExperienceQuantity['percentage']}}%;"></div></dd>
+                                    <dd class="bar" >
+                                        @if (array_search($claimExperience,$Experiences) <= array_search($resumes['experience'],$Experiences))
+                                            <div style="width: {{$claimExperienceQuantity['percentage']}}%;"></div>
+                                        @else
+                                            <div style="width: {{$claimExperienceQuantity['percentage']}}%;background-color: pink;"></div>
+                                        @endif
+                                    </dd>
                                     <dd class="ratio">{{$claimExperienceQuantity['percentage']}}%</dd>
                                     <div class="modal fade" id="a{{$claimExperience}}" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
                                         <div class="modal-dialog" role="document">
@@ -147,7 +153,13 @@
                                     <dt>
                                         <a href="" data-toggle="modal" data-target="#a{{$claimEducation}}">{{$claimEducation}}</a>
                                     </dt>
-                                    <dd class="bar"><div style="width: {{$claimEducationQuantity['percentage']}}%;"></div></dd>
+                                    <dd class="bar">
+                                        @if (array_search($claimEducation,$Eductions) <= array_search($resumes['eduction'],$Eductions))
+                                            <div style="width: {{$claimEducationQuantity['percentage']}}%;"></div>
+                                        @else
+                                            <div style="width: {{$claimEducationQuantity['percentage']}}%;background-color: pink;"></div>
+                                        @endif
+                                    </dd>
                                     <dd class="ratio">{{$claimEducationQuantity['percentage']}}%</dd>
                                     <div class="modal fade" id="a{{$claimEducation}}" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
                                         <div class="modal-dialog" role="document">
@@ -186,7 +198,13 @@
                                     <dt>
                                         <a href="" data-toggle="modal" data-target="#a{{$category}}">{{$category}}</a>
                                     </dt>
-                                    <dd class="bar"><div style="width: {{$categoryQuantity['percentage']}}%;"></div></dd>
+                                    <dd class="bar">
+                                        @if(in_array($category,$resumeCategories))
+                                            <div style="width: {{$categoryQuantity['percentage']}}%;"></div>
+                                        @else
+                                            <div style="width: {{$categoryQuantity['percentage']}}%;background-color: pink;"></div>
+                                        @endif
+                                    </dd>
                                     <dd class="ratio">{{$categoryQuantity['percentage']}}%</dd>
                                     <div class="modal fade" id="a{{$category}}" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
                                         <div class="modal-dialog" role="document">
@@ -225,7 +243,11 @@
                                         <a href="" data-toggle="modal" data-target="#a{{$tool}}">{{$tool}}</a>
                                     </dt>
                                     <dd class="bar">
+                                        @if(in_array($tool,$resumeTools))
                                             <div style="width: {{$toolQuantity['percentage']}}%;"></div>
+                                        @else
+                                            <div style="width: {{$toolQuantity['percentage']}}%;background-color: pink;"></div>
+                                        @endif
                                     </dd>
                                     <dd class="ratio">{{$toolQuantity['percentage']}}%</dd>
                                     <div class="modal fade" id="a{{$tool}}" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
@@ -238,7 +260,7 @@
                                                     </button>
                                                 </div>
                                                 <div>
-                                                    <hr>
+                                                    <hr>              
                                                     @foreach ($toolQuantity['vacancy'] as $item)
                                                         <a href={{$item['vacancy_link']}}>{{$item['vacancy_name']}}</a>
                                                         <a href={{$item['company_link']}}>{{$item['company_name']}}</a>

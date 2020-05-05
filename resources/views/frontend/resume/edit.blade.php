@@ -66,16 +66,16 @@
         <select class="selectExperience" style="width:100%;" name="experience"  required lay-verify="required">
             <option value="" style="display:none" >請選擇工作經歷</option>
             <option value="無經歷">無經歷</option>
-            <option value="一年">一年</option>
-            <option value="兩年">兩年</option>
-            <option value="三年">三年</option>
-            <option value="四年">四年</option>
-            <option value="五年">五年</option>
-            <option value="六年">六年</option>
-            <option value="七年">七年</option>
-            <option value="八年">八年</option>
-            <option value="九年">九年</option>
-            <option value="十年">十年</option>
+            <option value="1年">一年</option>
+            <option value="2年">兩年</option>
+            <option value="3年">三年</option>
+            <option value="4年">四年</option>
+            <option value="5年">五年</option>
+            <option value="6年">六年</option>
+            <option value="7年">七年</option>
+            <option value="8年">八年</option>
+            <option value="9年">九年</option>
+            <option value="10年">十年</option>
         </select>
     </div>
     <div class="col-md-12">

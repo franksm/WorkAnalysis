@@ -23,23 +23,24 @@ Route::get('/test', function () {
 Route::get('/page','PageController@index');
 
 Route::prefix('api')->name('api.')->group(function() {
-    Route::get('getVacancies','api\WorkController@getVacancies');
-    Route::get('getCategories','api\WorkController@getCategories');
-    Route::get('getTools','api\WorkController@getTools');
-    //------------------------------------------------------------------------
+    //Company------------------------------------------------------------------------
     Route::get('get_companies','api\CompanyController@get_companies');
     Route::get('industryCategoryCount','api\CompanyController@getIndustryCategoryCount');
     Route::get('capital','api\CompanyController@getCapital');
     Route::get('workers','api\CompanyController@getWorkers');
-    //------------------------------------------------------------------------
+    //Vacancy------------------------------------------------------------------------
+    Route::get('getVacancies','api\WorkController@getVacancies');
+    Route::get('getCategories','api\WorkController@getCategories');
+    Route::get('getTools','api\WorkController@getTools');
     Route::get('getResumeId','api\WorkController@getResumeId');
     Route::get('claimEducationCount','api\WorkController@getVacancyClaimEducationCount');
     Route::get('claimExperienceCount','api\WorkController@getVacancyClaimExperienceCount');
     Route::get('categoryCount','api\WorkController@getCategoryCount');
     Route::get('toolCount','api\WorkController@getToolCount');
-    //------------------------------------------------------------------------
-    Route::get('claimInfo','api\processVacancyResumeController@processClaimInfo');
-    Route::get('toolCategory','api\processVacancyResumeController@processToolOrCategory');
+    //Resume------------------------------------------------------------------------
+    Route::get('Resume','api\ResumeController@getResume');
+    Route::get('ResumeTool','api\ResumeController@getResumeTool');
+    Route::get('ResumeCategory','api\ResumeController@getResumeCategory');
 
 });
 

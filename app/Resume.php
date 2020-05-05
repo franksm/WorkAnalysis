@@ -23,10 +23,6 @@ class Resume extends Model
     {
         return $this->belongsToMany('App\VacancyTool','resume_tool_tags','resume_id','tool_id');
     }
-    public function resumeweight()
-    {
-        return $this->hasone('App\ResumeWeight','resume_id','id');
-    }
     public function user()
     {
         return $this->hasone('App\User','id','user_id');

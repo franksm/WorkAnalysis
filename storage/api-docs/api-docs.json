@@ -66,7 +66,7 @@
         "/api/capital": {
             "get": {
                 "tags": [
-                    "給我職缺資訊"
+                    "公司資訊"
                 ],
                 "summary": "取得資本額",
                 "description": "請給我對應的id",
@@ -95,7 +95,7 @@
         "/api/workers": {
             "get": {
                 "tags": [
-                    "給我職缺資訊"
+                    "公司資訊"
                 ],
                 "summary": "取得員工人數",
                 "description": "請給我對應的id",
@@ -121,7 +121,85 @@
                 }
             }
         },
-        "/api/getVacancies": {
+        "/api/Resume": {
+            "get": {
+                "tags": [
+                    "履歷資訊"
+                ],
+                "summary": "取得履歷資訊",
+                "description": "請給我對應的id",
+                "operationId": "App\\Http\\Controllers\\api\\ResumeController::getResume",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "query",
+                        "description": "請輸入使用者id",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "請求成功"
+                    }
+                }
+            }
+        },
+        "/api/ResumeTool": {
+            "get": {
+                "tags": [
+                    "履歷資訊"
+                ],
+                "summary": "取得擅長工具資訊",
+                "description": "請給我對應的id",
+                "operationId": "App\\Http\\Controllers\\api\\ResumeController::getResumeTool",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "query",
+                        "description": "請輸入使用者id",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "請求成功"
+                    }
+                }
+            }
+        },
+        "/api/ResumeCategory": {
+            "get": {
+                "tags": [
+                    "履歷資訊"
+                ],
+                "summary": "取得希望職缺種類",
+                "description": "請給我對應的id",
+                "operationId": "App\\Http\\Controllers\\api\\ResumeController::getResumeCategory",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "query",
+                        "description": "請輸入使用者id",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "請求成功"
+                    }
+                }
+            }
+        },
+        "/api/get_vacancies": {
             "get": {
                 "tags": [
                     "職缺資訊"
@@ -150,7 +228,7 @@
                 }
             }
         },
-        "/api/getCategories": {
+        "/api/get_categories": {
             "get": {
                 "tags": [
                     "職缺資訊"
@@ -302,7 +380,7 @@
                 ],
                 "summary": "取得工具統計分析資訊",
                 "description": "請給我對應的id",
-                "operationId": "App\\Http\\Controllers\\api\\WorkController::getToolCount",
+                "operationId": "App\\Http\\Controllers\\api\\WorkController::gettoolCount",
                 "parameters": [
                     {
                         "name": "works[]",

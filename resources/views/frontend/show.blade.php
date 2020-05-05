@@ -12,6 +12,7 @@
                     <table class="table">
                         <thead>
                             <tr>
+                                <th></th>
                                 <th>職缺名稱</th>
                                 {{-- <th>公司名稱</th> --}}
                                 <th>職缺類別</th>
@@ -29,6 +30,11 @@
                         <tbody>
                             @foreach ($Vacancies as $Vacancy)
                             <tr>
+                                @if($Vacancy->score>=5)
+                                    <th><img src="https://i.imgur.com/327mnj8.png" width="20" height="20"></th>
+                                @else
+                                    <th></th>
+                                @endif
                                 <th>{{$Vacancy->vacancy_name}}</th>
                                 {{-- <th>{{$Companies[$Vacancy->id]['company_name']}}</th> --}}
                                 <th>
