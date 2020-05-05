@@ -83,7 +83,7 @@ class WorkController extends Controller
         $vacancies=Vacancy::select('id')->find($works);
         $tools=[];
         foreach($vacancies as $vacancy){
-            $Tools[$vacancy->id]=$vacancy->tool->toarray();
+            $tools[$vacancy->id]=$vacancy->tool->toarray();
         }
         return $tools;
     }

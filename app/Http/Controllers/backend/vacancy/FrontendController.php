@@ -10,7 +10,7 @@ use App\Company;
 use App\Vacancy;
 use App\VacancyCategory;
 use Redirect;
-
+use App\Resume;
 class FrontendController extends Controller
 {
     public function index(Request $request){
@@ -39,11 +39,8 @@ class FrontendController extends Controller
         foreach($works as $work){
             $search .= "works[]=".$work."&";
         }
-        
         $urlApi = "http://laravel.test/api/getVacancies?".$search;
         $Vacancies = json_decode(file_get_contents($urlApi));
-        $urlApi = "http://laravel.test/api/getResumeId?id=".Auth::id();
-        $Resumes = json_decode(file_get_contents($urlApi));
         $urlApi = "http://laravel.test/api/getCategories?".$search;
         $Categories = json_decode(file_get_contents($urlApi),true);
         $urlApi = "http://laravel.test/api/getTools?".$search;
@@ -64,6 +61,7 @@ class FrontendController extends Controller
         foreach($works as $work){
             $search .= "works[]=".$work."&";
         }
+        $user_id=Auth::id();
         $claimExperienceUrl = "http://laravel.test/api/claimExperienceCount?".$search;
         $claimExperiences = json_decode(file_get_contents($claimExperienceUrl),true);
         $claimEducationUrl = "http://laravel.test/api/claimEducationCount?".$search;
@@ -78,6 +76,10 @@ class FrontendController extends Controller
         $capitals = json_decode(file_get_contents($urlApi),true);
         $urlApi = "http://laravel.test/api/workers?".$search;
         $workers = json_decode(file_get_contents($urlApi),true);
-        return view('frontend.detail',compact('claimExperiences','claimEducations','tools','categories','industryCategories','capitals','workers'));
+        $resumeToolsUrl = "http://laravel.test/api/ResumeTool?id=".$user_id;
+        $resumeTools = json_decode(file_get_contents($resumeToolsUrl),true);
+        $resumeCategoryUrl = "http://laravel.test/api/ResumeCategory?id=".$user_id;
+        $resumeCategories = json_decode(file_get_contents($resumeCategoryUrl),true);
+        return view('frontend.detail',compact('claimExperiences','claimEducations','tools','categories','industryCategories','capitals','workers','resumeTools','resumeCategories'));
     }
 }
