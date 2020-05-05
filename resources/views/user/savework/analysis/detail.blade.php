@@ -1,4 +1,4 @@
-@extends('frontend.layouts.master')
+@extends('user.savework.analysis.layouts.master')
 @section('nav_detail', 'active')
 @section('content')
 <link rel="stylesheet" href="https://www.104.com.tw/jobs/apply/static/css/app.min.css?id=7bc7c107a1569c7cfad5">

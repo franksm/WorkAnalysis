@@ -16,13 +16,13 @@ class ResumeController extends Controller
     {
         $Resume = Resume::where(['user_id' => Auth::id()])->first();
         $UserId = Auth::id();
-        return view('frontend/resume/index',compact('Resume','UserId'));
+        return view('user/resume/index',compact('Resume','UserId'));
     }
     public function create()
     {
         $CategoryAll = VacancyCategory::all();
         $ToolAll = VacancyTool::all();
-        return view('frontend/resume/create',compact('CategoryAll','ToolAll'));
+        return view('user/resume/create',compact('CategoryAll','ToolAll'));
     }
     public function store(Request $request)
     {
@@ -53,7 +53,7 @@ class ResumeController extends Controller
         $Tools = array_column($Tools,'id');
         $CategoryAll = VacancyCategory::all();
         $ToolAll = VacancyTool::all();
-        return view('frontend/resume/edit',compact('Resume','Categories','Tools','CategoryAll','ToolAll'));
+        return view('user/resume/edit',compact('Resume','Categories','Tools','CategoryAll','ToolAll'));
     }
 
     /**
