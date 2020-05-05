@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers\backend\vacancy;
+namespace App\Http\Controllers;
 
 use Illuminate\Support\Facades\Session;
 use Illuminate\Http\Request;
@@ -11,7 +11,8 @@ use App\Vacancy;
 use App\VacancyCategory;
 use Redirect;
 use App\Resume;
-class FrontendController extends Controller
+
+class WorkAnalysisController extends Controller
 {
     public function index(Request $request){
         if(isset($request->vacancy_category)){
