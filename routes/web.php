@@ -38,6 +38,7 @@ Route::prefix('api')->name('api.')->group(function() {
     Route::get('categoryCount','api\StatisticsWorksController@getCategoryCount');
     Route::get('toolCount','api\StatisticsWorksController@getToolCount');
     //Resume------------------------------------------------------------------------
+    Route::get('Resume','api\ResumeController@getResume');
     Route::get('ResumeTool','api\ResumeController@getResumeTool');
     Route::get('ResumeCategory','api\ResumeController@getResumeCategory');
 

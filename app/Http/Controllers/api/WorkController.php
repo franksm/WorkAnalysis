@@ -21,8 +21,8 @@ class WorkController extends Controller
     }
     /**
      * @OA\GET(
-     *     path="/api/getVacancies",
-     *     tags={"給我職缺資訊"},
+     *     path="/api/get_vacancies",
+     *     tags={"職缺資訊"},
      *     summary="取得職缺資訊",
      *     description="請給我對應的id",
      *     @OA\Parameter(name="works[]", in="query",@OA\Schema(type="array",@OA\Items(type="integer")), required=true, description="請輸入查詢id"),
@@ -40,8 +40,8 @@ class WorkController extends Controller
     }
     /**
      * @OA\GET(
-     *     path="/api/getCategories",
-     *     tags={"給我職缺資訊"},
+     *     path="/api/get_categories",
+     *     tags={"職缺資訊"},
      *     summary="取得職缺種類資訊",
      *     description="請給我對應的id",
      *     @OA\Parameter(name="works[]", in="query",@OA\Schema(type="array",@OA\Items(type="integer")), required=true, description="請輸入查詢id"),
@@ -66,7 +66,7 @@ class WorkController extends Controller
     /**
      * @OA\GET(
      *     path="/api/get_tools",
-     *     tags={"給我職缺資訊"},
+     *     tags={"職缺資訊"},
      *     summary="取得職缺需求工具資訊",
      *     description="請給我對應的id",
      *     @OA\Parameter(name="works[]", in="query",@OA\Schema(type="array",@OA\Items(type="integer")), required=true, description="請輸入查詢id"),
@@ -86,5 +86,4 @@ class WorkController extends Controller
         }
         return $tools;
     }
-
 }

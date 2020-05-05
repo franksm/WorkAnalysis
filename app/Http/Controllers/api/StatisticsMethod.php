@@ -21,17 +21,6 @@ class StatisticsMethod
         $this->companyInfo($countArray,$vacancyInfo,$vacancy,$companyContent);
         $this->vacancyInfo($countArray,$vacancyInfo,$vacancy);
     }
-    public function judgmentInHash(&$countArray,$vacancyInfo){
-        if (isset($countArray[$vacancyInfo]['percentage'])){
-            $countArray[$vacancyInfo]['percentage']++;
-        }
-        else{
-            $countArray[$vacancyInfo]['percentage']=1;
-        }
-    }
-    public function hashContentPercent(&$countArray,$selectWorks){
-        foreach($countArray as $countArrayItem => $countArrayCount){
-            $countArray[$countArrayItem]['percentage']=round($countArrayCount['percentage']/count($selectWorks)*100,1);
-        }
-    }
+    
+    
 }

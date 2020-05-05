@@ -96,7 +96,7 @@ class VacancyCategoryTagSeeder extends Seeder
         ]);
         $DB->insert([
             'vacancy_id'=>'8',
-            'category_id'=>'1'
+            'category_id'=>'7'
         ]);
         $DB->insert([
             'vacancy_id'=>'8',
@@ -108,27 +108,35 @@ class VacancyCategoryTagSeeder extends Seeder
         ]);
         $DB->insert([
             'vacancy_id'=>'9',
-            'category_id'=>'1'
+            'category_id'=>'7'
         ]);
         $DB->insert([
             'vacancy_id'=>'9',
-            'category_id'=>'2'
+            'category_id'=>'8'
         ]);
         $DB->insert([
             'vacancy_id'=>'9',
-            'category_id'=>'3'
+            'category_id'=>'9'
         ]);
         $DB->insert([
             'vacancy_id'=>'10',
-            'category_id'=>'1'
+            'category_id'=>'7'
         ]);
         $DB->insert([
             'vacancy_id'=>'10',
-            'category_id'=>'3'
+            'category_id'=>'9'
         ]);
         $DB->insert([
             'vacancy_id'=>'10',
             'category_id'=>'15'
+        ]);
+        $DB->insert([
+            'vacancy_id'=>'11',
+            'category_id'=>'7'
+        ]);
+        $DB->insert([
+            'vacancy_id'=>'11',
+            'category_id'=>'8'
         ]);
     }
 }

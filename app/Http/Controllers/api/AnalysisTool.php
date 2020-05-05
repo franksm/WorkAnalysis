@@ -1,7 +1,7 @@
 <?php
 namespace App\Http\Controllers\api;
 
-class detailFormInfo
+class GeneralTool
 {
     private function getCompanyInfo($vacancy){
         $company=$vacancy->company->all('id','company_name','link')->where('id',$vacancy->company_id)->toarray();
@@ -24,5 +24,17 @@ class detailFormInfo
         $this->companyInfo($countArray,$vacancyInfo,$vacancy,$companyContent);
         $this->vacancyInfo($countArray,$vacancyInfo,$vacancy);
     }
-    
+    public function judgmentInHash(&$countArray,$vacancyInfo){
+        if (isset($countArray[$vacancyInfo]['percent'])){
+            $countArray[$vacancyInfo]['percent']++;
+        }
+        else{
+            $countArray[$vacancyInfo]['percent']=1;
+        }
+    }
+    public function hashContentToPercent(&$countArray,$selectWorks){
+        foreach($countArray as $countArrayItem => $countArrayCount){
+            $countArray[$countArrayItem]['percent']=round($countArrayCount['percent']/count($selectWorks)*100,1);
+        }
+    }
 }
