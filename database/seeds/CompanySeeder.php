@@ -37,7 +37,7 @@ class CompanySeeder extends Seeder
         $DB->insert([
             'company_name'=>'遠雄房地產發展股份有限公司',
             'industry_category'=>'不動產經營業',
-            'capital'=>'2000萬',
+            'capital'=>'2000',
             'workers'=>'400',
             'region'=>'台北市',
             'area'=>'信義區',
@@ -58,7 +58,7 @@ class CompanySeeder extends Seeder
         $DB->insert([
             'company_name'=>'威煦軟體開發有限公司',
             'industry_category'=>'電腦軟體服務業',
-            'capital'=>'3000萬',
+            'capital'=>'3000',
             'workers'=>'暫不提供',
             'region'=>'台北市',
             'area'=>'信義區',
@@ -83,7 +83,7 @@ class CompanySeeder extends Seeder
         $DB->insert([
             'company_name'=>'創順科技有限公司',
             'industry_category'=>'其它軟體及網路相關業',
-            'capital'=>'80萬',
+            'capital'=>'80',
             'workers'=>'30',
             'region'=>'台北市',
             'area'=>'內湖區',
@@ -142,7 +142,7 @@ class CompanySeeder extends Seeder
         $DB->insert([
             'company_name'=>'社團法人台灣畜犬協會',
             'industry_category'=>'寵物相關服務業',
-            'capital'=>'20萬',
+            'capital'=>'20',
             'workers'=>'6',
             'region'=>'高雄市',
             'area'=>'三民區',
@@ -152,7 +152,7 @@ class CompanySeeder extends Seeder
         $DB->insert([
             'company_name'=>'台灣維達衛生用品股份有限公司',
             'industry_category'=>'紙相關製造',
-            'capital'=>'14億',
+            'capital'=>'140000',
             'workers'=>'300',
             'region'=>'台北市',
             'area'=>'大安區',
@@ -189,7 +189,7 @@ class CompanySeeder extends Seeder
         $DB->insert([
             'company_name'=>'志光教育科技股份有限公司',
             'industry_category'=>'其他教育服務',
-            'capital'=>'2億',
+            'capital'=>'20000',
             'workers'=>'暫不提供',
             'region'=>'台中市',
             'area'=>'中區',
@@ -202,7 +202,7 @@ class CompanySeeder extends Seeder
         $DB->insert([
             'company_name'=>'櫻女僕咖啡_勻翔專業攝影有限公司',
             'industry_category'=>'寵物相關服務業',
-            'capital'=>'100萬',
+            'capital'=>'100',
             'workers'=>'3',
             'region'=>'高雄市',
             'area'=>'三民區',

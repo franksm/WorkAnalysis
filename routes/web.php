@@ -23,14 +23,16 @@ Route::get('/test', function () {
 Route::get('/page','PageController@index');
 
 Route::prefix('api')->name('api.')->group(function() {
-    Route::get('get_vacancies','api\WorkController@get_vacancies');
-    Route::get('get_categories','api\WorkController@get_categories');
-    Route::get('get_tools','api\WorkController@get_tools');
+    Route::get('getVacancies','api\WorkController@getVacancies');
+    Route::get('getCategories','api\WorkController@getCategories');
+    Route::get('getTools','api\WorkController@getTools');
     //------------------------------------------------------------------------
     Route::get('get_companies','api\CompanyController@get_companies');
     Route::get('industryCategoryCount','api\CompanyController@getIndustryCategoryCount');
+    Route::get('capital','api\CompanyController@getCapital');
+    Route::get('workers','api\CompanyController@getWorkers');
     //------------------------------------------------------------------------
-    Route::get('getVacancyId','api\WorkController@getVacancyId');
+    Route::get('getResumeId','api\WorkController@getResumeId');
     Route::get('claimEducationCount','api\WorkController@getVacancyClaimEducationCount');
     Route::get('claimExperienceCount','api\WorkController@getVacancyClaimExperienceCount');
     Route::get('categoryCount','api\WorkController@getCategoryCount');

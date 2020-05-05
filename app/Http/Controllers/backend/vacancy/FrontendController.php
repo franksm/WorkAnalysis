@@ -6,7 +6,6 @@ use Illuminate\Support\Facades\Session;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use App\Http\Controllers\Controller;
-use App\Resume;
 use App\Company;
 use App\Vacancy;
 use App\VacancyCategory;
@@ -40,11 +39,14 @@ class FrontendController extends Controller
         foreach($works as $work){
             $search .= "works[]=".$work."&";
         }
-        $urlApi = "http://laravel.test/api/get_vacancies?".$search;
+        
+        $urlApi = "http://laravel.test/api/getVacancies?".$search;
         $Vacancies = json_decode(file_get_contents($urlApi));
-        $urlApi = "http://laravel.test/api/get_categories?".$search;
+        $urlApi = "http://laravel.test/api/getResumeId?id=".Auth::id();
+        $Resumes = json_decode(file_get_contents($urlApi));
+        $urlApi = "http://laravel.test/api/getCategories?".$search;
         $Categories = json_decode(file_get_contents($urlApi),true);
-        $urlApi = "http://laravel.test/api/get_tools?".$search;
+        $urlApi = "http://laravel.test/api/getTools?".$search;
         $Tools = json_decode(file_get_contents($urlApi),true);
         $urlApi = "http://laravel.test/api/get_companies?".$search;
         $Companies = json_decode(file_get_contents($urlApi),true);
@@ -62,9 +64,6 @@ class FrontendController extends Controller
         foreach($works as $work){
             $search .= "works[]=".$work."&";
         }
-        $resume = Resume::where(['user_id' => Auth::id()])->first();
-        $resumeTools=$resume->tool->toarray();
-        $resumeTools=array_column($resumeTools,'vacancy_tool');
 
         $claimExperienceUrl = "http://laravel.test/api/claimExperienceCount?".$search;
         $claimExperiences = json_decode(file_get_contents($claimExperienceUrl),true);
@@ -76,8 +75,11 @@ class FrontendController extends Controller
         $tools = json_decode(file_get_contents($toolUrl),true);
         $industryCategoryUrl = "http://laravel.test/api/industryCategoryCount?".$search;
         $industryCategories = json_decode(file_get_contents($industryCategoryUrl),true);
-        
-        $sameTools = array_intersect(array_keys($tools),$resumeTools);
-        return view('frontend.detail',compact('claimExperiences','claimEducations','tools','categories','industryCategories','sameTools'));
+        $urlApi = "http://laravel.test/api/capital?".$search;
+        $capitals = json_decode(file_get_contents($urlApi),true);
+        $urlApi = "http://laravel.test/api/workers?".$search;
+        $workers = json_decode(file_get_contents($urlApi),true);
+        return view('frontend.detail',compact('claimExperiences','claimEducations','tools','categories','industryCategories','capitals','workers'));
+
     }
 }

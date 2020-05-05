@@ -60,17 +60,75 @@ class CompanyController extends Controller
         $Companies=$this->useCompanyIdGetCompanyInfo($works);
         $industryCategories=[];
         foreach($Companies as $Company){
-            if (isset($industryCategories[$Company['industry_category']])){
-                $industryCategories[$Company['industry_category']]++;
+            if (isset($industryCategories[$Company['industry_category']]['percentage'])){
+                $industryCategories[$Company['industry_category']]['percentage']++;
             }
             else{
-                $industryCategories[$Company['industry_category']]=1;
+                $industryCategories[$Company['industry_category']]['percentage']=1;
             }
+            $industryCategories[$Company['industry_category']]['company'][$Company->id]['company_name']=$Company->company_name;
+            $industryCategories[$Company['industry_category']]['company'][$Company->id]['company_link']=$Company->link;
         }
         foreach($industryCategories as $Category => $Count){
-            $industryCategories[$Category]=round($Count/count($works)*100,1); 
+            $industryCategories[$Category]['percentage']=round($Count['percentage']/count($works)*100,1); 
         }
         return $industryCategories;
     }
-    
+    /**
+     * @OA\GET(
+     *     path="/api/capital",
+     *     tags={"給我職缺資訊"},
+     *     summary="取得資本額",
+     *     description="請給我對應的id",
+     *     @OA\Parameter(name="works[]", in="query",@OA\Schema(type="array",@OA\Items(type="integer")), required=true, description="請輸入查詢id"),
+     *     @OA\Response(
+     *      response="200",
+     *      description="請求成功"
+     *     )
+     * )
+     */
+    public function getCapital(Request $request)
+    {
+        $works=$request->works;
+        $Companies=$this->useCompanyIdGetCompanyInfo($works);
+        $capital=[];
+        foreach($Companies as $Company){
+            if($Company->capital=="暫不提供"){
+                $capital[$Company->company_name]=0;
+            }
+            else{
+                $capital[$Company->company_name]=(int)$Company->capital;
+            }
+        }
+        return $capital;
+    }
+    /**
+     * @OA\GET(
+     *     path="/api/workers",
+     *     tags={"給我職缺資訊"},
+     *     summary="取得員工人數",
+     *     description="請給我對應的id",
+     *     @OA\Parameter(name="works[]", in="query",@OA\Schema(type="array",@OA\Items(type="integer")), required=true, description="請輸入查詢id"),
+     *     @OA\Response(
+     *      response="200",
+     *      description="請求成功"
+     *     )
+     * )
+     */
+    public function getWorkers(Request $request)
+    {
+        $works=$request->works;
+        $Companies=$this->useCompanyIdGetCompanyInfo($works);
+        $workers=[];
+        foreach($Companies as $Company){
+            if($Company->workers=="暫不提供"){
+                $workers[$Company->company_name]=0;
+            }
+            else{
+                $workers[$Company->company_name]=$Company->workers;
+            }
+        }
+        return $workers;
+    }
+
 }

@@ -54,10 +54,10 @@ class ToolSeeder extends Seeder
         ]);
         # Excel、Word、中文打字20~50、英文打字75~100
         $DB->insert([
-            'vacancy_tool'=>'中文打字20~50'
+            'vacancy_tool'=>'中文打字20-50'
         ]);
         $DB->insert([
-            'vacancy_tool'=>'英文打字75~100'
+            'vacancy_tool'=>'英文打字75-100'
         ]);
     }
 }
