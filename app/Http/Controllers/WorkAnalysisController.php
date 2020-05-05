@@ -11,7 +11,6 @@ use App\Vacancy;
 use App\VacancyCategory;
 use Redirect;
 use App\Resume;
-
 class WorkAnalysisController extends Controller
 {
     public function index(Request $request){
@@ -24,7 +23,7 @@ class WorkAnalysisController extends Controller
         foreach($Vacancies as $Vacancy){
             $Companies[$Vacancy->id]=$Vacancy->company;
         }
-        return view('frontend.index',compact('Vacancies','Companies'));
+        return view('user.savework.index',compact('Vacancies','Companies'));
     }
     public function form(Request $request){
         if(isset($request->works) and $request->isMethod('post')){
@@ -34,7 +33,7 @@ class WorkAnalysisController extends Controller
         else if($request->session()->has('works')){
             $works=session('works');
         }else{
-            return Redirect::to('/user/web/');
+            return Redirect::to('/user/saveWork/');
         }
         $search = "";
         foreach($works as $work){
@@ -64,43 +63,63 @@ class WorkAnalysisController extends Controller
             $score+=count(array_intersect($vacancyCategory,$resumeCategories));
             $Vacancies[$key]->score=$score;
         }
-        return view('frontend.show',compact('Vacancies','Categories','Tools','Companies'));
+        return view('user.savework.analysis.show',compact('Vacancies','Categories','Tools','Companies'));
     }
+    
     public function detail(Request $request)
     {
+        function getAnalysisVacancy($search){
+            $claimExperienceUrl = "http://laravel.test/api/claimExperienceCount?".$search;
+            $claimExperiences = json_decode(file_get_contents($claimExperienceUrl),true);
+            $claimEducationUrl = "http://laravel.test/api/claimEducationCount?".$search;
+            $claimEducations = json_decode(file_get_contents($claimEducationUrl),true);
+            $categoryUrl = "http://laravel.test/api/categoryCount?".$search;
+            $categories = json_decode(file_get_contents($categoryUrl),true);
+            $toolUrl = "http://laravel.test/api/toolCount?".$search;
+            $tools = json_decode(file_get_contents($toolUrl),true);
+            return array($claimExperiences,$claimEducations,$categories,$tools);
+        }
+        function getAnalysisCompany($search){
+            $industryCategoryUrl = "http://laravel.test/api/industryCategoryCount?".$search;
+            $industryCategories = json_decode(file_get_contents($industryCategoryUrl),true);
+            $capitalUrl = "http://laravel.test/api/capital?".$search;
+            $capitals = json_decode(file_get_contents($capitalUrl),true);
+            $workerUrl = "http://laravel.test/api/workers?".$search;
+            $workers = json_decode(file_get_contents($workerUrl),true);
+            return array($industryCategories,$capitals,$workers);
+        }
+        function getResumeInfo(){
+            $user_id=Auth::id();
+            $resumeUrl = "http://laravel.test/api/Resume?id=".$user_id;
+            $resumes = json_decode(file_get_contents($resumeUrl),true);
+            $resumeToolsUrl = "http://laravel.test/api/ResumeTool?id=".$user_id;
+            $resumeTools = json_decode(file_get_contents($resumeToolsUrl),true);
+            $resumeCategoryUrl = "http://laravel.test/api/ResumeCategory?id=".$user_id;
+            $resumeCategories = json_decode(file_get_contents($resumeCategoryUrl),true);
+            return array($resumes,$resumeTools,$resumeCategories);
+        }
+
         if($request->session()->has('works')){
             $works=session('works');
         }else{
-            return Redirect::to('/user/web/');
+            return Redirect::to('/user/saveWork/');
         }
         $works=session('works');   
         $search = "";
         foreach($works as $work){
             $search .= "works[]=".$work."&";
         }
-        $user_id=Auth::id();
-        $claimExperienceUrl = "http://laravel.test/api/claimExperienceCount?".$search;
-        $claimExperiences = json_decode(file_get_contents($claimExperienceUrl),true);
-        $claimEducationUrl = "http://laravel.test/api/claimEducationCount?".$search;
-        $claimEducations = json_decode(file_get_contents($claimEducationUrl),true);
-        $categoryUrl = "http://laravel.test/api/categoryCount?".$search;
-        $categories = json_decode(file_get_contents($categoryUrl),true);
-        $toolUrl = "http://laravel.test/api/toolCount?".$search;
-        $tools = json_decode(file_get_contents($toolUrl),true);
-        $industryCategoryUrl = "http://laravel.test/api/industryCategoryCount?".$search;
-        $industryCategories = json_decode(file_get_contents($industryCategoryUrl),true);
-        $capitalUrl = "http://laravel.test/api/capital?".$search;
-        $capitals = json_decode(file_get_contents($capitalUrl),true);
-        $workerUrl = "http://laravel.test/api/workers?".$search;
-        $workers = json_decode(file_get_contents($workerUrl),true);
-        $resumeUrl = "http://laravel.test/api/Resume?id=".$user_id;
-        $resumes = json_decode(file_get_contents($resumeUrl),true);
-        $resumeToolsUrl = "http://laravel.test/api/ResumeTool?id=".$user_id;
-        $resumeTools = json_decode(file_get_contents($resumeToolsUrl),true);
-        $resumeCategoryUrl = "http://laravel.test/api/ResumeCategory?id=".$user_id;
-        $resumeCategories = json_decode(file_get_contents($resumeCategoryUrl),true);
+        
+        // 取得職缺分析資訊
+        list($claimExperiences,$claimEducations,$categories,$tools) = getAnalysisVacancy($search);
+        // 取得公司分析資訊
+        list($industryCategories,$capitals,$workers) = getAnalysisCompany($search);
+        // 取得使用者履歷資訊
+        list($resumes,$resumeTools,$resumeCategories) = getResumeInfo();
+
         $Eductions = ['不拘','高中','專科','大學','碩士','博士'];
         $Experiences = ['不拘','1年','2年','3年','4年','5年','6年','7年','8年','9年','10年'];
-        return view('frontend.detail',compact('claimExperiences','claimEducations','tools','categories','industryCategories','capitals','workers','resumes','resumeTools','resumeCategories','Eductions','Experiences'));
+
+        return view('user.savework.analysis.detail',compact('claimExperiences','claimEducations','tools','categories','industryCategories','capitals','workers','resumes','resumeTools','resumeCategories','Eductions','Experiences'));
     }
 }
