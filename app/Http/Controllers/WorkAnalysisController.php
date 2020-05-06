@@ -7,11 +7,8 @@ use Illuminate\Support\Facades\Session;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use App\Http\Controllers\Controller;
-use App\Company;
 use App\Vacancy;
-use App\VacancyCategory;
 use Redirect;
-use App\Resume;
 class WorkAnalysisController extends Controller
 {
     public function index(Request $request){
@@ -46,7 +43,7 @@ class WorkAnalysisController extends Controller
         $Categories = json_decode(file_get_contents($urlApi),true);
         $urlApi = "http://laravel.test/api/getTools?".$search;
         $Tools = json_decode(file_get_contents($urlApi),true);
-        $urlApi = "http://laravel.test/api/get_companies?".$search;
+        $urlApi = "http://laravel.test/api/getCompanies?".$search;
         $Companies = json_decode(file_get_contents($urlApi),true);
         
         $user_id=Auth::id();
@@ -54,7 +51,6 @@ class WorkAnalysisController extends Controller
         $resumeTools = json_decode(file_get_contents($resumeToolsUrl),true);
         $resumeCategoryUrl = "http://laravel.test/api/ResumeCategory?id=".$user_id;
         $resumeCategories = json_decode(file_get_contents($resumeCategoryUrl),true);
-
         foreach($Vacancies as $key=>$Vacancy){
             $score=0;
             $id = $Vacancy->id;
@@ -110,7 +106,6 @@ class WorkAnalysisController extends Controller
         foreach($works as $work){
             $search .= "works[]=".$work."&";
         }
-        
         // 取得職缺分析資訊
         list($claimExperiences,$claimEducations,$categories,$tools) = getAnalysisVacancy($search);
         // 取得公司分析資訊
@@ -120,7 +115,6 @@ class WorkAnalysisController extends Controller
 
         $Eductions = ['不拘','高中','專科','大學','碩士','博士'];
         $Experiences = ['不拘','1年','2年','3年','4年','5年','6年','7年','8年','9年','10年'];
-
         return view('user.savework.analysis.detail',compact('claimExperiences','claimEducations','tools','categories','industryCategories','capitals','workers','resumes','resumeTools','resumeCategories','Eductions','Experiences'));
     }
 }

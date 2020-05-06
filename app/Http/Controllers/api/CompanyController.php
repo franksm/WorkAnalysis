@@ -2,26 +2,19 @@
 
 namespace App\Http\Controllers\api;
 
-use App\Company;
-use App\Vacancy;
+use App\Http\Controllers\Tool\GetDbObject;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 
 class CompanyController extends Controller
 {
-    public function GetCompanyInfo($works)
-    {
-        $Vacancies=Vacancy::select('id','company_id')->find($works);
-        $vacancyArray=[];
-        foreach($Vacancies as $Vacancy){
-            $vacancyArray[$Vacancy->company_id]=$Vacancy->company_id;
-        }
-        $Companies=Company::all()->find($vacancyArray);
-        return $Companies;
+    private function getGeneralTool(){
+        $getDbObject=new GetDbObject;
+        return $getDbObject;
     }
     /**
      * @OA\GET(
-     *     path="/api/get_companies",
+     *     path="/api/getCompanies",
      *     tags={"公司資訊"},
      *     summary="取得公司資訊",
      *     description="請給我對應的id",
@@ -32,47 +25,15 @@ class CompanyController extends Controller
      *     )
      * )
      */
-    public function get_companies(Request $request)
+    public function getCompanies(Request $request)
     {
         $works=$request->works;
-        $Companies=$this->getCompanyInfo($works);
-        foreach($Companies as $Company){
-            $Company->vacancy;
+        $getDbObject=$this->getGeneralTool();
+        $companies=$getDbObject->getCompanyDbObject($works);
+        foreach($companies as $company){
+            $company->vacancy;
         };
-        return $Companies;
-    }
-    /**
-     * @OA\GET(
-     *     path="/api/industryCategoryCount",
-     *     tags={"公司資訊"},
-     *     summary="取得產業類別資訊",
-     *     description="請給我對應的id",
-     *     @OA\Parameter(name="works[]", in="query",@OA\Schema(type="array",@OA\Items(type="integer")), required=true, description="請輸入查詢id"),
-     *     @OA\Response(
-     *      response="200",
-     *      description="請求成功"
-     *     )
-     * )
-     */
-    public function getIndustryCategoryCount(Request $request)
-    {
-        $works=$request->works;
-        $Companies=$this->getCompanyInfo($works);
-        $industryCategories=[];
-        foreach($Companies as $Company){
-            if (isset($industryCategories[$Company['industry_category']]['percentage'])){
-                $industryCategories[$Company['industry_category']]['percentage']++;
-            }
-            else{
-                $industryCategories[$Company['industry_category']]['percentage']=1;
-            }
-            $industryCategories[$Company['industry_category']]['company'][$Company->id]['company_name']=$Company->company_name;
-            $industryCategories[$Company['industry_category']]['company'][$Company->id]['company_link']=$Company->link;
-        }
-        foreach($industryCategories as $Category => $Count){
-            $industryCategories[$Category]['percentage']=round($Count['percentage']/count($works)*100,1); 
-        }
-        return $industryCategories;
+        return $companies;
     }
     /**
      * @OA\GET(
@@ -90,14 +51,15 @@ class CompanyController extends Controller
     public function getCapital(Request $request)
     {
         $works=$request->works;
-        $Companies=$this->getCompanyInfo($works);
+        $getDbObject=$this->getGeneralTool();
+        $companies=$getDbObject->getCompanyDbObject($works);
         $capital=[];
-        foreach($Companies as $Company){
-            if($Company->capital=="暫不提供"){
-                $capital[$Company->company_name]=0;
+        foreach($companies as $company){
+            if($company->capital=="暫不提供"){
+                $capital[$company->company_name]=0;
             }
             else{
-                $capital[$Company->company_name]=(int)$Company->capital;
+                $capital[$company->company_name]=(int)$company->capital;
             }
         }
         return $capital;
@@ -118,14 +80,15 @@ class CompanyController extends Controller
     public function getWorkers(Request $request)
     {
         $works=$request->works;
-        $Companies=$this->useCompanyIdGetCompanyInfo($works);
+        $getDbObject=$this->getGeneralTool();
+        $companies=$getDbObject->getCompanyDbObject($works);
         $workers=[];
-        foreach($Companies as $Company){
-            if($Company->workers=="暫不提供"){
-                $workers[$Company->company_name]=0;
+        foreach($companies as $company){
+            if($company->workers=="暫不提供"){
+                $workers[$company->company_name]=0;
             }
             else{
-                $workers[$Company->company_name]=$Company->workers;
+                $workers[$company->company_name]=(int)$company->workers;
             }
         }
         return $workers;

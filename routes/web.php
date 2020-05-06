@@ -19,20 +19,21 @@ Route::get('/', function () {
 
 Route::prefix('api')->name('api.')->group(function() {
     //Company------------------------------------------------------------------------
-    Route::get('get_companies','api\CompanyController@get_companies');
-    Route::get('industryCategoryCount','api\CompanyController@getIndustryCategoryCount');
+    Route::get('getCompanies','api\CompanyController@getCompanies');
     Route::get('capital','api\CompanyController@getCapital');
     Route::get('workers','api\CompanyController@getWorkers');
+    //AnalysisCompanyController------------------------------------------------------
+    Route::get('industryCategoryCount','api\AnalysisCompanyController@getIndustryCategoryCount');
     //Vacancy------------------------------------------------------------------------
     Route::get('getVacancy','api\WorkController@getVacancy');
     Route::get('getCategories','api\WorkController@getCategories');
     Route::get('getTools','api\WorkController@getTools');
-    //StatisticsVacancy------------------------------------------------------------------------
-    Route::get('claimEducationCount','api\StatisticsWorksController@getVacancyClaimEducationCount');
-    Route::get('claimExperienceCount','api\StatisticsWorksController@getVacancyClaimExperienceCount');
-    Route::get('categoryCount','api\StatisticsWorksController@getCategoryCount');
-    Route::get('toolCount','api\StatisticsWorksController@getToolCount');
-    //Resume------------------------------------------------------------------------
+    //AnalysisWork-------------------------------------------------------------------
+    Route::get('claimEducationCount','api\AnalysisWorkController@getVacancyClaimEducationCount');
+    Route::get('claimExperienceCount','api\AnalysisWorkController@getVacancyClaimExperienceCount');
+    Route::get('categoryCount','api\AnalysisWorkController@getCategoryCount');
+    Route::get('toolCount','api\AnalysisWorkController@getToolCount');
+    //Resume-------------------------------------------------------------------------
     Route::get('Resume','api\ResumeController@getResume');
     Route::get('ResumeTool','api\ResumeController@getResumeTool');
     Route::get('ResumeCategory','api\ResumeController@getResumeCategory');

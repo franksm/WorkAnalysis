@@ -2,10 +2,8 @@
 
 namespace App\Http\Controllers\api;
 
-use App\Vacancy;
-use App\Resume;
+use App\Http\Controllers\Tool\GetDbObject;
 use App\Http\Controllers\Controller;
-use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Request;
 
 /**
@@ -14,10 +12,9 @@ use Illuminate\Http\Request;
 
 class WorkController extends Controller
 {
-    private function vacancySelectCol($selectCol,$selectWorks){
-        $selectColString=implode(",",$selectCol);
-        $Vacancies=Vacancy::select($selectColString)->find($selectWorks);
-        return $Vacancies;
+    private function getGeneralTool(){
+        $getDbObject=new GetDbObject;
+        return $getDbObject;
     }
     /**
      * @OA\GET(
@@ -35,7 +32,8 @@ class WorkController extends Controller
     public function getVacancy(Request $request)
     {
         $works=$request->works;
-        $vacancies=Vacancy::all()->find($works);
+        $getDbObject=$this->getGeneralTool();
+        $vacancies=$getDbObject->getVacancyDbObject([],$works,true);
         return $vacancies;
     }
     /**
@@ -55,7 +53,8 @@ class WorkController extends Controller
     public function getCategories(Request $request)
     {
         $works=$request->works;
-        $vacancies=$this->vacancySelectCol(['id'],$works);
+        $getDbObject=$this->getGeneralTool();
+        $vacancies=$getDbObject->getVacancyDbObject(['id'],$works);
         $categories=[];
         foreach($vacancies as $vacancy){
             $categories[$vacancy->id]=$vacancy->category->toarray();
@@ -79,11 +78,13 @@ class WorkController extends Controller
     public function getTools(Request $request)
     {
         $works=$request->works;
-        $vacancies=$this->vacancySelectCol(['id'],$works);
+        $getDbObject=$this->getGeneralTool();
+        $vacancies=$getDbObject->getVacancyDbObject(['id'],$works);
         $tools=[];
         foreach($vacancies as $vacancy){
             $tools[$vacancy->id]=$vacancy->tool->toarray();
         }
         return $tools;
     }
+
 }
