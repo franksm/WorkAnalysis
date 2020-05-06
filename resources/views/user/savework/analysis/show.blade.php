@@ -31,7 +31,7 @@
                             @foreach ($Vacancies as $Vacancy)
                             <tr>
                                 @if($Vacancy->score>=5)
-                                    <th><img src="https://i.imgur.com/327mnj8.png" width="20" height="20"></th>
+                                    <th><img src="/image/B89pLVWn3M.png" width="20" height="20"></th>
                                 @else
                                     <th></th>
                                 @endif
