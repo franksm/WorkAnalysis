@@ -25,7 +25,7 @@ Route::prefix('api')->name('api.')->group(function() {
     //AnalysisCompanyController------------------------------------------------------
     Route::get('industryCategoryCount','api\AnalysisCompanyController@getIndustryCategoryCount');
     //Vacancy------------------------------------------------------------------------
-    Route::get('getVacancy','api\WorkController@getVacancy');
+    Route::get('getVacancies','api\WorkController@getVacancies');
     Route::get('getCategories','api\WorkController@getCategories');
     Route::get('getTools','api\WorkController@getTools');
     //AnalysisWork-------------------------------------------------------------------

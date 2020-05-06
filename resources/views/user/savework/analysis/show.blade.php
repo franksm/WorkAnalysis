@@ -14,7 +14,6 @@
                             <tr>
                                 <th></th>
                                 <th>職缺名稱</th>
-                                {{-- <th>公司名稱</th> --}}
                                 <th>職缺類別</th>
                                 <th>需求工具</th>
                                 <th>薪資類型</th>
@@ -30,31 +29,30 @@
                         <tbody>
                             @foreach ($Vacancies as $Vacancy)
                             <tr>
-                                @if($Vacancy->score>=5)
+                                {{-- @if($Vacancy["score"]>=5)
                                     <th><img src="/image/B89pLVWn3M.png" width="20" height="20"></th>
                                 @else
                                     <th></th>
-                                @endif
-                                <th>{{$Vacancy->vacancy_name}}</th>
-                                {{-- <th>{{$Companies[$Vacancy->id]['company_name']}}</th> --}}
+                                @endif --}}
+                                <th>{{$Vacancy['vacancy_name']}}</th>
                                 <th>
-                                    @foreach ($Categories[$Vacancy->id] as $Category)
+                                    @foreach ($Categories[$Vacancy['id']] as $Category)
                                         {{$Category['vacancy_category']}},
                                     @endforeach
                                 </th>
                                 <th>
-                                    @foreach ($Tools[$Vacancy->id] as $Tool)
+                                    @foreach ($Tools[$Vacancy['id']] as $Tool)
                                         {{$Tool['vacancy_tool']}},
                                     @endforeach
                                 </th>
-                                <th>{{$Vacancy->salary_category}}</th>
-                                <th>{{$Vacancy->salary}}</th>
-                                <th>{{$Vacancy->work_nature}}</th>
-                                <th>{{$Vacancy->claim_education}}</th>
-                                <th>{{$Vacancy->claim_experience}}</th>
-                                <th>{{$Vacancy->claim_people}}</th>
-                                <th>{{$Vacancy->expatriate}}</th>
-                                <th><a href="{{$Vacancy->link}}">職缺連結</a></th>
+                                <th>{{$Vacancy['salary_category']}}</th>
+                                <th>{{$Vacancy['salary']}}</th>
+                                <th>{{$Vacancy['work_nature']}}</th>
+                                <th>{{$Vacancy['claim_education']}}</th>
+                                <th>{{$Vacancy['claim_experience']}}</th>
+                                <th>{{$Vacancy['claim_people']}}</th>
+                                <th>{{$Vacancy['expatriate']}}</th>
+                                <th><a href="{{$Vacancy['link']}}">職缺連結</a></th>
                             </tr>
                             @endforeach
                         </tbody>

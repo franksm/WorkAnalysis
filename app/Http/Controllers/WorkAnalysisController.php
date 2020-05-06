@@ -12,6 +12,7 @@ use Redirect;
 class WorkAnalysisController extends Controller
 {
     public function index(Request $request){
+        
         function getCompanyInfo($Vacancies){
             $Companies=[];
             foreach($Vacancies as $Vacancy){
@@ -19,6 +20,7 @@ class WorkAnalysisController extends Controller
             }
             return $Companies;
         }
+        
         function isSetCategory($request){
             return $request->vacancy_category;
         }
@@ -49,22 +51,22 @@ class WorkAnalysisController extends Controller
             list($resumeTools,$resumeCategories)=getResumeInfo();
             foreach($Vacancies as $key=>$Vacancy){
                 $score=0;
-                $id = $Vacancy->id;
+                $id = $Vacancy['id'];
                 $vacancyTool=array_column($Tools[$id],'vacancy_tool');
                 $score+=count(array_intersect($vacancyTool,$resumeTools));
                 $vacancyCategory=array_column($Categories[$id],'vacancy_category');
                 $score+=count(array_intersect($vacancyCategory,$resumeCategories));
-                $Vacancies[$key]->score=$score;
+                $Vacancies[$key]['score']=$score;
             }
         }
         function getCompanyInfo($search){
-            $CompanyUrl = "http://laravel.test/api/get_companies?".$search;
+            $CompanyUrl = "http://laravel.test/api/getCompanies?".$search;
             $Companies = json_decode(file_get_contents($CompanyUrl),true);
             return $Companies;
         }
         function getVacancyInfo($search){
             $VacancyUrl = "http://laravel.test/api/getVacancies?".$search;
-            $Vacancies = json_decode(file_get_contents($VacancyUrl));
+            $Vacancies = json_decode(file_get_contents($VacancyUrl),true);
             $CategoryUrl = "http://laravel.test/api/getCategories?".$search;
             $Categories = json_decode(file_get_contents($CategoryUrl),true);
             $ToolUrl = "http://laravel.test/api/getTools?".$search;

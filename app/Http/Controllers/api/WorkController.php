@@ -29,7 +29,7 @@ class WorkController extends Controller
      *     )
      * )
      */
-    public function getVacancy(Request $request)
+    public function getVacancies(Request $request)
     {
         $works=$request->works;
         $getDbObject=$this->getGeneralTool();
