@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Controllers\api\Statistics as Statistics;
+use App\Http\Controllers\Tool\MathTool;
 use Illuminate\Support\Facades\Session;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -11,6 +11,10 @@ use App\Vacancy;
 use Redirect;
 class WorkAnalysisController extends Controller
 {
+    private function getMathTool(){
+        $mathTool = new MathTool;
+        return $mathTool;
+    }
     public function index(Request $request){
         
         function getCompanyInfo($Vacancies){
@@ -38,7 +42,8 @@ class WorkAnalysisController extends Controller
     }
     public function form(Request $request)
     {
-        function calculateSuitableScore($Vacancies,$Categories,$Tools){
+        function calculateSuitableScore(&$Vacancies,&$Categories,&$Tools){
+            $MathTool=new MathTool;
             function getResumeInfo(){
                 $user_id=Auth::id();
                 $resumeToolsUrl = "http://laravel.test/api/ResumeTool?id=".$user_id;
@@ -47,17 +52,28 @@ class WorkAnalysisController extends Controller
                 $resumeCategories = json_decode(file_get_contents($resumeCategoryUrl),true);
                 return array($resumeTools,$resumeCategories);
             }
-
             list($resumeTools,$resumeCategories)=getResumeInfo();
+            $sortVacancy=[];
             foreach($Vacancies as $key=>$Vacancy){
+                $vacancyVector=[];
+                $resumeVector=[];
+                $bothVector=[];
                 $score=0;
                 $id = $Vacancy['id'];
                 $vacancyTool=array_column($Tools[$id],'vacancy_tool');
-                $score+=count(array_intersect($vacancyTool,$resumeTools));
                 $vacancyCategory=array_column($Categories[$id],'vacancy_category');
-                $score+=count(array_intersect($vacancyCategory,$resumeCategories));
+                dd($Vacancy);
+                //$MathTool->setVector($vacancyTool,$resumeTools,$vacancyVector,$resumeVector,$bothVector);
+                //$MathTool->setVector($vacancyCategory,$resumeCategories,$vacancyVector,$resumeVector,$bothVector);
+                //$score=$MathTool->computeVector($vacancyVector,$resumeVector,$bothVector);
                 $Vacancies[$key]['score']=$score;
+                //$score+=count(array_intersect($vacancyTool,$resumeTools));
+                //$score+=count(array_intersect($vacancyCategory,$resumeCategories));
+                $sortVacancy[$key]=$score;
             }
+            arsort($sortVacancy);
+            
+            return $sortVacancy;
         }
         function getCompanyInfo($search){
             $CompanyUrl = "http://laravel.test/api/getCompanies?".$search;
@@ -106,9 +122,9 @@ class WorkAnalysisController extends Controller
         // 計算職缺與使用者合適程度
         // 職缺與履歷進行比對 
         // 比對項目:[tool,category]
-        calculateSuitableScore($Vacancies,$Categories,$Tools);
+        $sortVacancy=calculateSuitableScore($Vacancies,$Categories,$Tools);
         
-        return view('user.savework.analysis.show',compact('Vacancies','Categories','Tools','Companies'));
+        return view('user.savework.analysis.show',compact('Vacancies','Categories','Tools','Companies','sortVacancy'));
     }
     
     public function detail(Request $request)
