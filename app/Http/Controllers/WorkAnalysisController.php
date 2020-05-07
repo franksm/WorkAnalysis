@@ -4,16 +4,21 @@ namespace App\Http\Controllers;
 
 use App\Http\Controllers\api\Statistics as Statistics;
 use Illuminate\Support\Facades\Session;
+use Illuminate\Support\Facades\Http;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use App\Http\Controllers\Controller;
+use App\Http\Controllers\Tool\UseApi;
 use App\Vacancy;
 use Redirect;
+
 class WorkAnalysisController extends Controller
 {
-    public function index(Request $request){
+    public function index(Request $request)
+    {
         
-        function getCompanyInfo($Vacancies){
+        function getCompanyInfo($Vacancies)
+        {
             $Companies=[];
             foreach($Vacancies as $Vacancy){
                 $Companies[$Vacancy->id]=$Vacancy->company;
@@ -21,7 +26,8 @@ class WorkAnalysisController extends Controller
             return $Companies;
         }
         
-        function isSetCategory($request){
+        function isSetCategory($request)
+        {
             return $request->vacancy_category;
         }
 
@@ -38,13 +44,14 @@ class WorkAnalysisController extends Controller
     }
     public function form(Request $request)
     {
-        function calculateSuitableScore($Vacancies,$Categories,$Tools){
-            function getResumeInfo(){
-                $user_id=Auth::id();
-                $resumeToolsUrl = "http://laravel.test/api/ResumeTool?id=".$user_id;
-                $resumeTools = json_decode(file_get_contents($resumeToolsUrl),true);
-                $resumeCategoryUrl = "http://laravel.test/api/ResumeCategory?id=".$user_id;
-                $resumeCategories = json_decode(file_get_contents($resumeCategoryUrl),true);
+        function calculateSuitableScore($Vacancies,$Categories,$Tools)
+        {
+            function getResumeInfo()
+            {
+                $search=['id'=>Auth::id()];
+                $useApi = new UseApi(); 
+                $resumeTools = $useApi->CallApi('GET','api/ResumeTool',$search);
+                $resumeCategories = $useApi->CallApi('GET','api/ResumeCategory',$search);
                 return array($resumeTools,$resumeCategories);
             }
 
@@ -59,31 +66,26 @@ class WorkAnalysisController extends Controller
                 $Vacancies[$key]['score']=$score;
             }
         }
-        function getCompanyInfo($search){
-            $CompanyUrl = "http://laravel.test/api/getCompanies?".$search;
-            $Companies = json_decode(file_get_contents($CompanyUrl),true);
+        function getCompanyInfo($search)
+        {
+            $useApi = new UseApi(); 
+            $Companies = $useApi->CallApi('GET','api/getCompanies',$search);
             return $Companies;
         }
-        function getVacancyInfo($search){
-            $VacancyUrl = "http://laravel.test/api/getVacancies?".$search;
-            $Vacancies = json_decode(file_get_contents($VacancyUrl),true);
-            $CategoryUrl = "http://laravel.test/api/getCategories?".$search;
-            $Categories = json_decode(file_get_contents($CategoryUrl),true);
-            $ToolUrl = "http://laravel.test/api/getTools?".$search;
-            $Tools = json_decode(file_get_contents($ToolUrl),true);
+        function getVacancyInfo($search)
+        {
+            $useApi = new UseApi(); 
+            $Vacancies = $useApi->CallApi('GET','api/getVacancies',$search);
+            $Categories = $useApi->CallApi('GET','api/getCategories',$search);
+            $Tools = $useApi->CallApi('GET','api/getTools',$search);
             return array($Vacancies,$Categories,$Tools);
         }
-        function setApiParameter($works){
-            $search = "";
-            foreach($works as $work){
-                $search .= "works[]=".$work."&";
-            }
-            return $search;
-        }
-        function isSetSessionWork($request){
+        function isSetSessionWork($request)
+        {
             return $request->session()->has('works');
         }
-        function isPost($request){
+        function isPost($request)
+        {
             return $request->isMethod('post');
         }
         
@@ -98,7 +100,7 @@ class WorkAnalysisController extends Controller
             return Redirect::to('/user/saveWork/');
         }
         // 設定Api參數
-        $search = setApiParameter($works);
+        $search = ['works'=>$works];
         // 取得職缺資訊
         list($Vacancies,$Categories,$Tools)=getVacancyInfo($search);
         // 取得公司資訊
@@ -113,45 +115,34 @@ class WorkAnalysisController extends Controller
     
     public function detail(Request $request)
     {
-        function getResumeInfo(){
-
-            $user_id=Auth::id();
-            $resumeUrl = "http://laravel.test/api/Resume?id=".$user_id;
-            $resumes = json_decode(file_get_contents($resumeUrl),true);
-            $resumeToolsUrl = "http://laravel.test/api/ResumeTool?id=".$user_id;
-            $resumeTools = json_decode(file_get_contents($resumeToolsUrl),true);
-            $resumeCategoryUrl = "http://laravel.test/api/ResumeCategory?id=".$user_id;
-            $resumeCategories = json_decode(file_get_contents($resumeCategoryUrl),true);
+        function getResumeInfo()
+        {
+            $useApi = new UseApi();
+            $search=['id'=>Auth::id()];
+            $resumes = $useApi->CallApi('GET','api/Resume',$search);
+            $resumeTools = $useApi->CallApi('GET','api/ResumeTool',$search);
+            $resumeCategories = $useApi->CallApi('GET','api/ResumeCategory',$search);
             return array($resumes,$resumeTools,$resumeCategories);
         }
-        function getAnalysisCompany($search){
-            $industryCategoryUrl = "http://laravel.test/api/industryCategoryCount?".$search;
-            $industryCategories = json_decode(file_get_contents($industryCategoryUrl),true);
-            $capitalUrl = "http://laravel.test/api/capital?".$search;
-            $capitals = json_decode(file_get_contents($capitalUrl),true);
-            $workerUrl = "http://laravel.test/api/workers?".$search;
-            $workers = json_decode(file_get_contents($workerUrl),true);
+        function getAnalysisCompany($search)
+        {
+            $useApi = new UseApi(); 
+            $industryCategories = $useApi->CallApi('GET','api/industryCategoryCount',$search);
+            $capitals = $useApi->CallApi('GET','api/capital',$search);
+            $workers = $useApi->CallApi('GET','api/workers',$search);
             return array($industryCategories,$capitals,$workers);
         }
-        function getAnalysisVacancy($search){
-            $claimExperienceUrl = "http://laravel.test/api/claimExperienceCount?".$search;
-            $claimExperiences = json_decode(file_get_contents($claimExperienceUrl),true);
-            $claimEducationUrl = "http://laravel.test/api/claimEducationCount?".$search;
-            $claimEducations = json_decode(file_get_contents($claimEducationUrl),true);
-            $categoryUrl = "http://laravel.test/api/categoryCount?".$search;
-            $categories = json_decode(file_get_contents($categoryUrl),true);
-            $toolUrl = "http://laravel.test/api/toolCount?".$search;
-            $tools = json_decode(file_get_contents($toolUrl),true);
+        function getAnalysisVacancy($search)
+        {
+            $useApi = new UseApi();
+            $claimExperiences = $useApi->CallApi('GET','api/claimExperienceCount',$search);
+            $claimEducations = $useApi->CallApi('GET','api/claimEducationCount',$search);
+            $categories = $useApi->CallApi('GET','api/categoryCount',$search);
+            $tools = $useApi->CallApi('GET','api/toolCount',$search);
             return array($claimExperiences,$claimEducations,$categories,$tools);
         }
-        function setApiParameter($works){
-            $search = "";
-            foreach($works as $work){
-                $search .= "works[]=".$work."&";
-            }
-            return $search;
-        }
-        function isSetSessionWork($request){
+        function isSetSessionWork($request)
+        {
             return $request->session()->has('works');
         }
 
@@ -165,8 +156,7 @@ class WorkAnalysisController extends Controller
             return Redirect::to('/user/saveWork/');
         }
         // 設定Api參數
-        $search = setApiParameter($works);
-
+        $search = ['works'=>$works];
         // 取得職缺分析資訊
         list($claimExperiences,$claimEducations,$categories,$tools) = getAnalysisVacancy($search);
         // 取得公司分析資訊

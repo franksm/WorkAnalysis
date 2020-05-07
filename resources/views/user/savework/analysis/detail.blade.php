@@ -231,7 +231,7 @@
                         </div>
                     </div>
                     
-                <th>
+                
                     <div class="bar_analysis">
                         <div class="bar-title">
                             <h3>工具種類</h3>
