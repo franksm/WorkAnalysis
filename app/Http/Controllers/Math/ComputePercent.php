@@ -11,6 +11,6 @@ class ComputePercent
             $proportion=$selfNumber/$benchMark;
             $percent=$proportion*100;
         }
-        return $percent;
+        return (int)$percent;
     }
 }

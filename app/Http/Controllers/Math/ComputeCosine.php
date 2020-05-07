@@ -13,15 +13,13 @@ class ComputeCosine
  * 获得向量的模
  * @param unknown_type $array 传入分析数据的基准点的N维向量。|eg:array(1,1,1,1,1);
  */
-private function getMarkMod($arrAnother,$choiceMethod='Sum'){
+private function getMarkMod($arrMultiply,$arrSum){
     $strModDouble = 0;
-    foreach($arrParam as $val){
-        if($choiceMethod=='Sum'){
-            $strModDouble += $val ;
-        }
-        else{
-            $strModDouble += $val * $val;
-        }
+    foreach($arrMultiply as $multiply){
+        $strModDouble += $multiply * $multiply;
+    }
+    foreach($arrSum as $sum){
+        $strModDouble += $sum;
     }
     $strMod = sqrt($strModDouble);
     //是否需要保留小数点后几位
@@ -34,27 +32,26 @@ private function getMarkMod($arrAnother,$choiceMethod='Sum'){
     * @ruturn $arrBack
     */
     private function handIndex($arrParam, $index){
-    foreach($arrParam as $key => $val){
-        $in = $index.$key;
-        $arrBack[$in] = $val;
-    }
-    return $arrBack;
-    }
-    private function total($analy,$markIndex,$analyIndex=[],$type='Sum'){
-        $arrAnaly=$this->handIndex($analy,'i');
-        if(count($analyIndex)>0){
-            $arrMark=$this->handIndex($mark,'j');
+        foreach($arrParam as $key => $val){
+            $in = $index.$key;
+            $arrBack[$in] = $val;
         }
-        $arrLen=count($arrSum);
-        for($i=0;$i<$arrLen;$i++){
-            if($type=='Multiply'){
-                
-            }
-            else{
-                $strVal = $arrLen[$index.$i];
-                $strVector += $strVal;
-            }
+        return $arrBack;
+    }
+    private function vector($sumBoth,$multiplyMark,$multiplyAnaly){
+        $strVector=0;
+        $arrMark=$this->handIndex($multiplyMark,'k');
+        $arrAnaly=$this->handIndex($multiplyAnaly,'j');
+        $arrBoth=$this->handIndex($sumBoth,'b');
+        $arrLenth=count($arrBoth);
+        for($i = 0; $i < $arrLenth; $i++){
+            $strMarkVal = $arrMark['k'.$i];
+            $strAnalyVal = $arrAnaly['j'.$i];
+            $strSelfVal = $arrBoth['b'.$i];
+            $strVector += $strMarkVal * $strAnalyVal;
+            $strVector += $strSelfVal;
         }
+        return $strVector;
     }
     /**
     *
@@ -63,24 +60,14 @@ private function getMarkMod($arrAnother,$choiceMethod='Sum'){
     * @param unknown_type $strMarkMod标杆向量的模
     * @param unknown_type $intLenth 向量的长度
     */
-    public function getCosine($markMultiply=[],$analyMultiply=[],$mark=[],$analy=[],$selfMod=0,$useSelfMod=false){
+    public function getCosine($sumMark,$sumAnaly,$sumBoth,$multiplyMark,$multiplyAnaly){
         $strCosine = 0;
         $strVector=0;
-        // $arrMark=$this->handIndex($Mark,'k');
-        // $arrAnaly=$this->handIndex($Analy,'j');
-        $arrSelf=$this->handIndex($selfMod,'b');
-        $arrLenth=count($arrSelf);
-        for($i = 0; $i < $arrLenth; $i++){
-        // $strMarkVal = $arrMark['k'.$i];
-        // $strAnalyVal = $arrAnaly['j'.$i];
-        $strSelfVal = $arrSelf['b'.$i];
-        //$strVector += $strMarkVal * $strAnalyVal;
-        $strVector += $strSelfVal;
-        }
+        $strVector=$this->vector($sumBoth,$multiplyMark,$multiplyAnaly);
         $strFenzi = $strVector;
-        $arrAnalyMod = $this->getMarkMod($vacancy);//$arrAnaly); //求分析向量的模
-        $strMarkMod = $this->getMarkMod($resume);//$arrMark); //求分析向量的模
-        $strFenMu = $arrAnalyMod * $strMarkMod;
+        $strMarkMod = $this->getMarkMod($multiplyMark,$sumMark);//求分析向量的模
+        $strAnalyMod = $this->getMarkMod($multiplyAnaly,$sumAnaly);//求分析向量的模
+        $strFenMu = $strAnalyMod * $strMarkMod;
         if((int)$strFenMu !== 0){
             $strCosine = $strFenzi / $strFenMu;
         }

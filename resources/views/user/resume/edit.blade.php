@@ -65,7 +65,7 @@
         <strong>工作經歷</strong><br>
         <select class="selectExperience" style="width:100%;" name="experience"  required lay-verify="required">
             <option value="" style="display:none" >請選擇工作經歷</option>
-            <option value="無經歷">無經歷</option>
+            <option value="不拘">不拘</option>
             <option value="1年">一年</option>
             <option value="2年">兩年</option>
             <option value="3年">三年</option>

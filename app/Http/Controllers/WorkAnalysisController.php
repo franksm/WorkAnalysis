@@ -44,7 +44,7 @@ class WorkAnalysisController extends Controller
     }
     public function form(Request $request)
     {
-        function calculateSuitableScore($Vacancies,$Categories,$Tools)
+        function calculateSuitableScore(&$Vacancies,$Categories,$Tools)
         {
             $mathTool = new MathTool;
             function getResumeInfo()
@@ -57,31 +57,43 @@ class WorkAnalysisController extends Controller
                 return array($resumeTools,$resumeCategories,$getResume);
             }
             list($resumeTools,$resumeCategories,$getResume)=getResumeInfo();
-            //dd(substr(,0,-1));
             $Eductions = ['不拘'=>0,'高中'=>1,'專科'=>2,'大學'=>3,'碩士'=>4,'博士'=>5];
             $Experiences = ['不拘'=>0,'1年'=>1,'2年'=>2,'3年'=>3,'4年'=>4,'5年'=>5,'6年'=>6,'7年'=>7,'8年'=>8,'9年'=>9,'10年'=>10];
+            $resumeSum=[count($resumeTools)*3,count($resumeCategories)*3];
+            $resumeMultiply=[$Experiences[$getResume['experience']],$Eductions[$getResume['education']]];
+            $vacancySum=[];
+            $vacancyMultiply=[];
             $sortVacancy=[];
             foreach($Vacancies as $key=>$Vacancy){
-                // $vacancyVector=[];
-                // $resumeVector=[];
-                // $bothVector=[];
-                $experiencePercent=[];
-                $score=0;
-                $id = $Vacancy['id'];
+                $id=$Vacancy['id'];
                 $vacancyTool=array_column($Tools[$id],'vacancy_tool');
                 $vacancyCategory=array_column($Categories[$id],'vacancy_category');
-                $Vacancies[$key]['claim_education']=$mathTool->getPercent($Eductions[$Vacancy['claim_education']],$Eductions[$getResume['eduction']]);
-                $Vacancies[$key]['claim_experience']=$mathTool->getPercent($Experiences[$Vacancy['claim_experience']],$Experiences[$getResume['experience']]);
-                //dd($Vacancy);
-                //$MathTool->setVector($vacancyTool,$resumeTools,$vacancyVector,$resumeVector,$bothVector);
-                //$MathTool->setVector($vacancyCategory,$resumeCategories,$vacancyVector,$resumeVector,$bothVector);
-                //$score=$MathTool->computeVector($vacancyVector,$resumeVector,$bothVector);
-                $Vacancies[$key]['score']=$score;
-                //$score+=count(array_intersect($vacancyTool,$resumeTools));
-                //$score+=count(array_intersect($vacancyCategory,$resumeCategories));
+                $vacancyInfo[$key]['Multiply']=[$Experiences[$Vacancies[$key]['claim_experience']],$Eductions[$Vacancies[$key]['claim_education']]];
+                $vacancyInfo[$key]['Sum']=[count($vacancyTool)*3,count($vacancyCategory)*3];
+                $vacancyInfo[$key]['Both']=[count(array_intersect($vacancyTool,$resumeTools))*3,count(array_intersect($vacancyCategory,$resumeCategories))*3];
+                $score=$mathTool->computeCosine($vacancyInfo[$key]['Sum'],$resumeSum,$vacancyInfo[$key]['Both'],$vacancyInfo[$key]['Multiply'],$resumeMultiply);
+                //$Vacancies[$key]['score']=$score;
                 $sortVacancy[$key]=$score;
             }
-            dd($Vacancies);
+            
+            // foreach($Vacancies as $key=>$Vacancy){
+            //     $score=0;
+            //     $id = $Vacancy['id'];
+            //     $vacancyTool=array_column($Tools[$id],'vacancy_tool');
+            //     $vacancyCategory=array_column($Categories[$id],'vacancy_category');
+            //     $Vacancies[$key]['category']=$mathTool->getSetSimilar($resumeCategories,$vacancyCategory);
+            //     if($vacancyTool[0]=='不拘'){
+            //         $Vacancies[$key]['tool']=100;
+            //     }
+            //     else{
+            //         $Vacancies[$key]['tool']=$mathTool->getSetSimilar($resumeTools,$vacancyTool);
+            //     }
+            //     $getClaimEducation[$key] = $Eductions[$Vacancies[$key]['claim_education']];
+            //     $score+=count(array_intersect($vacancyTool,$resumeTools));
+            //     $score+=count(array_intersect($vacancyCategory,$resumeCategories));
+            //     $sortVacancy[$key]=$score;
+            // }
+            //$mathTool->adjustmentData($getClaimEducation);
             arsort($sortVacancy);
             
             return $sortVacancy;
@@ -185,5 +197,8 @@ class WorkAnalysisController extends Controller
         list($resumes,$resumeTools,$resumeCategories) = getResumeInfo();
 
         return view('user.savework.analysis.detail',compact('claimExperiences','claimEducations','tools','categories','industryCategories','capitals','workers','resumes','resumeTools','resumeCategories','Eductions','Experiences'));
+    }
+    public function comprehensiveAnalysis(){
+
     }
 }
