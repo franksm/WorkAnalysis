@@ -19,7 +19,7 @@ class CreateResumesTable extends Migration
             $table->string('name',50);
             $table->integer('age');
             $table->string('born',20);
-            $table->string('eduction',2);
+            $table->string('education',2);
             $table->string('experience',3);
             $table->timestamps();
         });
