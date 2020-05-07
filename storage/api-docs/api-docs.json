@@ -6,7 +6,7 @@
     },
     "paths": {
         "/api/industryCategoryCount": {
-            "post": {
+            "get": {
                 "tags": [
                     "公司資訊"
                 ],
@@ -35,7 +35,7 @@
             }
         },
         "/api/categoryCount": {
-            "post": {
+            "get": {
                 "tags": [
                     "職缺資訊"
                 ],
@@ -64,7 +64,7 @@
             }
         },
         "/api/claimEducationCount": {
-            "post": {
+            "get": {
                 "tags": [
                     "職缺資訊"
                 ],
@@ -93,7 +93,7 @@
             }
         },
         "/api/claimExperienceCount": {
-            "post": {
+            "get": {
                 "tags": [
                     "職缺資訊"
                 ],
@@ -122,7 +122,7 @@
             }
         },
         "/api/toolCount": {
-            "post": {
+            "get": {
                 "tags": [
                     "職缺資訊"
                 ],
@@ -151,7 +151,7 @@
             }
         },
         "/api/getCompanies": {
-            "post": {
+            "get": {
                 "tags": [
                     "公司資訊"
                 ],
@@ -180,7 +180,7 @@
             }
         },
         "/api/capital": {
-            "post": {
+            "get": {
                 "tags": [
                     "公司資訊"
                 ],
@@ -209,7 +209,7 @@
             }
         },
         "/api/workers": {
-            "post": {
+            "get": {
                 "tags": [
                     "公司資訊"
                 ],
@@ -238,7 +238,7 @@
             }
         },
         "/api/Resume": {
-            "post": {
+            "get": {
                 "tags": [
                     "履歷資訊"
                 ],
@@ -264,7 +264,7 @@
             }
         },
         "/api/ResumeTool": {
-            "post": {
+            "get": {
                 "tags": [
                     "履歷資訊"
                 ],
@@ -290,7 +290,7 @@
             }
         },
         "/api/ResumeCategory": {
-            "post": {
+            "get": {
                 "tags": [
                     "履歷資訊"
                 ],
@@ -315,8 +315,8 @@
                 }
             }
         },
-        "/api/getVacancies": {
-            "post": {
+        "/api/get_vacancies": {
+            "get": {
                 "tags": [
                     "職缺資訊"
                 ],
@@ -344,8 +344,8 @@
                 }
             }
         },
-        "/api/getCategories": {
-            "post": {
+        "/api/get_categories": {
+            "get": {
                 "tags": [
                     "職缺資訊"
                 ],
@@ -373,8 +373,8 @@
                 }
             }
         },
-        "/api/getTools": {
-            "post": {
+        "/api/get_tools": {
+            "get": {
                 "tags": [
                     "職缺資訊"
                 ],

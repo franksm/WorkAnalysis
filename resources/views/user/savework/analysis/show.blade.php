@@ -8,11 +8,11 @@
         }
 </style>
 <div class="m-lg-4">
+                    <div style="float:right;"><button onclick="myFunction()">比對履歷1</button></div>
                     <h3>職缺綜合資訊</h3>
                     <table class="table">
                         <thead>
                             <tr>
-                                <th></th>
                                 <th>職缺名稱</th>
                                 <th>職缺類別</th>
                                 <th>需求工具</th>

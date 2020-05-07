@@ -16,7 +16,12 @@ class ResumeController extends Controller
     {
         $Resume = Resume::where(['user_id' => Auth::id()])->first();
         $UserId = Auth::id();
-        return view('user/resume/index',compact('Resume','UserId'));
+        if($Resume==null){
+            return Redirect::to('/user/resume/create');
+        }else{
+            //dd($UserId);
+            return Redirect::to('user/resume/'.$UserId.'/edit');
+        }
     }
     public function create()
     {
@@ -40,7 +45,7 @@ class ResumeController extends Controller
         $Resume->tool()->attach($Tools);
         $Resume->save();
         
-        return Redirect::to('/user/resume/')
+        return Redirect::to('/home')
        ->with('success','Greate! Product created successfully.');
     }
 
@@ -82,7 +87,7 @@ class ResumeController extends Controller
         $Resume->tool()->sync($Tools);
         $Resume->save();
 
-        return Redirect::to('/user/resume/')
+        return Redirect::to('/home')
        ->with('success','Great! Product updated successfully');
         
     }
