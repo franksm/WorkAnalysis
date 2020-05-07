@@ -8,7 +8,7 @@ use App\Resume;
 class GetDbObject
 {
     public function getResumeDbObject($selectCol,$selectWorks){
-        $resumes=Resume::select($selectCol)->find($selectWorks);
+        $resumes=Resume::all($selectCol)->where('user_id',$selectWorks)->first();
         return $resumes;
     }
     public function getVacancyDbObject($selectCol,$selectWorks,$getall=False){

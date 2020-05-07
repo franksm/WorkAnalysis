@@ -54,5 +54,6 @@ Route::middleware(['auth'])->prefix('analysis')->name('analysis.')->group(functi
     Route::get('list','WorkAnalysisController@form')->name('list');
     Route::post('list','WorkAnalysisController@form')->name('list');
     Route::get('detail','WorkAnalysisController@detail')->name('detail');
+    Route::get('suitable','WorkAnalysisController@suitable')->name('suitable');
 });
 

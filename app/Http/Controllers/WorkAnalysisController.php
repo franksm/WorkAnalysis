@@ -96,7 +96,7 @@ class WorkAnalysisController extends Controller
             //$mathTool->adjustmentData($getClaimEducation);
             arsort($sortVacancy);
             
-            return $sortVacancy;
+            return array($getResume,$resumeTools,$resumeCategories,$sortVacancy);
         }
         function getCompanyInfo($search)
         {
@@ -137,12 +137,12 @@ class WorkAnalysisController extends Controller
         list($Vacancies,$Categories,$Tools)=getVacancyInfo($search);
         // 取得公司資訊
         $Companies = getCompanyInfo($search);
-        // 計算職缺與使用者合適程度
+        // 計算職缺與使用者合適程度 & 取得使用者履歷資訊
         // 職缺與履歷進行比對 
         // 比對項目:[tool,category]
-        $sortVacancy=calculateSuitableScore($Vacancies,$Categories,$Tools);
+        list($resume,$resumeTools,$resumeCategories,$sortVacancy) = calculateSuitableScore($Vacancies,$Categories,$Tools);
         
-        return view('user.savework.analysis.show',compact('Vacancies','Categories','Tools','Companies','sortVacancy'));
+        return view('user.savework.analysis.show',compact('Vacancies','Categories','Tools','Companies','resume','resumeTools','resumeCategories','sortVacancy'));
     }
     
     public function detail(Request $request)
@@ -179,7 +179,7 @@ class WorkAnalysisController extends Controller
         }
 
         // 教育與經歷清單
-        $Eductions = ['不拘','高中','專科','大學','碩士','博士'];
+        $Educations = ['不拘','高中','專科','大學','碩士','博士'];
         $Experiences = ['不拘','1年','2年','3年','4年','5年','6年','7年','8年','9年','10年'];
         // 取得資料
         if(isSetSessionWork($request)){
@@ -196,7 +196,11 @@ class WorkAnalysisController extends Controller
         // 取得使用者履歷資訊
         list($resumes,$resumeTools,$resumeCategories) = getResumeInfo();
 
-        return view('user.savework.analysis.detail',compact('claimExperiences','claimEducations','tools','categories','industryCategories','capitals','workers','resumes','resumeTools','resumeCategories','Eductions','Experiences'));
+        return view('user.savework.analysis.detail',compact('claimExperiences','claimEducations','tools','categories','industryCategories','capitals','workers','resumes','resumeTools','resumeCategories','Educations','Experiences'));
+    }
+    public function suitable(Request $request)
+    {
+        return view('user.savework.analysis.suitable');
     }
     public function comprehensiveAnalysis(){
 
