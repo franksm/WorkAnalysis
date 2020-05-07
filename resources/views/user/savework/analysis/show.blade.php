@@ -7,8 +7,13 @@
             white-space: pre-line;
         }
 </style>
+<script language="JavaScript">
+        function compareResumes(){
+            
+        }
+</script>
 <div class="m-lg-4">
-                    <div style="float:right;"><button onclick="myFunction()">比對履歷1</button></div>
+                    <div style="float:right;"><button class="btn-primary my-lg-1" onclick="compareResumes()">比對履歷1</button></div>
                     <h3>職缺綜合資訊</h3>
                     <table class="table">
                         <thead>
