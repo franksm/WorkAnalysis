@@ -154,7 +154,7 @@
                                         <a href="" data-toggle="modal" data-target="#a{{$claimEducation}}">{{$claimEducation}}</a>
                                     </dt>
                                     <dd class="bar">
-                                        @if (array_search($claimEducation,$Eductions) <= array_search($resumes['eduction'],$Eductions))
+                                        @if (array_search($claimEducation,$Educations) <= array_search($resumes['education'],$Educations))
                                             <div style="width: {{$claimEducationQuantity['percent']}}%;"></div>
                                         @else
                                             <div style="width: {{$claimEducationQuantity['percent']}}%;background-color: pink;"></div>

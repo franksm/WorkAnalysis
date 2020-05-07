@@ -29,7 +29,7 @@ class ResumeController extends Controller
     public function getResume(Request $request){
         $user_id=$request->id;
         $getDbObject=$this->getGeneralTool();
-        $resume = $getDbObject->getResumeDbObject(['id','user_id','experience','eduction'],$user_id);
+        $resume = $getDbObject->getResumeDbObject(['id','user_id','experience','education'],$user_id);
         return $resume;
     }
     /**

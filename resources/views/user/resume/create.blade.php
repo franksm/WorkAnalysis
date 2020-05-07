@@ -42,7 +42,7 @@
     </div>
     <div class="col-md-12">
         <strong>學歷</strong><br>
-        <select class="selectEduction" style="width:100%;" name="eduction"  required lay-verify="required">
+        <select class="selectEduction" style="width:100%;" name="education"  required lay-verify="required">
             <option value="" style="display:none" >請選擇學歷</option>
             <option value="高中">高中</option>
             <option value="專科">專科</option>

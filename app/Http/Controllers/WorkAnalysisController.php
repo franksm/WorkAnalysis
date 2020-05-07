@@ -44,7 +44,7 @@ class WorkAnalysisController extends Controller
     }
     public function form(Request $request)
     {
-        function calculateSuitableScore($Vacancies,$Categories,$Tools)
+        function calculateSuitableScore(&$Vacancies,&$Categories,&$Tools)
         {
             $mathTool = new MathTool;
             function getResumeInfo()
@@ -58,7 +58,7 @@ class WorkAnalysisController extends Controller
             }
             list($resumeTools,$resumeCategories,$getResume)=getResumeInfo();
             //dd(substr(,0,-1));
-            $Eductions = ['不拘'=>0,'高中'=>1,'專科'=>2,'大學'=>3,'碩士'=>4,'博士'=>5];
+            $Educations = ['不拘'=>0,'高中'=>1,'專科'=>2,'大學'=>3,'碩士'=>4,'博士'=>5];
             $Experiences = ['不拘'=>0,'1年'=>1,'2年'=>2,'3年'=>3,'4年'=>4,'5年'=>5,'6年'=>6,'7年'=>7,'8年'=>8,'9年'=>9,'10年'=>10];
             $sortVacancy=[];
             foreach($Vacancies as $key=>$Vacancy){
@@ -70,8 +70,8 @@ class WorkAnalysisController extends Controller
                 $id = $Vacancy['id'];
                 $vacancyTool=array_column($Tools[$id],'vacancy_tool');
                 $vacancyCategory=array_column($Categories[$id],'vacancy_category');
-                $Vacancies[$key]['claim_education']=$mathTool->getPercent($Eductions[$Vacancy['claim_education']],$Eductions[$getResume['eduction']]);
-                $Vacancies[$key]['claim_experience']=$mathTool->getPercent($Experiences[$Vacancy['claim_experience']],$Experiences[$getResume['experience']]);
+                // $Vacancies[$key]['claim_education']=$mathTool->getPercent($Educations[$Vacancy['claim_education']],$Educations[$getResume['education']]);
+                // $Vacancies[$key]['claim_experience']=$mathTool->getPercent($Experiences[$Vacancy['claim_experience']],$Experiences[$getResume['experience']]);
                 //dd($Vacancy);
                 //$MathTool->setVector($vacancyTool,$resumeTools,$vacancyVector,$resumeVector,$bothVector);
                 //$MathTool->setVector($vacancyCategory,$resumeCategories,$vacancyVector,$resumeVector,$bothVector);
@@ -81,10 +81,9 @@ class WorkAnalysisController extends Controller
                 //$score+=count(array_intersect($vacancyCategory,$resumeCategories));
                 $sortVacancy[$key]=$score;
             }
-            dd($Vacancies);
             arsort($sortVacancy);
             
-            return $sortVacancy;
+            return array($getResume,$resumeTools,$resumeCategories,$sortVacancy);
         }
         function getCompanyInfo($search)
         {
@@ -125,12 +124,12 @@ class WorkAnalysisController extends Controller
         list($Vacancies,$Categories,$Tools)=getVacancyInfo($search);
         // 取得公司資訊
         $Companies = getCompanyInfo($search);
-        // 計算職缺與使用者合適程度
+        // 計算職缺與使用者合適程度 & 取得使用者履歷資訊
         // 職缺與履歷進行比對 
         // 比對項目:[tool,category]
-        $sortVacancy=calculateSuitableScore($Vacancies,$Categories,$Tools);
+        list($resume,$resumeTools,$resumeCategories,$sortVacancy) = calculateSuitableScore($Vacancies,$Categories,$Tools);
         
-        return view('user.savework.analysis.show',compact('Vacancies','Categories','Tools','Companies','sortVacancy'));
+        return view('user.savework.analysis.show',compact('Vacancies','Categories','Tools','Companies','resume','resumeTools','resumeCategories','sortVacancy'));
     }
     
     public function detail(Request $request)
@@ -167,7 +166,7 @@ class WorkAnalysisController extends Controller
         }
 
         // 教育與經歷清單
-        $Eductions = ['不拘','高中','專科','大學','碩士','博士'];
+        $Educations = ['不拘','高中','專科','大學','碩士','博士'];
         $Experiences = ['不拘','1年','2年','3年','4年','5年','6年','7年','8年','9年','10年'];
         // 取得資料
         if(isSetSessionWork($request)){
@@ -184,6 +183,10 @@ class WorkAnalysisController extends Controller
         // 取得使用者履歷資訊
         list($resumes,$resumeTools,$resumeCategories) = getResumeInfo();
 
-        return view('user.savework.analysis.detail',compact('claimExperiences','claimEducations','tools','categories','industryCategories','capitals','workers','resumes','resumeTools','resumeCategories','Eductions','Experiences'));
+        return view('user.savework.analysis.detail',compact('claimExperiences','claimEducations','tools','categories','industryCategories','capitals','workers','resumes','resumeTools','resumeCategories','Educations','Experiences'));
+    }
+    public function suitable(Request $request)
+    {
+        return view('user.savework.analysis.suitable');
     }
 }

@@ -16,6 +16,9 @@
                         <li class="nav-item">
                             <a class="nav-link @yield('nav_detail')" href="{{ route('analysis.detail') }}">細項分析</a>
                         </li> 
+                        <li class="nav-item">
+                            <a class="nav-link @yield('nav_detail')" href="{{ route('analysis.suitable') }}">合適分析</a>
+                        </li>
                     </ul>
                 </div>
             </div>

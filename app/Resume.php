@@ -12,7 +12,7 @@ class Resume extends Model
         'age',
         'born',
         'experience',
-        'eduction'
+        'education'
     ];
 
     public function category()

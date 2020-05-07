@@ -8,14 +8,63 @@
         }
 </style>
 <script language="JavaScript">
-        function compareResumes(){
-            
+    
+    function compareResumes()
+    {
+        var resume = {!! json_encode($resume) !!}
+        var resumeTools = {!! json_encode($resumeTools) !!}
+
+        var table = document.getElementById('vacancy');
+        var education = {'不拘':0,'高中':1,'專科':2,'大學':3,'碩士':4,'博士':5};
+        var experiences = {'不拘':0,'1年':1,'2年':2,'3年':3,'4年':4,'5年':5,'6年':6,'7年':7,'8年':8,'9年':9,'10年':10};
+        for (var row = 1; row < table.rows.length; row++) {
+            if(education[table.rows[row].cells[6].innerHTML]>=education[resume['education']]){
+                table.rows[row].cells[6].innerHTML = "<img src={{url('/image/meet.png')}} width=30 heigth=30>";
+            }else{
+                table.rows[row].cells[6].innerHTML = "<img src={{url('/image/notmeet.png')}} width=30 heigth=30>";
+            }
+            if(experiences[table.rows[row].cells[7].innerHTML]>=experiences[resume['experience']]){
+                table.rows[row].cells[7].innerHTML = "<img src={{url('/image/meet.png')}} width=30 heigth=30>";
+            }else{
+                table.rows[row].cells[7].innerHTML = "<img src={{url('/image/notmeet.png')}} width=30 heigth=30>";
+            }
+            var Tools = table.rows[row].cells[2].innerText.replace(/\r\n|\n|\s+/g, "");
+            console.log(Tools);
+            if(Tools!='不拘,'){
+                Tools = Tools.split(",");
+                var ToolSame = "";
+                var ToolDiff = ""; 
+                Tools.forEach((item,index)=>{
+                    if(resumeTools.indexOf(item)!=-1){
+                        ToolSame += item+',';
+                    }else{
+                        ToolDiff += item+',';
+                    }
+                });
+                ToolSame = ToolSame.substring(0, ToolSame.length-1);
+                ToolDiff = ToolDiff.substring(0, ToolDiff.length-2);
+                table.rows[row].cells[2].innerHTML = "<img src={{url('/image/meet.png')}} width=20 heigth=20>："+ToolSame+"<br/><img src={{url('/image/notmeet.png')}} width=20 heigth=20>："+ToolDiff;
+            }
         }
+        var currentBtn = document.getElementById('result');
+        currentBtn.style.display = "none";
+        var currentBtn = document.getElementById('init');
+        currentBtn.style.display = "block";
+    }
+    function tableInit()
+    {
+        var table=document.getElementById('vacancy');
+        table.reload();
+    }
+
 </script>
 <div class="m-lg-4">
-                    <div style="float:right;"><button class="btn-primary my-lg-1" onclick="compareResumes()">比對履歷1</button></div>
+                    <div style="float:right;">
+                        <button id='init' class="btn-primary my-lg-1" onclick="javascript:window.location.reload()" style='display:none'>原始表單</button>
+                        <button id='result' class="btn-primary my-lg-1" onclick="compareResumes(this)">比對履歷1</button>
+                    </div>
                     <h3>職缺綜合資訊</h3>
-                    <table class="table">
+                    <table id="vacancy" class="table">
                         <thead>
                             <tr>
                                 <th>職缺名稱</th>
@@ -34,11 +83,6 @@
                         <tbody>
                             @foreach ($sortVacancy as $key=>$sortVacancyItem)
                             <tr>
-                                {{-- @if($Vacancies[$key]["score"]>=0.7)
-                                    <th><img src="/image/B89pLVWn3M.png" width="20" height="20"></th>
-                                @else
-                                @endif --}}
-                                <th><th>
                                 <th>{{$Vacancies[$key]['vacancy_name']}}</th>
                                 <th>
                                     @foreach ($Categories[$Vacancies[$key]['id']] as $Category)
@@ -53,7 +97,7 @@
                                 <th>{{$Vacancies[$key]['salary_category']}}</th>
                                 <th>{{$Vacancies[$key]['salary']}}</th>
                                 <th>{{$Vacancies[$key]['work_nature']}}</th>
-                                <th>{{$Vacancies[$key]['claim_education']}}</th>
+                                <th id='education'>{{$Vacancies[$key]['claim_education']}}</th>
                                 <th>{{$Vacancies[$key]['claim_experience']}}</th>
                                 <th>{{$Vacancies[$key]['claim_people']}}</th>
                                 <th>{{$Vacancies[$key]['expatriate']}}</th>
