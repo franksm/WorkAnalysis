@@ -5,14 +5,14 @@
         "version": "0.1"
     },
     "paths": {
-        "/api/get_companies": {
-            "get": {
+        "/api/industryCategoryCount": {
+            "post": {
                 "tags": [
                     "公司資訊"
                 ],
-                "summary": "取得公司資訊",
+                "summary": "取得產業類別資訊",
                 "description": "請給我對應的id",
-                "operationId": "App\\Http\\Controllers\\api\\CompanyController::get_companies",
+                "operationId": "App\\Http\\Controllers\\api\\AnalysisCompanyController::getIndustryCategoryCount",
                 "parameters": [
                     {
                         "name": "works[]",
@@ -34,14 +34,130 @@
                 }
             }
         },
-        "/api/industryCategoryCount": {
-            "get": {
+        "/api/categoryCount": {
+            "post": {
+                "tags": [
+                    "職缺資訊"
+                ],
+                "summary": "取得種類統計分析資訊",
+                "description": "請給我對應的id",
+                "operationId": "App\\Http\\Controllers\\api\\AnalysisWorkController::getCategoryCount",
+                "parameters": [
+                    {
+                        "name": "works[]",
+                        "in": "query",
+                        "description": "請輸入查詢id",
+                        "required": true,
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "type": "integer"
+                            }
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "請求成功"
+                    }
+                }
+            }
+        },
+        "/api/claimEducationCount": {
+            "post": {
+                "tags": [
+                    "職缺資訊"
+                ],
+                "summary": "取得需求學歷分析資訊",
+                "description": "請給我對應的id",
+                "operationId": "App\\Http\\Controllers\\api\\AnalysisWorkController::getVacancyClaimEducationCount",
+                "parameters": [
+                    {
+                        "name": "works[]",
+                        "in": "query",
+                        "description": "請輸入查詢id",
+                        "required": true,
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "type": "integer"
+                            }
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "請求成功"
+                    }
+                }
+            }
+        },
+        "/api/claimExperienceCount": {
+            "post": {
+                "tags": [
+                    "職缺資訊"
+                ],
+                "summary": "取得工作經歷分析資訊",
+                "description": "請給我對應的id",
+                "operationId": "App\\Http\\Controllers\\api\\AnalysisWorkController::getVacancyClaimExperienceCount",
+                "parameters": [
+                    {
+                        "name": "works[]",
+                        "in": "query",
+                        "description": "請輸入查詢id",
+                        "required": true,
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "type": "integer"
+                            }
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "請求成功"
+                    }
+                }
+            }
+        },
+        "/api/toolCount": {
+            "post": {
+                "tags": [
+                    "職缺資訊"
+                ],
+                "summary": "取得工具統計分析資訊",
+                "description": "請給我對應的id",
+                "operationId": "App\\Http\\Controllers\\api\\AnalysisWorkController::getToolCount",
+                "parameters": [
+                    {
+                        "name": "works[]",
+                        "in": "query",
+                        "description": "請輸入查詢id",
+                        "required": true,
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "type": "integer"
+                            }
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "請求成功"
+                    }
+                }
+            }
+        },
+        "/api/getCompanies": {
+            "post": {
                 "tags": [
                     "公司資訊"
                 ],
-                "summary": "取得產業類別資訊",
+                "summary": "取得公司資訊",
                 "description": "請給我對應的id",
-                "operationId": "App\\Http\\Controllers\\api\\CompanyController::getIndustryCategoryCount",
+                "operationId": "App\\Http\\Controllers\\api\\CompanyController::getCompanies",
                 "parameters": [
                     {
                         "name": "works[]",
@@ -64,7 +180,7 @@
             }
         },
         "/api/capital": {
-            "get": {
+            "post": {
                 "tags": [
                     "公司資訊"
                 ],
@@ -93,7 +209,7 @@
             }
         },
         "/api/workers": {
-            "get": {
+            "post": {
                 "tags": [
                     "公司資訊"
                 ],
@@ -122,7 +238,7 @@
             }
         },
         "/api/Resume": {
-            "get": {
+            "post": {
                 "tags": [
                     "履歷資訊"
                 ],
@@ -148,7 +264,7 @@
             }
         },
         "/api/ResumeTool": {
-            "get": {
+            "post": {
                 "tags": [
                     "履歷資訊"
                 ],
@@ -174,7 +290,7 @@
             }
         },
         "/api/ResumeCategory": {
-            "get": {
+            "post": {
                 "tags": [
                     "履歷資訊"
                 ],
@@ -199,8 +315,8 @@
                 }
             }
         },
-        "/api/get_vacancies": {
-            "get": {
+        "/api/getVacancies": {
+            "post": {
                 "tags": [
                     "職缺資訊"
                 ],
@@ -228,8 +344,8 @@
                 }
             }
         },
-        "/api/get_categories": {
-            "get": {
+        "/api/getCategories": {
+            "post": {
                 "tags": [
                     "職缺資訊"
                 ],
@@ -257,130 +373,14 @@
                 }
             }
         },
-        "/api/get_tools": {
-            "get": {
+        "/api/getTools": {
+            "post": {
                 "tags": [
                     "職缺資訊"
                 ],
                 "summary": "取得職缺需求工具資訊",
                 "description": "請給我對應的id",
                 "operationId": "App\\Http\\Controllers\\api\\WorkController::getTools",
-                "parameters": [
-                    {
-                        "name": "works[]",
-                        "in": "query",
-                        "description": "請輸入查詢id",
-                        "required": true,
-                        "schema": {
-                            "type": "array",
-                            "items": {
-                                "type": "integer"
-                            }
-                        }
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "請求成功"
-                    }
-                }
-            }
-        },
-        "/api/categoryCount": {
-            "get": {
-                "tags": [
-                    "職缺資訊"
-                ],
-                "summary": "取得種類統計分析資訊",
-                "description": "請給我對應的id",
-                "operationId": "App\\Http\\Controllers\\api\\WorkController::getCategoryCount",
-                "parameters": [
-                    {
-                        "name": "works[]",
-                        "in": "query",
-                        "description": "請輸入查詢id",
-                        "required": true,
-                        "schema": {
-                            "type": "array",
-                            "items": {
-                                "type": "integer"
-                            }
-                        }
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "請求成功"
-                    }
-                }
-            }
-        },
-        "/api/claimEducationCount": {
-            "get": {
-                "tags": [
-                    "職缺資訊"
-                ],
-                "summary": "取得需求學歷分析資訊",
-                "description": "請給我對應的id",
-                "operationId": "App\\Http\\Controllers\\api\\WorkController::getVacancyClaimEducationCount",
-                "parameters": [
-                    {
-                        "name": "works[]",
-                        "in": "query",
-                        "description": "請輸入查詢id",
-                        "required": true,
-                        "schema": {
-                            "type": "array",
-                            "items": {
-                                "type": "integer"
-                            }
-                        }
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "請求成功"
-                    }
-                }
-            }
-        },
-        "/api/claimExperienceCount": {
-            "get": {
-                "tags": [
-                    "職缺資訊"
-                ],
-                "summary": "取得工作經歷分析資訊",
-                "description": "請給我對應的id",
-                "operationId": "App\\Http\\Controllers\\api\\WorkController::getVacancyClaimExperienceCount",
-                "parameters": [
-                    {
-                        "name": "works[]",
-                        "in": "query",
-                        "description": "請輸入查詢id",
-                        "required": true,
-                        "schema": {
-                            "type": "array",
-                            "items": {
-                                "type": "integer"
-                            }
-                        }
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "請求成功"
-                    }
-                }
-            }
-        },
-        "/api/toolCount": {
-            "get": {
-                "tags": [
-                    "職缺資訊"
-                ],
-                "summary": "取得工具統計分析資訊",
-                "description": "請給我對應的id",
-                "operationId": "App\\Http\\Controllers\\api\\WorkController::gettoolCount",
                 "parameters": [
                     {
                         "name": "works[]",

@@ -29,11 +29,10 @@
                         <tbody>
                             @foreach ($sortVacancy as $key=>$sortVacancyItem)
                             <tr>
-                                @if($Vacancies[$key]["score"]>=0.7)
+                                {{-- @if($Vacancies[$key]["score"]>=0.7)
                                     <th><img src="/image/B89pLVWn3M.png" width="20" height="20"></th>
                                 @else
-                                    
-                                @endif
+                                @endif --}}
                                 <th><th>
                                 <th>{{$Vacancies[$key]['vacancy_name']}}</th>
                                 <th>
