@@ -80,7 +80,7 @@ class ResumeController extends Controller
         $Tools = $request->tools;
         
         $update = ['name' => $request->name, 'age' => $request->age,'born' => $request->born,
-                    'eduction'=>$request->eduction,'experience'=>$request->experience];
+                    'education'=>$request->education,'experience'=>$request->experience];
         $Resume = Resume::where('id',$id)->first();
         $Resume->update($update);
         $Resume->category()->sync($Categories);

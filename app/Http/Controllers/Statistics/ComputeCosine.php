@@ -1,5 +1,5 @@
 <?php
-namespace App\Http\Controllers\Math; 
+namespace App\Http\Controllers\Statistics; 
 
 class ComputeCosine
 {

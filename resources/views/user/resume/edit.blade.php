@@ -17,7 +17,7 @@
         $(".selectCategory").val(Categories).trigger("change");
 
         var Resume = {!! json_encode($Resume) !!};
-        $('.selectEduction').val(Resume['education']).trigger("change");
+        $('.selectEducation').val(Resume['education']).trigger("change");
         $('.selectExperience').val(Resume['experience']).trigger("change");
     });
 
@@ -52,7 +52,7 @@
     </div>
     <div class="col-md-12">
         <strong>學歷</strong><br>
-        <select class="selectEduction" style="width:100%;" name="education"  required lay-verify="required">
+        <select class="selectEducation" style="width:100%;" name="education"  required lay-verify="required">
             <option value="" style="display:none" >請選擇學歷</option>
             <option value="高中">高中</option>
             <option value="專科">專科</option>

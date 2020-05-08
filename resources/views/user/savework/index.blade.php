@@ -61,12 +61,14 @@
                 <th></th>
                 <th>職務名稱</th>
                 <th>公司名稱</th>
+                <th></th>
             </tr>
-            @foreach ($Vacancies as $Vacancy)
+            @foreach ($score as $key=>$value)
                 <tr>
-                    <td><input type="checkbox" name="works[]" value="{{$Vacancy->id}}"></td>
-                    <td><a href="{{$Vacancy->link}}">{{$Vacancy->vacancy_name}}</a></td>
-                    <td><a href="{{$Companies[$Vacancy->id]['link']}}">{{$Companies[$Vacancy->id]['company_name']}}</a></td>
+                    <td><input type="checkbox" name="works[]" value="{{$key}}"></td>
+                    <td><a href="{{$Vacancies[$key]['link']}}">{{$Vacancies[$key]['vacancy_name']}}</a></td>
+                    <td><a href="{{$Companies[$Vacancies[$key]['company_id']]['link']}}">{{$Companies[$Vacancies[$key]['company_id']]['company_name']}}</a></td>
+                    <td>權重:{{$value}}</td>
                 </tr>
             @endforeach
         </table>

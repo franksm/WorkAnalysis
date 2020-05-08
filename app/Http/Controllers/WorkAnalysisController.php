@@ -10,13 +10,17 @@ use Illuminate\Support\Facades\Auth;
 use App\Http\Controllers\Controller;
 use App\Http\Controllers\Tool\UseApi;
 use App\Vacancy;
+use App\Http\Controllers\Tool\CalScore;
 use Redirect;
 
 class WorkAnalysisController extends Controller
 {
-    public function index(Request $request){
-
-        
+    private function getCalScore(){
+        $calScore=new CalScore;
+        return $calScore;
+    }
+    public function index(Request $request){ 
+        $calScore=$this->getCalScore();
         function getCompanyInfo($Vacancies)
         {
             $Companies=[];
@@ -30,74 +34,31 @@ class WorkAnalysisController extends Controller
         {
             return $request->vacancy_category;
         }
-
         // 判斷職缺分類
         if(isSetCategory($request)){
-            $Vacancies=Vacancy::all('id','vacancy_name','company_id','vacancy_category','link')->where('vacancy_category',$request->vacancy_category);
+            $Vacancies=Vacancy::all('id','vacancy_name','company_id','claim_experience','claim_education','vacancy_category','link')->where('vacancy_category',$request->vacancy_category);
         }else{
-            $Vacancies=Vacancy::all('id','vacancy_name','company_id','link');
+            $Vacancies=Vacancy::all('id','vacancy_name','claim_experience','claim_education','company_id','link');
         }
-        // 取得職缺對應的公司名稱
+        $tools=[];
+        $categories=[];
+        foreach($Vacancies as $key=>$vacancy){
+            foreach($vacancy->tool->toarray() as $vacancyTool){
+                $tools[$vacancy->id][]=$vacancyTool['vacancy_tool'];
+            }
+            foreach($vacancy->category->toarray() as $vacancyCategory){
+                $categories[$vacancy->id][]=$vacancyCategory['vacancy_category'];
+            }
+        }
         $Companies=getCompanyInfo($Vacancies);
-        
-        return view('user.savework.index',compact('Vacancies','Companies'));
+        $Vacancies=$Vacancies->toarray();
+        $score=$calScore->calScore($Vacancies,$tools,$categories);
+        //dd($Vacancies);
+        // 取得職缺對應的公司名稱
+        return view('user.savework.index',compact('Vacancies','Companies','score'));
     }
     public function form(Request $request)
     {
-        function calculateSuitableScore(&$Vacancies,$Categories,$Tools)
-        {
-            $mathTool = new MathTool;
-            function getResumeInfo()
-            {
-                $search=['id'=>Auth::id()];
-                $useApi = new UseApi(); 
-                $resumeTools = $useApi->CallApi('GET','api/ResumeTool',$search);
-                $resumeCategories = $useApi->CallApi('GET','api/ResumeCategory',$search);
-                $getResume = $useApi->CallApi('GET','api/Resume',$search);
-                return array($resumeTools,$resumeCategories,$getResume);
-            }
-            list($resumeTools,$resumeCategories,$getResume)=getResumeInfo();
-            $Eductions = ['不拘'=>0,'高中'=>1,'專科'=>2,'大學'=>3,'碩士'=>4,'博士'=>5];
-            $Experiences = ['不拘'=>0,'1年'=>1,'2年'=>2,'3年'=>3,'4年'=>4,'5年'=>5,'6年'=>6,'7年'=>7,'8年'=>8,'9年'=>9,'10年'=>10];
-            $resumeSum=[count($resumeTools)*3,count($resumeCategories)*3];
-            $resumeMultiply=[$Experiences[$getResume['experience']],$Eductions[$getResume['education']]];
-            $vacancySum=[];
-            $vacancyMultiply=[];
-            $sortVacancy=[];
-            foreach($Vacancies as $key=>$Vacancy){
-                $id=$Vacancy['id'];
-                $vacancyTool=array_column($Tools[$id],'vacancy_tool');
-                $vacancyCategory=array_column($Categories[$id],'vacancy_category');
-                $vacancyInfo[$key]['Multiply']=[$Experiences[$Vacancies[$key]['claim_experience']],$Eductions[$Vacancies[$key]['claim_education']]];
-                $vacancyInfo[$key]['Sum']=[count($vacancyTool)*3,count($vacancyCategory)*3];
-                $vacancyInfo[$key]['Both']=[count(array_intersect($vacancyTool,$resumeTools))*3,count(array_intersect($vacancyCategory,$resumeCategories))*3];
-                $score=$mathTool->computeCosine($vacancyInfo[$key]['Sum'],$resumeSum,$vacancyInfo[$key]['Both'],$vacancyInfo[$key]['Multiply'],$resumeMultiply);
-                //$Vacancies[$key]['score']=$score;
-                $sortVacancy[$key]=$score;
-            }
-            
-            // foreach($Vacancies as $key=>$Vacancy){
-            //     $score=0;
-            //     $id = $Vacancy['id'];
-            //     $vacancyTool=array_column($Tools[$id],'vacancy_tool');
-            //     $vacancyCategory=array_column($Categories[$id],'vacancy_category');
-            //     $Vacancies[$key]['category']=$mathTool->getSetSimilar($resumeCategories,$vacancyCategory);
-            //     if($vacancyTool[0]=='不拘'){
-            //         $Vacancies[$key]['tool']=100;
-            //     }
-            //     else{
-            //         $Vacancies[$key]['tool']=$mathTool->getSetSimilar($resumeTools,$vacancyTool);
-            //     }
-            //     $getClaimEducation[$key] = $Eductions[$Vacancies[$key]['claim_education']];
-            //     $score+=count(array_intersect($vacancyTool,$resumeTools));
-            //     $score+=count(array_intersect($vacancyCategory,$resumeCategories));
-            //     $sortVacancy[$key]=$score;
-            // }
-            //$mathTool->adjustmentData($getClaimEducation);
-            arsort($sortVacancy);
-            
-            return array($getResume,$resumeTools,$resumeCategories,$sortVacancy);
-        }
         function getCompanyInfo($search)
         {
             $useApi = new UseApi(); 
@@ -106,11 +67,11 @@ class WorkAnalysisController extends Controller
         }
         function getVacancyInfo($search)
         {
-            $useApi = new UseApi(); 
+            $useApi = new UseApi();
             $Vacancies = $useApi->CallApi('GET','api/getVacancies',$search);
             $Categories = $useApi->CallApi('GET','api/getCategories',$search);
             $Tools = $useApi->CallApi('GET','api/getTools',$search);
-            return array($Vacancies,$Categories,$Tools);
+            return [$Vacancies,$Categories,$Tools];
         }
         function isSetSessionWork($request)
         {
@@ -140,9 +101,9 @@ class WorkAnalysisController extends Controller
         // 計算職缺與使用者合適程度 & 取得使用者履歷資訊
         // 職缺與履歷進行比對 
         // 比對項目:[tool,category]
-        list($resume,$resumeTools,$resumeCategories,$sortVacancy) = calculateSuitableScore($Vacancies,$Categories,$Tools);
-        
-        return view('user.savework.analysis.show',compact('Vacancies','Categories','Tools','Companies','resume','resumeTools','resumeCategories','sortVacancy'));
+        //list($resume,$resumeTools,$resumeCategories,$sortVacancy) = calculateSuitableScore($Vacancies,$Categories,$Tools);
+        //compact裡的項目->'sortVacancy'
+        return view('user.savework.analysis.show',compact('Vacancies','Categories','Tools','Companies','resume','resumeTools','resumeCategories'));
     }
     
     public function detail(Request $request)
@@ -201,8 +162,5 @@ class WorkAnalysisController extends Controller
     public function suitable(Request $request)
     {
         return view('user.savework.analysis.suitable');
-    }
-    public function comprehensiveAnalysis(){
-
     }
 }
