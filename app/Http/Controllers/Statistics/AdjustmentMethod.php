@@ -1,5 +1,5 @@
 <?php
-namespace App\Http\Controllers\Statistics; 
+namespace App\Http\Controllers\Statistics;
 use App\Http\Controllers\Statistics\StatisticsMethods;
 class AdjustmentMethod
 {

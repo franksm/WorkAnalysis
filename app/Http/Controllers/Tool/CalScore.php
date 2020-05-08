@@ -24,30 +24,32 @@ class CalScore
             $resume = $useApi->CallApi('GET','api/Resume',$search);
             return [$resumeTools,$resumeCategories,$resume];
     }
-    private function prepareData($vacancies,$tools,$categories,$resume,$resumeTools,$resumeCategories){
+    private function prepareData($vacancies,$categories,$tools,$resume,$resumeTools,$resumeCategories){
         $score = $this->setScore();
         $vacancyInfo=[];
         $vacancyExperience=[];
         $vacancyEducation=[];
         foreach($vacancies as $key=>$vacancy){
             $id=$vacancy['id'];
+            $vacancyCategory=array_column($categories[$id],'vacancy_category');
+            $vacancyTool=array_column($tools[$id],'vacancy_tool');
             $vacancyExperience[]=$score['experiences'][$vacancy['claim_experience']];
             $vacancyEducation[]=$score['educations'][$vacancy['claim_education']];
             $vacancyInfo[$key]['Multiply']=[$score['experiences'][$vacancy['claim_experience']],$score['educations'][$vacancy['claim_education']]];
-            $vacancyInfo[$key]['Sum']=[count($tools[$id]),count($categories[$id])];
-            $vacancyInfo[$key]['Both']=[count(array_intersect($tools[$id],$resumeTools)),count(array_intersect($categories[$id],$resumeCategories))];
+            $vacancyInfo[$key]['Sum']=[count($vacancyTool),count($vacancyCategory)];
+            $vacancyInfo[$key]['Both']=[count(array_intersect($vacancyTool,$resumeTools)),count(array_intersect($vacancyCategory,$resumeCategories))];
         }
         $vacancyExperience[]=$score['experiences'][$resume['experience']];
         $vacancyEducation[]=$score['educations'][$resume['education']];
         return ['info'=>$vacancyInfo,'experience'=>$vacancyExperience,'education'=>$vacancyEducation];
     }
-    public function calScore(&$vacancies,$tools=[],$categories=[])
+    public function calScore(&$vacancies,$categories,$tools)
         {
             $statisticsTool=$this->getStatisticsTool();
             list($resumeTools,$resumeCategories,$resume)=$this->getResume();
             $resumeSum=[count($resumeTools),count($resumeCategories)];
             $sortVacancy=[];
-            $preparationData = $this->prepareData($vacancies,$tools,$categories,$resume,$resumeTools,$resumeCategories);
+            $preparationData = $this->prepareData($vacancies,$categories,$tools,$resume,$resumeTools,$resumeCategories);
             $readyData = $statisticsTool->adjustmentData($preparationData['info'],$preparationData['experience'],$preparationData['education']);
             $resumeMultiply=[$readyData['resumeExperience'],$readyData['resumeEducation']];
             foreach($readyData['readyData'] as $key=>$vacancy){

@@ -81,7 +81,7 @@
                             </tr>
                         </thead>
                         <tbody>
-                            @foreach ($sortVacancy as $key=>$sortVacancyItem)
+                            @foreach ($score as $key=>$scoreItem)
                             <tr>
                                 <th>{{$Vacancies[$key]['vacancy_name']}}</th>
                                 <th>
