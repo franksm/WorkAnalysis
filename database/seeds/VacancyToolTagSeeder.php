@@ -145,5 +145,21 @@ class VacancyToolTagSeeder extends Seeder
             'vacancy_id'=>'11',
             'tool_id'=>'15'
         ]);
+        $DB->insert([
+            'vacancy_id'=>'12',
+            'tool_id'=>'10'
+        ]);
+        $DB->insert([
+            'vacancy_id'=>'13',
+            'tool_id'=>'10'
+        ]);
+        $DB->insert([
+            'vacancy_id'=>'14',
+            'tool_id'=>'10'
+        ]);
+        $DB->insert([
+            'vacancy_id'=>'15',
+            'tool_id'=>'16'
+        ]);
     }
 }

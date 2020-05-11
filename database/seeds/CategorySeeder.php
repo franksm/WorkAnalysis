@@ -61,5 +61,14 @@ class CategorySeeder extends Seeder
         $DB->insert([
             'vacancy_category'=>'主管特別助理'
         ]);
+        $DB->insert([
+            'vacancy_category'=>'測試人員'
+        ]);
+        $DB->insert([
+            'vacancy_category'=>'軟韌體測試工程師'
+        ]);
+        $DB->insert([
+            'vacancy_category'=>'軟體專案主管'
+        ]);
     }
 }

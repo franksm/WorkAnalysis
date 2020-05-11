@@ -6,7 +6,7 @@ class UseApi
 {
     function CallApi($method,$url,$data=false)
     {
-        $request = Request::create($url, $method, $data);
+        $request = Request::create(\env('APP_URL').$url, $method, $data);
         $response = app()->handle($request);
         $result = $response->getData();
         $result = json_decode(json_encode($result), true);

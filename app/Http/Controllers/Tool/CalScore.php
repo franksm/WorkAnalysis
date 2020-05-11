@@ -11,11 +11,6 @@ class CalScore
         $statisticsTool=new StatisticsTool;
         return $statisticsTool;
     }
-    private function setScore(){
-        $Eductions = ['不拘'=>1,'高中'=>2,'專科'=>3,'大學'=>4,'碩士'=>5,'博士'=>6];
-        $Experiences = ['不拘'=>1,'1年'=>2,'2年'=>3,'3年'=>4,'4年'=>5,'5年'=>6,'6年'=>7,'7年'=>8,'8年'=>9,'9年'=>10,'10年'=>11];
-        return ['educations'=>$Eductions,'experiences'=>$Experiences];
-    }
     private function getResume(){
             $search=['id'=>Auth::id()];
             $useApi = new UseApi();
@@ -24,36 +19,64 @@ class CalScore
             $resume = $useApi->CallApi('GET','api/Resume',$search);
             return [$resumeTools,$resumeCategories,$resume];
     }
-    private function prepareData($vacancies,$categories,$tools,$resume,$resumeTools,$resumeCategories){
-        $score = $this->setScore();
-        $vacancyInfo=[];
-        $vacancyExperience=[];
-        $vacancyEducation=[];
-        foreach($vacancies as $key=>$vacancy){
-            $id=$vacancy['id'];
-            $vacancyCategory=array_column($categories[$id],'vacancy_category');
-            $vacancyTool=array_column($tools[$id],'vacancy_tool');
-            $vacancyExperience[]=$score['experiences'][$vacancy['claim_experience']];
-            $vacancyEducation[]=$score['educations'][$vacancy['claim_education']];
-            $vacancyInfo[$key]['Multiply']=[$score['experiences'][$vacancy['claim_experience']],$score['educations'][$vacancy['claim_education']]];
-            $vacancyInfo[$key]['Sum']=[count($vacancyTool),count($vacancyCategory)];
-            $vacancyInfo[$key]['Both']=[count(array_intersect($vacancyTool,$resumeTools)),count(array_intersect($vacancyCategory,$resumeCategories))];
+    private function prepareVacancies($vacancies,$categories,$tools){
+        $vacanciesVector=[];
+        foreach($vacancies as $index=>$vacancy){
+            $categorySum=0;
+            $toolSum=0;
+            if($vacancy['weight_experience']==0.0){
+                $vacanciesVector[$index]['experience']=0;
+            }
+            else{
+                $vacanciesVector[$index]['experience']=$vacancy['weight_experience'];
+            }
+            $vacanciesVector[$index]['education']=$vacancy['weight_education'];
+            foreach($categories[$vacancy['id']] as $key=>$category){
+                $categorySum+=$category['weight'];
+            }
+            foreach($tools[$vacancy['id']] as $tool){
+                $toolSum+=$tool['weight'];
+            }
+            $vacanciesVector[$index]['category']=$categorySum;
+            $vacanciesVector[$index]['tool']=$toolSum;
         }
-        $vacancyExperience[]=$score['experiences'][$resume['experience']];
-        $vacancyEducation[]=$score['educations'][$resume['education']];
-        return ['info'=>$vacancyInfo,'experience'=>$vacancyExperience,'education'=>$vacancyEducation];
+        return $vacanciesVector;
     }
-    public function calScore(&$vacancies,$categories,$tools)
+    private function chechInWeight($weight,$resume){
+        $weightValue=0;
+        if(isset($weight[$resume])){
+            $weightValue=$weight[$resume];
+        }
+        else{
+            $weightValue=min($weight);
+        }
+        return $weightValue;
+    }
+    private function prepareResume($resume,$weight,$resumeTools,$resumeCategories){
+        $resumeVector=[];
+        $resumeVector['experience']=$this->chechInWeight($weight['experience'],$resume['experience']);
+        $resumeVector['education']=$this->chechInWeight($weight['education'],$resume['education']);
+        $categorySum=0;
+        $toolSum=0;
+        foreach ($resumeTools as $resumeTool) {
+            $toolSum+=$this->chechInWeight($weight['tool'],$resumeTool);
+        }
+        foreach ($resumeCategories as $resumeCategory) {
+            $categorySum+=$this->chechInWeight($weight['category'],$resumeCategory);
+        }
+        $resumeVector['tool']=$toolSum;
+        $resumeVector['category']=$categorySum;
+        return $resumeVector;
+    }
+    public function calScore(&$vacancies,$categories,$tools,$weight)
         {
             $statisticsTool=$this->getStatisticsTool();
             list($resumeTools,$resumeCategories,$resume)=$this->getResume();
-            $resumeSum=[count($resumeTools),count($resumeCategories)];
+            $preparationVacanciesVector = $this->prepareVacancies($vacancies,$categories,$tools);
+            $preparationResumeVector = $this->prepareResume($resume,$weight,$resumeTools,$resumeCategories);
             $sortVacancy=[];
-            $preparationData = $this->prepareData($vacancies,$categories,$tools,$resume,$resumeTools,$resumeCategories);
-            $readyData = $statisticsTool->adjustmentData($preparationData['info'],$preparationData['experience'],$preparationData['education']);
-            $resumeMultiply=[$readyData['resumeExperience'],$readyData['resumeEducation']];
-            foreach($readyData['readyData'] as $key=>$vacancy){
-                $score=$statisticsTool->computeCosine($vacancy['Sum'],$resumeSum,$vacancy['Both'],$vacancy['Multiply'],$resumeMultiply);
+            foreach($preparationVacanciesVector as $key=>$vacancyVector){
+                $score=$statisticsTool->computeCosine($vacancyVector,$preparationResumeVector);
                 $sortVacancy[$key]=$score;
             }
             arsort($sortVacancy);

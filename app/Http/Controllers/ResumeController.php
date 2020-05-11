@@ -39,7 +39,6 @@ class ResumeController extends Controller
         $request['user_id']=Auth::id();
         $Categories = $request->categories;
         $Tools = $request->tools;
-
         $Resume = Resume::create($request->all()); 
         $Resume->category()->attach($Categories);
         $Resume->tool()->attach($Tools);
@@ -51,6 +50,7 @@ class ResumeController extends Controller
 
     public function edit($UserId)
     {
+
         $Resume = Resume::where(['user_id'=>$UserId])->first();
         $Categories = json_decode(Resume::find($Resume->id)->category,true);
         $Categories = array_column($Categories,'id');
@@ -78,7 +78,6 @@ class ResumeController extends Controller
          
         $Categories = $request->categories;
         $Tools = $request->tools;
-        
         $update = ['name' => $request->name, 'age' => $request->age,'born' => $request->born,
                     'education'=>$request->education,'experience'=>$request->experience];
         $Resume = Resume::where('id',$id)->first();

@@ -28,6 +28,7 @@ Route::prefix('api')->name('api.')->group(function() {
     Route::get('getVacancies','api\WorkController@getVacancies');
     Route::get('getCategories','api\WorkController@getCategories');
     Route::get('getTools','api\WorkController@getTools');
+    Route::get('saveWeight','api\WorkController@saveWeight');
     //AnalysisWork-------------------------------------------------------------------
     Route::get('claimEducationCount','api\AnalysisWorkController@getVacancyClaimEducationCount');
     Route::get('claimExperienceCount','api\AnalysisWorkController@getVacancyClaimExperienceCount');

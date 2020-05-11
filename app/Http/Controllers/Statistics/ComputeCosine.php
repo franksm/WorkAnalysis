@@ -3,53 +3,35 @@ namespace App\Http\Controllers\Statistics;
 
 class ComputeCosine
 {
-/**
- * 数据分析引擎
- * 分析向量的元素 必须和基准向量的元素一致，取最大个数，分析向量不足元素以0填补。
- * 求出分析向量与基准向量的余弦值
- * @author yu.guo@okhqb.com
- */
-/**
- * 获得向量的模
- * @param unknown_type $array 传入分析数据的基准点的N维向量。|eg:array(1,1,1,1,1);
- */
-private function getMarkMod($arrMultiply,$arrSum){
-    $strModDouble = 0;
-    foreach($arrMultiply as $multiply){
-        $strModDouble += $multiply * $multiply;
-    }
-    foreach($arrSum as $sum){
-        $strModDouble += $sum;
-    }
-    $strMod = sqrt($strModDouble);
-    //是否需要保留小数点后几位
-    return $strMod;
-    }
     /**
-    * 对传入数组进行索引分配，基准点的索引必须为k，求夹角的向量索引必须为 'j'.
-    * @param unknown_type $arrParam
-    * @param unknown_type $index
-    * @ruturn $arrBack
+    * 数据分析引擎
+    * 分析向量的元素 必须和基准向量的元素一致，取最大个数，分析向量不足元素以0填补。
+    * 求出分析向量与基准向量的余弦值
+    * @author yu.guo@okhqb.com
     */
-    private function handIndex($arrParam, $index){
-        foreach($arrParam as $key => $val){
-            $in = $index.$key;
-            $arrBack[$in] = $val;
+    /**
+    * 获得向量的模
+    * @param unknown_type $array 传入分析数据的基准点的N维向量。|eg:array(1,1,1,1,1);
+    */
+    private function getMarkMod($arrMultiply){
+        $strModDouble = 0;
+        foreach($arrMultiply as $multiply){
+            if ($multiply==0){
+                continue;
+            }
+        $strModDouble += $multiply * $multiply;
         }
-        return $arrBack;
+        $strMod = sqrt($strModDouble);
+        //是否需要保留小数点后几位
+        return $strMod;
     }
-    private function vector($sumBoth,$multiplyMark,$multiplyAnaly){
+    private function vector($arrMark,$arrAnaly){
         $strVector=0;
-        $arrMark=$this->handIndex($multiplyMark,'k');
-        $arrAnaly=$this->handIndex($multiplyAnaly,'j');
-        $arrBoth=$this->handIndex($sumBoth,'b');
-        $arrLenth=count($arrBoth);
-        for($i = 0; $i < $arrLenth; $i++){
-            $strMarkVal = $arrMark['k'.$i];
-            $strAnalyVal = $arrAnaly['j'.$i];
-            $strSelfVal = $arrBoth['b'.$i];
-            $strVector += $strMarkVal * $strAnalyVal;
-            $strVector += $strSelfVal;
+        foreach($arrMark as $markIndex=>$markValue){
+            if($arrAnaly[$markIndex]==0 or $markValue==0){
+                continue;
+            }
+            $strVector=$arrAnaly[$markIndex]*$markValue;
         }
         return $strVector;
     }
@@ -60,16 +42,18 @@ private function getMarkMod($arrMultiply,$arrSum){
     * @param unknown_type $strMarkMod标杆向量的模
     * @param unknown_type $intLenth 向量的长度
     */
-    public function getCosine($sumMark,$sumAnaly,$sumBoth,$multiplyMark,$multiplyAnaly){
+    public function getCosine($arrMark,$arrAnaly){
         $strCosine = 0;
         $strVector=0;
-        $strVector=$this->vector($sumBoth,$multiplyMark,$multiplyAnaly);
-        $strFenzi = $strVector;
-        $strMarkMod = $this->getMarkMod($multiplyMark,$sumMark);//求分析向量的模
-        $strAnalyMod = $this->getMarkMod($multiplyAnaly,$sumAnaly);//求分析向量的模
+        $strVector=$this->vector($arrMark,$arrAnaly);
+        $strAnalyMod = $this->getMarkMod($arrAnaly);//求分析向量的模
+        $strMarkMod = $this->getMarkMod($arrMark);//求分析向量的模
         $strFenMu = $strAnalyMod * $strMarkMod;
-        if((int)$strFenMu !== 0){
-            $strCosine = $strFenzi / $strFenMu;
+        if ($strFenMu!=0){
+        $strCosine = $strVector / $strFenMu;
+        }
+        else{
+            $strCosine=0.1;
         }
         return $strCosine;
     }

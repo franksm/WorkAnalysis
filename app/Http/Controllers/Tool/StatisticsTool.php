@@ -6,15 +6,10 @@ use App\Http\Controllers\Statistics\AdjustmentMethod;
 
 class StatisticsTool
 {
-    public function computeCosine($sumMark,$sumAnaly,$sumBoth,$multiplyMark,$multiplyAnaly)
+    public function computeCosine($arrMark,$arrAnaly)
     {   
         $computeCosine=new ComputeCosine;
-        $strCosine=$computeCosine->getCosine($sumMark,$sumAnaly,$sumBoth,$multiplyMark,$multiplyAnaly);
+        $strCosine=$computeCosine->getCosine($arrMark,$arrAnaly);
         return $strCosine;
     }
-    public function adjustmentData($adjustmentArray,$experienceArray,$educationArray){
-        $adjustment=new AdjustmentMethod;
-        return $adjustment->adjustmentData($adjustmentArray,$experienceArray,$educationArray);
-    }
-
 }

@@ -59,5 +59,8 @@ class ToolSeeder extends Seeder
         $DB->insert([
             'vacancy_tool'=>'英文打字75-100'
         ]);
+        $DB->insert([
+            'vacancy_tool'=>'ReactNative'
+        ]);
     }
 }
