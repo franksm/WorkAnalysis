@@ -45,6 +45,27 @@ class WorkAnalysisController extends Controller
         $Tools = $useApi->CallApi('GET','api/getTools',$search);
         return [$Vacancies,$Categories,$Tools];
     }
+    private function setValue($Vacancies,$Categories,$Tools,$resumes,$resumeTools,$resumeCategories,$StatisticsMethods,$scoreRule){
+        $value=[];
+        $claimEducation=[$scoreRule['educations'][$resumes['education']]];
+        $claimExperience=[$scoreRule['experiences'][$resumes['experience']]];
+        foreach($Vacancies as $Vacancy){
+            $claimEducation[]=$scoreRule['educations'][$Vacancy['claim_education']];
+            $claimExperience[]=$scoreRule['experiences'][$Vacancy['claim_experience']];
+        }
+        $maxEducation=max($claimEducation);
+        $maxExperience=max($claimExperience);
+        $minEducation=min($claimEducation);
+        $minExperience=min($claimExperience);
+        foreach($Vacancies as $Vacancy){
+            $name=$Vacancy['vacancy_name'];
+            $value[$name]['category']=$StatisticsMethods->setSimilar(array_column($Categories[$Vacancy['id']],'vacancy_category'),$resumeCategories);
+            $value[$name]['tool']=$StatisticsMethods->setSimilar(array_column($Tools[$Vacancy['id']],'vacancy_tool'),$resumeTools);
+            $value[$name]['claim_education']=(int)(($StatisticsMethods->meanNormalization($scoreRule['educations'][$Vacancy['claim_education']],$claimEducation,$maxEducation,$minEducation)+1)*50);
+            $value[$name]['claim_experience']=(int)(($StatisticsMethods->meanNormalization($scoreRule['experiences'][$Vacancy['claim_experience']],$claimExperience,$maxExperience,$minExperience)+1)*50);
+        }
+        return $value;
+    }
     public function index(Request $request){ 
         function getCompanyInfo($Vacancies)
         {
@@ -172,23 +193,7 @@ class WorkAnalysisController extends Controller
         list($resumes,$resumeTools,$resumeCategories) = $this->getResumeInfo();
         list($Vacancies,$Categories,$Tools)=$this->getVacancyInfo($search);
         $scoreRule=$StatisticsMethods->setScore();
-        $claimEducation=[$scoreRule['educations'][$resumes['education']]];
-        $claimExperience=[$scoreRule['experiences'][$resumes['experience']]];
-        foreach($Vacancies as $Vacancy){
-            $claimEducation[]=$scoreRule['educations'][$Vacancy['claim_education']];
-            $claimExperience[]=$scoreRule['experiences'][$Vacancy['claim_experience']];
-        }
-        $maxEducation=max($claimEducation);
-        $maxExperience=max($claimExperience);
-        $minEducation=min($claimEducation);
-        $minExperience=min($claimExperience);
-        foreach($Vacancies as $Vacancy){
-            $name=$Vacancy['vacancy_name'];
-            $value[$name]['category']=$StatisticsMethods->setSimilar(array_column($Categories[$Vacancy['id']],'vacancy_category'),$resumeCategories);
-            $value[$name]['tool']=$StatisticsMethods->setSimilar(array_column($Tools[$Vacancy['id']],'vacancy_tool'),$resumeTools);
-            $value[$name]['claim_education']=(int)($StatisticsMethods->meanNormalization($scoreRule['educations'][$Vacancy['claim_education']],$claimEducation,$maxEducation,$minEducation)*100);
-            $value[$name]['claim_experience']=(int)($StatisticsMethods->meanNormalization($scoreRule['experiences'][$Vacancy['claim_experience']],$claimExperience,$maxExperience,$minExperience)*100);
-        }
+        $value=$this->setValue($Vacancies,$Categories,$Tools,$resumes,$resumeTools,$resumeCategories,$StatisticsMethods,$scoreRule);
         $score=$calScore->calScore($Vacancies,$Categories,$Tools);
         foreach($Vacancies as $key=>$Vacancy){
             $name=$Vacancy['vacancy_name'];
