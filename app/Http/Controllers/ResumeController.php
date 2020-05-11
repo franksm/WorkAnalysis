@@ -16,12 +16,7 @@ class ResumeController extends Controller
     {
         $Resume = Resume::where(['user_id' => Auth::id()])->first();
         $UserId = Auth::id();
-        if($Resume==null){
-            return Redirect::to('/user/resume/create');
-        }else{
-            //dd($UserId);
-            return Redirect::to('user/resume/'.$UserId.'/edit');
-        }
+        return view('user/resume/index',compact('Resume','UserId'));
     }
     public function create()
     {
@@ -90,5 +85,16 @@ class ResumeController extends Controller
         return Redirect::to('/home')
        ->with('success','Great! Product updated successfully');
         
+    }
+    public function show($UserId)
+    {
+        $Resume = Resume::where(['user_id'=>$UserId])->first();
+        $Categories = json_decode(Resume::find($Resume->id)->category,true);
+        $Categories = array_column($Categories,'vacancy_category');
+        $Categories = implode(",",$Categories);
+        $Tools = json_decode(Resume::find($Resume->id)->tool,true);
+        $Tools = array_column($Tools,'vacancy_tool');
+        $Tools = implode(",",$Tools);
+        return view('user/resume/show',compact('Resume','Categories','Tools','UserId'));
     }
 }
