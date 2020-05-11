@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Controllers\Tool\MathTool;
+use Phpml\Clustering\KMeans;
 use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Http\Request;
@@ -61,9 +62,9 @@ class WorkAnalysisController extends Controller
         // 判斷職缺分類
 
         if(isSetCategory($request)){
-            $Vacancies=Vacancy::all('id','vacancy_name','company_id','claim_education','claim_experience','link')->where('vacancy_category',$request->vacancy_category);
+            $Vacancies=Vacancy::all('id','vacancy_name','vacancy_category','company_id','claim_education','claim_experience','link')->where('vacancy_category',$request->vacancy_category);
         }else{
-            $Vacancies=Vacancy::all('id','vacancy_name','company_id','claim_education','claim_experience','link');
+            $Vacancies=Vacancy::all('id','vacancy_name','vacancy_category','company_id','claim_education','claim_experience','link');
         }
         $calScore=$this->getCalScore();
         $works=[];
@@ -73,7 +74,7 @@ class WorkAnalysisController extends Controller
         }
         $search = ['works'=>$works];
         list($Vacancies,$Categories,$Tools)=$this->getVacancyInfo($search);
-        $score=$calScore->calScore($Vacancies,$Tools,$Categories);
+        $score=$calScore->calScore($Vacancies,$Categories,$Tools);
         // 取得職缺對應的公司名稱
         return view('user.savework.index',compact('Vacancies','Companies','score'));
     }
@@ -191,7 +192,7 @@ class WorkAnalysisController extends Controller
         $score=$calScore->calScore($Vacancies,$Categories,$Tools);
         foreach($Vacancies as $key=>$Vacancy){
             $name=$Vacancy['vacancy_name'];
-            $value[$name]['score']=(int)($score[$key]*100);
+            $value[$name]['score']=(int)(($score[$key]+1)*50);
         }
         return view('user.savework.analysis.suitable',compact('value'));
     }
