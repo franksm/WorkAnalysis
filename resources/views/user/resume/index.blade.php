@@ -3,9 +3,9 @@
 @section('content')
 <div class="m-lg-4">
 @if ($Resume == null)
-<a href="{{ route('user.resume.create') }}" class="btn btn-success mb-2">添加履歷</a> 
+<a href="{{ route('user.resume.create') }}" class="btn btn-primary">添加履歷</a> 
 @else
-<a href="{{ route('user.resume.edit',$UserId) }}" class="btn btn-success mb-2">修改履歷</a> 
+<a href="{{ route('user.resume.show',$UserId) }}" class="btn btn-primary">顯示履歷</a> 
 @endif
 </div>
 @endsection
