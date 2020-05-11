@@ -68,9 +68,7 @@ private function getMarkMod($arrMultiply,$arrSum){
         $strMarkMod = $this->getMarkMod($multiplyMark,$sumMark);//求分析向量的模
         $strAnalyMod = $this->getMarkMod($multiplyAnaly,$sumAnaly);//求分析向量的模
         $strFenMu = $strAnalyMod * $strMarkMod;
-        if((int)$strFenMu !== 0){
-            $strCosine = $strFenzi / $strFenMu;
-        }
+        $strCosine = $strFenzi / $strFenMu;
         return $strCosine;
     }
 }

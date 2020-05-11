@@ -66,10 +66,14 @@ class WorkAnalysisController extends Controller
             $Vacancies=Vacancy::all('id','vacancy_name','company_id','claim_education','claim_experience','link');
         }
         $calScore=$this->getCalScore();
+        $works=[];
         $Companies=getCompanyInfo($Vacancies);
-        $info=$this->getToolAndCategory($Vacancies);
-        $Vacancies=$Vacancies->toarray();
-        $score=$calScore->calScore($Vacancies,$info['tools'],$info['categories']);
+        foreach ($Vacancies as $Vacancy) {
+            $works[]=$Vacancy->id;
+        }
+        $search = ['works'=>$works];
+        list($Vacancies,$Categories,$Tools)=$this->getVacancyInfo($search);
+        $score=$calScore->calScore($Vacancies,$Tools,$Categories);
         // 取得職缺對應的公司名稱
         return view('user.savework.index',compact('Vacancies','Companies','score'));
     }
