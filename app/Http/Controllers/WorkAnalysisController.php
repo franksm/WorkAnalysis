@@ -126,9 +126,6 @@ class WorkAnalysisController extends Controller
             $Vacancies=Vacancy::all('id','vacancy_category','weight_education','weight_experience','claim_education','claim_experience','company_id');
         }
         else{
-            // $useApi =$this->useApi();
-            // $workController = $useApi->CallApi('GET','api/saveWeight',[]);
-            // dd($workController);
             $workController=new WorkController;
             $workController->saveWeight();
             $Vacancies=Vacancy::all('id','vacancy_category','claim_education','claim_experience','weight_education','weight_experience','company_id');
