@@ -144,6 +144,7 @@ class WorkAnalysisController extends Controller
         list($Vacancies,$Categories,$Tools)=$this->getVacancyInfo($search);
         list($weight['experience'],$weight['education'],$weight['category'],$weight['tool'])=$this->prepareCategoryAnTool($Vacancies,$Categories,$Tools);
         $score=$calScore->calScore($Vacancies,$Categories,$Tools,$weight);
+        //dd($score);
         // 取得職缺對應的公司名稱
         return view('user.savework.index',compact('Vacancies','Companies','score'));
     }

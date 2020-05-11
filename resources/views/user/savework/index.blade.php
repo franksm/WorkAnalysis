@@ -35,6 +35,11 @@
             alert("請勾選職缺");
             return false;
         }
+        function check_all(obj,cName)
+        {
+            var checkboxs = document.getElementsByName(cName);
+            for(var i=0;i<checkboxs.length;i++){checkboxs[i].checked = obj.checked;}
+        }
     </script>
 
 <div class="parent">
@@ -55,17 +60,17 @@
     <div class="right">
         <form action="{{ route('analysis.list') }}" method="post" onSubmit="return validate(this)">
             {{ csrf_field() }}
-            <input type="submit" value="送出表單" class="btn-primary my-lg-1">
+            <input type="submit" value="送出表單" class="btn btn-primary my-lg-1">
         <table class="table">
             <tr>
-                <th></th>
+                <th><input type="checkbox" name="all" onclick="check_all(this,'works[]')" /></th>
                 <th>職務名稱</th>
                 <th>公司名稱</th>
                 <th></th>
             </tr>
             @foreach ($score as $key=>$value)
                 <tr>
-                    <td><input type="checkbox" name="works[]" value="{{$key}}"></td>
+                    <td><input type="checkbox" name="works[]" value="{{$key+1}}"></td>
                     <td><a href="{{$Vacancies[$key]['link']}}">{{$Vacancies[$key]['vacancy_name']}}</a></td>
                     <td><a href="{{$Companies[$Vacancies[$key]['company_id']]['link']}}">{{$Companies[$Vacancies[$key]['company_id']]['company_name']}}</a></td>
                     <td>權重:{{$value}}</td>

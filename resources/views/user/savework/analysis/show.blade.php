@@ -18,12 +18,12 @@
         var education = {'不拘':0,'高中':1,'專科':2,'大學':3,'碩士':4,'博士':5};
         var experiences = {'不拘':0,'1年':1,'2年':2,'3年':3,'4年':4,'5年':5,'6年':6,'7年':7,'8年':8,'9年':9,'10年':10};
         for (var row = 1; row < table.rows.length; row++) {
-            if(education[table.rows[row].cells[6].innerHTML]>=education[resume['education']]){
+            if(education[table.rows[row].cells[6].innerHTML]<=education[resume['education']]){
                 table.rows[row].cells[6].innerHTML = "<img src={{url('/image/meet.png')}} width=30 heigth=30>";
             }else{
                 table.rows[row].cells[6].innerHTML = "<img src={{url('/image/notmeet.png')}} width=30 heigth=30>";
             }
-            if(experiences[table.rows[row].cells[7].innerHTML]>=experiences[resume['experience']]){
+            if(experiences[table.rows[row].cells[7].innerHTML]<=experiences[resume['experience']]){
                 table.rows[row].cells[7].innerHTML = "<img src={{url('/image/meet.png')}} width=30 heigth=30>";
             }else{
                 table.rows[row].cells[7].innerHTML = "<img src={{url('/image/notmeet.png')}} width=30 heigth=30>";

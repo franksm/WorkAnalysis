@@ -1,5 +1,5 @@
 @extends('user.savework.analysis.layouts.master')
-@section('nav_list', 'active')
+@section('nav_suitable', 'active')
 @section('content')
 <link rel="stylesheet" href="https://www.104.com.tw/jobs/apply/static/css/app.min.css?id=7bc7c107a1569c7cfad5">
 <script src="https://cdn.jsdelivr.net/npm/chart.js@2.9.3/dist/Chart.min.js"></script>
@@ -55,7 +55,6 @@
                     borderColor: 'rgba(45, 22, 128, 1)',
                     borderWidth: 1,
                 },
-                
                 ]
             },
             options: {
@@ -63,7 +62,7 @@
                     yAxes: [{
                         id: 'y-axis-1', 
                         position:'left',
-                        ticks: {min: 0},
+                        ticks: {min: 0,max: 100},
                         scaleLabel: {
                             display: true,
                             labelString: '分數'

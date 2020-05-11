@@ -24,12 +24,7 @@ class CalScore
         foreach($vacancies as $index=>$vacancy){
             $categorySum=0;
             $toolSum=0;
-            if($vacancy['weight_experience']==0.0){
-                $vacanciesVector[$index]['experience']=0;
-            }
-            else{
-                $vacanciesVector[$index]['experience']=$vacancy['weight_experience'];
-            }
+            $vacanciesVector[$index]['experience']=$vacancy['weight_experience'];
             $vacanciesVector[$index]['education']=$vacancy['weight_education'];
             foreach($categories[$vacancy['id']] as $key=>$category){
                 $categorySum+=$category['weight'];

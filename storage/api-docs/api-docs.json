@@ -315,7 +315,7 @@
                 }
             }
         },
-        "/api/get_vacancies": {
+        "/api/getVacancies": {
             "get": {
                 "tags": [
                     "職缺資訊"
@@ -344,7 +344,7 @@
                 }
             }
         },
-        "/api/get_categories": {
+        "/api/getCategories": {
             "get": {
                 "tags": [
                     "職缺資訊"
@@ -373,7 +373,7 @@
                 }
             }
         },
-        "/api/get_tools": {
+        "/api/getTools": {
             "get": {
                 "tags": [
                     "職缺資訊"
