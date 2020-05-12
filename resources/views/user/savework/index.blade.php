@@ -70,10 +70,10 @@
             </tr>
             @foreach ($score as $key=>$value)
                 <tr>
-                    <td><input type="checkbox" name="works[]" value="{{$key+1}}"></td>
+                    <td><input type="checkbox" name="works[]" value="{{$key}}"></td>
                     <td><a href="{{$Vacancies[$key]['link']}}">{{$Vacancies[$key]['vacancy_name']}}</a></td>
                     <td><a href="{{$Companies[$Vacancies[$key]['company_id']]['link']}}">{{$Companies[$Vacancies[$key]['company_id']]['company_name']}}</a></td>
-                    <td>權重:{{$value}}</td>
+                    <td>相似度:{{$value}}</td>
                 </tr>
             @endforeach
         </table>

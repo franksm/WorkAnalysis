@@ -3,12 +3,14 @@ namespace App\Http\Controllers\Statistics;
 
 class StatisticsMethods
 {
+
     public function avergeValue($array){
         $arrayCount=count($array);
         $arraySum=array_sum($array);
         $averge=$arraySum/$arrayCount;
         return $averge;
     }
+    
     public function computePercent($selfNumber,$benchMark){
         if($benchMark<$selfNumber){
             $percent=100;
@@ -22,6 +24,7 @@ class StatisticsMethods
         }
         return (int)$percent;
     }
+
     public function setSimilar($selfSet,$benchSet){
         $intersectCount=count(array_intersect($selfSet,$benchSet));
         $mergeCount=count((array_merge($selfSet,$benchSet)));
@@ -43,4 +46,5 @@ class StatisticsMethods
         $normalization=(($targetNumber-$min)/($max-$min));
         return $normalization;
     }
+
 }

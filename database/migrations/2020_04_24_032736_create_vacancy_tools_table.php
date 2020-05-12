@@ -16,7 +16,7 @@ class CreateVacancyToolsTable extends Migration
         Schema::create('vacancy_tools', function (Blueprint $table) {
             $table->increments('id');
             $table->string('vacancy_tool',20);
-            $table->float('weight')->nullable();
+            $table->integer('weight')->nullable();
             $table->timestamps();
         });
     }

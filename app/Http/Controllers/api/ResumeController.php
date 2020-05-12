@@ -50,7 +50,6 @@ class ResumeController extends Controller
         $getDbObject=$this->getGeneralTool();
         $resume = $getDbObject->getResumeDbObject(['id','user_id'],$user_id);
         $resumeTools=$resume->tool->toarray();
-        $resumeTools=array_column($resumeTools,'vacancy_tool');
         return $resumeTools;
     }
     /**
@@ -71,7 +70,6 @@ class ResumeController extends Controller
         $getDbObject=$this->getGeneralTool();
         $resume = $getDbObject->getResumeDbObject(['id','user_id'],$user_id);
         $resumeCategories=$resume->category->toarray();
-        $resumeCategories=array_column($resumeCategories,'vacancy_category');
         return $resumeCategories;
     }
 }

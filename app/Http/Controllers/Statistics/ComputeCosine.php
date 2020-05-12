@@ -16,10 +16,7 @@ class ComputeCosine
     private function getMarkMod($arrMultiply){
         $strModDouble = 0;
         foreach($arrMultiply as $multiply){
-            if ($multiply==0){
-                continue;
-            }
-        $strModDouble += $multiply * $multiply;
+            $strModDouble += $multiply * $multiply;
         }
         $strMod = sqrt($strModDouble);
         //是否需要保留小数点后几位
@@ -28,10 +25,7 @@ class ComputeCosine
     private function vector($arrMark,$arrAnaly){
         $strVector=0;
         foreach($arrMark as $markIndex=>$markValue){
-            if($arrAnaly[$markIndex]==0 or $markValue==0){
-                continue;
-            }
-            $strVector=$arrAnaly[$markIndex]*$markValue;
+            $strVector+=$arrAnaly[$markIndex]*$markValue;
         }
         return $strVector;
     }
@@ -49,12 +43,7 @@ class ComputeCosine
         $strAnalyMod = $this->getMarkMod($arrAnaly);//求分析向量的模
         $strMarkMod = $this->getMarkMod($arrMark);//求分析向量的模
         $strFenMu = $strAnalyMod * $strMarkMod;
-        if ($strFenMu!=0){
         $strCosine = $strVector / $strFenMu;
-        }
-        else{
-            $strCosine=0.1;
-        }
         return $strCosine;
     }
 }
