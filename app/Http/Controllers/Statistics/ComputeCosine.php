@@ -31,7 +31,7 @@ class ComputeCosine
             if($arrAnaly[$markIndex]==0 or $markValue==0){
                 continue;
             }
-            $strVector=$arrAnaly[$markIndex]*$markValue;
+            $strVector=+$arrAnaly[$markIndex]*$markValue;
         }
         return $strVector;
     }
