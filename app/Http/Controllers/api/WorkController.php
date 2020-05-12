@@ -103,6 +103,7 @@ class WorkController extends Controller
         }
         $vacanciesWeight=$Vacancies->toarray();
         $weight=$setWeight->setVacancItemWeight($vacanciesWeight);
+        
         foreach($Vacancies as $vacancy){
             $vacancy->weight_experience=$weight['experience'][$vacancy->claim_experience];
             $vacancy->weight_education=$weight['education'][$vacancy->claim_education];
