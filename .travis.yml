@@ -1,8 +1,10 @@
 dist: bionic
 language: php
 php:
-  - 7.2
   - 7.3
+branch:
+  only:
+    - master
 services:
   - mysql
 cache:
@@ -18,3 +20,19 @@ before_script:
   - php artisan migrate
 script:
   - vendor/bin/phpunit
+
+before_deploy:
+  - sed -in-place 's/localhost/workanalysis.ddns.net/g' .env.example
+  - rm .env.examplen-place
+  - rm -r laradock/
+
+deploy:
+  provider: elasticbeanstalk
+  edge: true
+  skip_cleanup: true
+  access_key_id: $aws_access_key
+  secret_access_key: $aws_secret_key
+  region: "us-west-2"
+  app: "workanalysis"
+  env: "Workanalysis-env"
+  bucket_name: "elasticbeanstalk-us-west-2-632618040974"
