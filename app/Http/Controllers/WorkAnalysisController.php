@@ -85,8 +85,8 @@ class WorkAnalysisController extends Controller
         foreach ($Vacancies as $Vacancy) {
                 $value[$Vacancy['vacancy_name']]['claim_experience']=$StatisticsMethods->computePercent($itemScore['experience'][$resumes['experience']],$itemScore['experience'][$Vacancy['claim_experience']]);
                 $value[$Vacancy['vacancy_name']]['claim_education']=$StatisticsMethods->computePercent($itemScore['education'][$resumes['education']],$itemScore['education'][$Vacancy['claim_education']]);
-                $value[$Vacancy['vacancy_name']]['category']=$StatisticsMethods->setSimilar(array_column($resumeCategories,'vacancy_category'),array_column($Categories[$Vacancy['id']],'vacancy_category'));
-                $value[$Vacancy['vacancy_name']]['tool']=$StatisticsMethods->setSimilar(array_column($resumeTools,'vacancy_tool'),array_column($Tools[$Vacancy['id']],'vacancy_tool'));
+                // $value[$Vacancy['vacancy_name']]['category']=$StatisticsMethods->setSimilar(array_column($resumeCategories,'vacancy_category'),array_column($Categories[$Vacancy['id']],'vacancy_category'));
+                // $value[$Vacancy['vacancy_name']]['tool']=$StatisticsMethods->setSimilar(array_column($resumeTools,'vacancy_tool'),array_column($Tools[$Vacancy['id']],'vacancy_tool'));
         }
         return $value;
     }
@@ -224,11 +224,16 @@ class WorkAnalysisController extends Controller
         list($resumes,$resumeTools,$resumeCategories) = $this->getResumeInfo();
         $handleCategory=$statisticsTool->handleData($categories,'vacancy_category',$resumeCategories);
         $handleTool=$statisticsTool->handleData($Tools,'vacancy_tool',$resumeTools);
+        $resumeTool=array_pop($handleTool);
+        $resumeCategory=array_pop($handleCategory);
         $value=$this->computeChartValue($Vacancies,$categories,$Tools,$resumes,$resumeCategories,$resumeTools,$weight,$itemScore);
         $score=$calScore->calScore($Vacancies,$categories,$Tools,$weight);
         foreach($Vacancies as $key=>$Vacancy){
-            $name=$Vacancy['vacancy_name'];
-            $value[$name]['score']=(int)(($score[$key]+1)*50);
+            $tool=$statisticsTool->computeCosine($handleTool[$key],$resumeTool);
+            $category=$statisticsTool->computeCosine($handleCategory[$key],$resumeCategory);
+            $value[$Vacancy['vacancy_name']]['tool']=round(($tool+1)*50,2);
+            $value[$Vacancy['vacancy_name']]['category']=round(($category+1)*50,2);
+            $value[$Vacancy['vacancy_name']]['score']=round(($score[$key]+1)*50,2);
         }
         return view('user.savework.analysis.suitable',compact('value'));
     }
