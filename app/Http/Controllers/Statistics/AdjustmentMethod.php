@@ -7,7 +7,6 @@ class AdjustmentMethod
         $methods=new StatisticsMethods;
         $adjustmentArrayLen=count($adjustmentArray);
         $adjustment=[];
-        
         foreach(end($adjustmentArray) as $adjustmentKey=>$adjustmentValue){
             $adjustment[$adjustmentKey]=(array_sum(array_column($adjustmentArray,$adjustmentKey))/$adjustmentArrayLen);
         }

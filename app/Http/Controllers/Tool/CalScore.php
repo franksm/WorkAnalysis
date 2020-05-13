@@ -5,7 +5,7 @@ use Illuminate\Support\Facades\Auth;
 use App\Http\Controllers\Tool\UseApi;
 use App\Http\Controllers\Tool\StatisticsTool;
 use App\Http\Controllers\Tool\HandleData;
-
+use Phpml\Math\Statistic\Correlation;
 class CalScore
 {
     
@@ -54,12 +54,14 @@ class CalScore
         foreach($prepareData as $index=>$prepareDataValue){
             $prepareData[$index]=array_merge($prepareData[$index],$handleTools[$index],$handleCategories[$index]);
         }
+        
         $preparationResumeVector=array_pop($prepareData);
         $sortVacancy=[];
         foreach($prepareData as $key=>$vacancyVector){
             $score=$statisticsTool->computeCosine($vacancyVector,$preparationResumeVector);
             $sortVacancy[$key]=$score;
         }
+        
         arsort($sortVacancy);
         return $sortVacancy;
     }

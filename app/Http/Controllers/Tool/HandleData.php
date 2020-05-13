@@ -29,7 +29,6 @@ class HandleData
         $allFieldItemArray=[];
         $allFieldItem=[];
         $field[]=$resumeField;
-        
         foreach($field as $fieldIndex=>$fieldItem){
             foreach ($fieldItem as $fieldAttribute){
                 if($fieldAttribute[$fieldType]=="不拘"){
