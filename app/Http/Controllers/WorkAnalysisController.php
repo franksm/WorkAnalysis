@@ -178,12 +178,10 @@ class WorkAnalysisController extends Controller
         // 取得公司資訊
         $Companies=getCompanyInfo($search);
         // 計算職缺與使用者合適程度 & 取得使用者履歷資訊
-        list($resumeTools,$resumeCategories,$resume)=$this->getResumeInfo();
+        list($resume,$resumeTools,$resumeCategories)=$this->getResumeInfo();
         
         $score=$calScore->calScore($Vacancies,$Categories,$Tools,$weight);
-        
-        // 職缺與履歷進行比對 
-        // 比對項目:[claim_education,tool,category]
+        //dd($resumeTools);
         return view('user.savework.analysis.show',compact('Vacancies','Categories','Tools','Companies','resume','resumeTools','resumeCategories','score'));
     }
     
@@ -240,7 +238,12 @@ class WorkAnalysisController extends Controller
         $resumeTool=array_pop($prepareTools);
         $resumeCategory=array_pop($prepareCategories);
         $value=$this->computeChartValue($Vacancies,$categories,$Tools,$resumes,$weight);
-        $score=$calScore->calScore($Vacancies,$categories,$Tools,$weight);
+        $type=$request->type;
+        if($type==null){
+            $score=$calScore->calScore($Vacancies,$categories,$Tools,$weight);
+        }else{
+            $score=$calScore->calScore($Vacancies,$categories,$Tools,$weight,$type);
+        }
         foreach($Vacancies as $key=>$Vacancy){
             $tool=$statisticsTool->computeCosine($prepareTools[$key],$resumeTool);
             $category=$statisticsTool->computeCosine($prepareCategories[$key],$resumeCategory);

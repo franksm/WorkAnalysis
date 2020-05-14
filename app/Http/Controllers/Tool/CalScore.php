@@ -76,14 +76,15 @@ class CalScore
         }
         else{
             $prepareData=$prepareVacanciesVector;
+
         }
+        
         $prepareResumeVector=array_pop($prepareData);
         $sortVacancy=[];
         foreach($prepareData as $key=>$vacancyVector){
             $score=$statisticsTool->computeCosine($vacancyVector,$prepareResumeVector);
             $sortVacancy[$key]=$score;
         }
-        //dd($prepareData);
         arsort($sortVacancy);
         return $sortVacancy;
     }

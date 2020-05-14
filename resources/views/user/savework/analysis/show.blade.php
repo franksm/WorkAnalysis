@@ -12,7 +12,8 @@
     function compareResumes()
     {
         var resume = {!! json_encode($resume) !!}
-        var resumeTools = {!! json_encode($resumeTools) !!}
+        var resumeTools = {!! json_encode(array_column($resumeTools,'vacancy_tool')) !!}
+        console.log('resumeTools:'+resumeTools);
 
         var table = document.getElementById('vacancy');
         var education = {'不拘':0,'高中':1,'專科':2,'大學':3,'碩士':4,'博士':5};
@@ -29,12 +30,14 @@
                 table.rows[row].cells[7].innerHTML = "<img src={{url('/image/notmeet.png')}} width=30 heigth=30>";
             }
             var Tools = table.rows[row].cells[2].innerText.replace(/\r\n|\n|\s+/g, "");
-            console.log(Tools);
+            //console.log(Tools);
             if(Tools!='不拘,'){
                 Tools = Tools.split(",");
                 var ToolSame = "";
                 var ToolDiff = ""; 
                 Tools.forEach((item,index)=>{
+                    console.log('resumeTools:'+resumeTools);
+                    console.log('row:'+row+'item:'+item);
                     if(resumeTools.indexOf(item)!=-1){
                         ToolSame += item+',';
                     }else{
@@ -43,7 +46,18 @@
                 });
                 ToolSame = ToolSame.substring(0, ToolSame.length-1);
                 ToolDiff = ToolDiff.substring(0, ToolDiff.length-2);
-                table.rows[row].cells[2].innerHTML = "<img src={{url('/image/meet.png')}} width=20 heigth=20>："+ToolSame+"<br/><img src={{url('/image/notmeet.png')}} width=20 heigth=20>："+ToolDiff;
+                console.log('ToolSame:'+ToolSame.length);
+                if(ToolSame.length==0){
+                    ToolSame = "";
+                }else{
+                    ToolSame = "<img src={{url('/image/meet.png')}} width=20 heigth=20>："+ToolSame;
+                }
+                if(ToolDiff.length==0){
+                    ToolDiff = "";
+                }else{
+                    ToolDiff = "<br/><img src={{url('/image/notmeet.png')}} width=20 heigth=20>："+ToolDiff;
+                }
+                table.rows[row].cells[2].innerHTML = ToolSame+ToolDiff;
             }
         }
         var currentBtn = document.getElementById('result');

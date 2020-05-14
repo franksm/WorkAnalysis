@@ -82,6 +82,10 @@
 </script>
 
 <div class="m-lg-4 ">
+    <div id='link' style="float:right;">
+        <a class="nav-link" href="/analysis/suitable">使用Pearson</a>
+        <a class="nav-link" href="/analysis/suitable?type=noPearson">不使用Pearson</a>   
+    </div>
     <div class="bar_analysis">
        <dd><canvas id="suitableChart" width="1200" height="600"></canvas></dd>
     </div>
