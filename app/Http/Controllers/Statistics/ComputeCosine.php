@@ -43,7 +43,12 @@ class ComputeCosine
         $strAnalyMod = $this->getMarkMod($arrAnaly);//求分析向量的模
         $strMarkMod = $this->getMarkMod($arrMark);//求分析向量的模
         $strFenMu = $strAnalyMod * $strMarkMod;
-        $strCosine = $strVector / $strFenMu;
+        if ($strFenMu==0){
+            return 0;
+        }
+        else{
+            $strCosine = $strVector / $strFenMu;
+        }
         return $strCosine;
     }
 }

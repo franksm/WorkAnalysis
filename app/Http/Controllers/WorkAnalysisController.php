@@ -86,11 +86,9 @@ class WorkAnalysisController extends Controller
         $value=[];
         $allExp=[];
         $allEdu=[];
-        //$Vacancy['weight_experience']*
-        //$Vacancy['weight_education']*
         foreach($Vacancies as $index => $Vacancy){
-            $allExp[$index]=0.1*$setScore['experience'][$Vacancy['claim_experience']];
-            $allEdu[$index]=0.1*$setScore['education'][$Vacancy['claim_education']];
+            $allExp[$index]=$Vacancy['weight_experience']*$setScore['experience'][$Vacancy['claim_experience']];
+            $allEdu[$index]=$Vacancy['weight_education']*$setScore['education'][$Vacancy['claim_education']];
         }
         $minEducation=min($allEdu);
         $minExperience=min($allExp);
@@ -224,35 +222,35 @@ class WorkAnalysisController extends Controller
             return Redirect::to('/user/saveWork/');
         }
         $statisticsTool=new StatisticsTool();
+        $type=$request->type;
         $weight=[];
         $value=[];
         $calScore=$this->getCalScore();
         $search = ['works'=>$works];
         list($Vacancies,$categories,$Tools)=$this->getVacancyInfo($search);
         list($weight['category'],$weight['tool'])=$this->prepareWeight($categories,$Tools);
-        list($resumes,$resumeTools,$resumeCategories) = $this->getResumeInfo();
-        $handleCategory=$statisticsTool->handleData($categories,'vacancy_category',$resumeCategories);
-        $handleTools=$statisticsTool->handleData($Tools,'vacancy_tool',$resumeTools);
-        $prepareCategories=$statisticsTool->pearson($handleCategory);
-        $prepareTools=$statisticsTool->pearson($handleTools);
-        $resumeTool=array_pop($prepareTools);
-        $resumeCategory=array_pop($prepareCategories);
+        list($resumes,$resumeTool,$resumeCategory) = $this->getResumeInfo();
+        $handleCategory=$statisticsTool->handleData($categories,'vacancy_category',$resumeCategory);
+        $handleTools=$statisticsTool->handleData($Tools,'vacancy_tool',$resumeTool);
         $value=$this->computeChartValue($Vacancies,$categories,$Tools,$resumes,$weight);
-        $type=$request->type;
         if($type==null){
+            $prepareCategories=$handleCategory;
+            $prepareTools=$handleTools;
             $score=$calScore->calScore($Vacancies,$categories,$Tools,$weight);
         }else{
+            $prepareCategories=$statisticsTool->pearson($handleCategory);
+            $prepareTools=$statisticsTool->pearson($handleTools);
             $score=$calScore->calScore($Vacancies,$categories,$Tools,$weight,$type);
         }
+        $resumeTool=array_pop($prepareTools);
+        $resumeCategory=array_pop($prepareCategories);
         foreach($Vacancies as $key=>$Vacancy){
             $tool=$statisticsTool->computeCosine($prepareTools[$key],$resumeTool);
             $category=$statisticsTool->computeCosine($prepareCategories[$key],$resumeCategory);
             $value[$Vacancy['vacancy_name']]['tool']=round(($tool+1)*50,2);
             $value[$Vacancy['vacancy_name']]['category']=round(($category+1)*50,2);
-            //$value[$Vacancy['vacancy_name']]['score']=($value[$Vacancy['vacancy_name']]['category']+$value[$Vacancy['vacancy_name']]['tool']+$value[$Vacancy['vacancy_name']]['claim_experience']+$value[$Vacancy['vacancy_name']]['claim_education'])/4;
             $value[$Vacancy['vacancy_name']]['score']=round(($score[$key]+1)*50,2);
         }
-        //dd($value);
         return view('user.savework.analysis.suitable',compact('value'));
     }
 }

@@ -78,7 +78,6 @@ class CalScore
             $prepareData=$prepareVacanciesVector;
 
         }
-        
         $prepareResumeVector=array_pop($prepareData);
         $sortVacancy=[];
         foreach($prepareData as $key=>$vacancyVector){
