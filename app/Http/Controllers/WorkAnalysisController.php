@@ -2,26 +2,112 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Controllers\Tool\MathTool;
 use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use App\Http\Controllers\Controller;
 use App\Http\Controllers\Tool\UseApi;
+use App\Http\Controllers\Tool\setWeight;
+use App\Http\Controllers\Statistics\StatisticsMethods;
+use App\Http\Controllers\Tool\StatisticsTool;
+use App\Http\Controllers\api\WorkController;
 use App\Vacancy;
+use App\Http\Controllers\Tool\CalScore;
 use Redirect;
-
 class WorkAnalysisController extends Controller
 {
-    public function index(Request $request){
-
+    private function getCalScore(){
+        $calScore=new CalScore;
+        return $calScore;
+    }
+    private function useApi(){
+        $useApi = new UseApi();
+        return $useApi;
+    }
+    private function getResumeInfo()
+    {
+        $useApi = new UseApi();
+        $search=['id'=>Auth::id()];
+        $resumes = $useApi->CallApi('GET','api/Resume',$search);
+        $resumeTools = $useApi->CallApi('GET','api/ResumeTool',$search);
+        $resumeCategories = $useApi->CallApi('GET','api/ResumeCategory',$search);
+        return array($resumes,$resumeTools,$resumeCategories);
+    }
+    private function isSetSessionWork($request)
+    {
+        return $request->session()->has('works');
+    }
+    private function isSetSessionScore($request)
+    {
+        return $request->session()->has('score');
+    }
+    private function getVacancyInfo($search){
+        $useApi = $this->useApi();
+        $Vacancies = $useApi->CallApi('GET','api/getVacancies',$search);
+        $Categories = $useApi->CallApi('GET','api/getCategories',$search);
+        $Tools = $useApi->CallApi('GET','api/getTools',$search);
+        return [$Vacancies,$Categories,$Tools];
+    }
+    private function getAnalysisVacancy($search){
+            $useApi =$this->useApi();
+            $claimExperiences = $useApi->CallApi('GET','api/claimExperienceCount',$search);
+            $claimEducations = $useApi->CallApi('GET','api/claimEducationCount',$search);
+            $categories = $useApi->CallApi('GET','api/categoryCount',$search);
+            $tools = $useApi->CallApi('GET','api/toolCount',$search);
+            return [$claimExperiences,$claimEducations,$categories,$tools];
+    }
+    private function prepareWeight($categories,$tools){
+        $prepareCategories=[];
+        $prepareTools=[];
+        foreach($categories as $index=>$category){
+            foreach($category as $categoryItem){
+                $prepareCategories[$categoryItem['vacancy_category']]=$categoryItem['weight'];
+            }
+            foreach($tools[$index] as $toolItem){
+                $prepareTools[$toolItem['vacancy_tool']]=$toolItem['weight'];
+            }
+        }
         
+        return [$prepareCategories,$prepareTools];
+    }
+    private function setScore(){
+        $Eductions = ['不拘'=>1,'高中'=>2,'專科'=>2,'大學'=>3,'碩士'=>4,'博士'=>5];
+        $Experiences = ['不拘'=>1,'1年'=>2,'2年'=>3,'3年'=>4,'4年'=>5,'5年'=>6,'6年'=>7,'7年'=>8,'8年'=>9,'9年'=>10,'10年'=>11];
+        return ['education'=>$Eductions,'experience'=>$Experiences];
+    }
+    private function setWeight(){
+        $useApi =$this->useApi();
+        $useApi->CallApi('GET','api/saveWeight');
+    }
+    private function computeChartValue($Vacancies,$Categories,$Tools,$weight){
+        $StatisticsMethods=new StatisticsMethods();
+        $setScore=$this->setScore();
+        $value=[];
+        $allExp=[];
+        $allEdu=[];
+        //$Vacancy['weight_experience']*
+        //$Vacancy['weight_education']*
+        foreach($Vacancies as $index => $Vacancy){
+            $allExp[$index]=0.1*$setScore['experience'][$Vacancy['claim_experience']];
+            $allEdu[$index]=0.1*$setScore['education'][$Vacancy['claim_education']];
+        }
+        $minEducation=min($allEdu);
+        $minExperience=min($allExp);
+        $maxEducation=max($allEdu);
+        $maxExperience=max($allExp);
+        foreach ($Vacancies as $index=>$Vacancy) {
+                $value[$Vacancy['vacancy_name']]['claim_experience']=round(($StatisticsMethods->meanNormalization($allExp[$index],$allExp,$maxExperience,$minExperience)+1)*50,2);
+                $value[$Vacancy['vacancy_name']]['claim_education']=round(($StatisticsMethods->meanNormalization($allEdu[$index],$allEdu,$maxEducation,$minEducation)+1)*50,2);
+        }
+        return $value;
+    }
+    public function index(Request $request){
         function getCompanyInfo($Vacancies)
         {
             $Companies=[];
             foreach($Vacancies as $Vacancy){
-                $Companies[$Vacancy->id]=$Vacancy->company;
+                $Companies[$Vacancy->company->id]=$Vacancy->company->toarray();
             }
             return $Companies;
         }
@@ -30,146 +116,91 @@ class WorkAnalysisController extends Controller
         {
             return $request->vacancy_category;
         }
-
         // 判斷職缺分類
         if(isSetCategory($request)){
-            $Vacancies=Vacancy::all('id','vacancy_name','company_id','vacancy_category','link')->where('vacancy_category',$request->vacancy_category);
-        }else{
-            $Vacancies=Vacancy::all('id','vacancy_name','company_id','link');
+            $Vacancies=Vacancy::all('id','vacancy_category','claim_education','claim_experience','company_id')->where('vacancy_category',$request->vacancy_category);
         }
-        // 取得職缺對應的公司名稱
+        else if($this->isSetSessionWork($request)){
+            $Vacancies=Vacancy::all('id','vacancy_category','claim_education','claim_experience','company_id');
+        }
+        else{
+            $workController=new WorkController;
+            $workController->saveWeight();
+            $Vacancies=Vacancy::all('id','vacancy_category','claim_education','claim_experience','company_id');
+        }
+        $calScore=$this->getCalScore();
+        $works=[];
+        $weight=[];
+        foreach($Vacancies as $Vacancy){
+            $works[]=$Vacancy['id'];
+        }
+        $search = ['works'=>$works];
         $Companies=getCompanyInfo($Vacancies);
-        
-        return view('user.savework.index',compact('Vacancies','Companies'));
+        list($Vacancies,$Categories,$Tools)=$this->getVacancyInfo($search);
+        list($weight['category'],$weight['tool'])=$this->prepareWeight($Categories,$Tools);
+        $score=$calScore->calScore($Vacancies,$Categories,$Tools,$weight);
+        // 取得職缺對應的公司名稱
+        return view('user.savework.index',compact('Vacancies','Companies','score'));
     }
     public function form(Request $request)
     {
-        function calculateSuitableScore(&$Vacancies,&$Categories,&$Tools)
-        {
-            $mathTool = new MathTool;
-            function getResumeInfo()
-            {
-                $search=['id'=>Auth::id()];
-                $useApi = new UseApi(); 
-                $resumeTools = $useApi->CallApi('GET','api/ResumeTool',$search);
-                $resumeCategories = $useApi->CallApi('GET','api/ResumeCategory',$search);
-                $getResume = $useApi->CallApi('GET','api/Resume',$search);
-                return array($resumeTools,$resumeCategories,$getResume);
-            }
-            list($resumeTools,$resumeCategories,$getResume)=getResumeInfo();
-            //dd(substr(,0,-1));
-            $Educations = ['不拘'=>0,'高中'=>1,'專科'=>2,'大學'=>3,'碩士'=>4,'博士'=>5];
-            $Experiences = ['不拘'=>0,'1年'=>1,'2年'=>2,'3年'=>3,'4年'=>4,'5年'=>5,'6年'=>6,'7年'=>7,'8年'=>8,'9年'=>9,'10年'=>10];
-            $sortVacancy=[];
-            foreach($Vacancies as $key=>$Vacancy){
-                // $vacancyVector=[];
-                // $resumeVector=[];
-                // $bothVector=[];
-                $experiencePercent=[];
-                $score=0;
-                $id = $Vacancy['id'];
-                $vacancyTool=array_column($Tools[$id],'vacancy_tool');
-                $vacancyCategory=array_column($Categories[$id],'vacancy_category');
-                // $Vacancies[$key]['claim_education']=$mathTool->getPercent($Educations[$Vacancy['claim_education']],$Educations[$getResume['education']]);
-                // $Vacancies[$key]['claim_experience']=$mathTool->getPercent($Experiences[$Vacancy['claim_experience']],$Experiences[$getResume['experience']]);
-                //dd($Vacancy);
-                //$MathTool->setVector($vacancyTool,$resumeTools,$vacancyVector,$resumeVector,$bothVector);
-                //$MathTool->setVector($vacancyCategory,$resumeCategories,$vacancyVector,$resumeVector,$bothVector);
-                //$score=$MathTool->computeVector($vacancyVector,$resumeVector,$bothVector);
-                $Vacancies[$key]['score']=$score;
-                //$score+=count(array_intersect($vacancyTool,$resumeTools));
-                //$score+=count(array_intersect($vacancyCategory,$resumeCategories));
-                $sortVacancy[$key]=$score;
-            }
-            arsort($sortVacancy);
-            
-            return array($getResume,$resumeTools,$resumeCategories,$sortVacancy);
-        }
         function getCompanyInfo($search)
         {
-            $useApi = new UseApi(); 
+            $useApi = new useApi;
             $Companies = $useApi->CallApi('GET','api/getCompanies',$search);
             return $Companies;
-        }
-        function getVacancyInfo($search)
-        {
-            $useApi = new UseApi(); 
-            $Vacancies = $useApi->CallApi('GET','api/getVacancies',$search);
-            $Categories = $useApi->CallApi('GET','api/getCategories',$search);
-            $Tools = $useApi->CallApi('GET','api/getTools',$search);
-            return array($Vacancies,$Categories,$Tools);
-        }
-        function isSetSessionWork($request)
-        {
-            return $request->session()->has('works');
         }
         function isPost($request)
         {
             return $request->isMethod('post');
         }
-        
         // 取得資料
         if(isPost($request)){
             $works=$request->works;
             session(['works' =>$works]);
         }
-        else if(isSetSessionWork($request)){
+        else if($this->isSetSessionWork($request)){
             $works=session('works');
-        }else{
+        }
+        else if($this->isSetSessionScore($request)){
+            $score=session('score');
+        }
+        else{
             return Redirect::to('/user/saveWork/');
         }
+        $calScore=$this->getCalScore();
         // 設定Api參數
+        $weight=[];
         $search = ['works'=>$works];
         // 取得職缺資訊
-        list($Vacancies,$Categories,$Tools)=getVacancyInfo($search);
+        list($Vacancies,$Categories,$Tools)=$this->getVacancyInfo($search);
+        list($weight['category'],$weight['tool'])=$this->prepareWeight($Categories,$Tools);
         // 取得公司資訊
-        $Companies = getCompanyInfo($search);
+        $Companies=getCompanyInfo($search);
         // 計算職缺與使用者合適程度 & 取得使用者履歷資訊
-        // 職缺與履歷進行比對 
-        // 比對項目:[tool,category]
-        list($resume,$resumeTools,$resumeCategories,$sortVacancy) = calculateSuitableScore($Vacancies,$Categories,$Tools);
+        list($resume,$resumeTools,$resumeCategories)=$this->getResumeInfo();
         
-        return view('user.savework.analysis.show',compact('Vacancies','Categories','Tools','Companies','resume','resumeTools','resumeCategories','sortVacancy'));
+        $score=$calScore->calScore($Vacancies,$Categories,$Tools,$weight);
+        //dd($resumeTools);
+        return view('user.savework.analysis.show',compact('Vacancies','Categories','Tools','Companies','resume','resumeTools','resumeCategories','score'));
     }
     
     public function detail(Request $request)
     {
-        function getResumeInfo()
-        {
-            $useApi = new UseApi();
-            $search=['id'=>Auth::id()];
-            $resumes = $useApi->CallApi('GET','api/Resume',$search);
-            $resumeTools = $useApi->CallApi('GET','api/ResumeTool',$search);
-            $resumeCategories = $useApi->CallApi('GET','api/ResumeCategory',$search);
-            return array($resumes,$resumeTools,$resumeCategories);
-        }
+        
         function getAnalysisCompany($search)
         {
-            $useApi = new UseApi(); 
+            $useApi =new useApi; 
             $industryCategories = $useApi->CallApi('GET','api/industryCategoryCount',$search);
             $capitals = $useApi->CallApi('GET','api/capital',$search);
             $workers = $useApi->CallApi('GET','api/workers',$search);
             return array($industryCategories,$capitals,$workers);
         }
-        function getAnalysisVacancy($search)
-        {
-            $useApi = new UseApi();
-            $claimExperiences = $useApi->CallApi('GET','api/claimExperienceCount',$search);
-            $claimEducations = $useApi->CallApi('GET','api/claimEducationCount',$search);
-            $categories = $useApi->CallApi('GET','api/categoryCount',$search);
-            $tools = $useApi->CallApi('GET','api/toolCount',$search);
-            return array($claimExperiences,$claimEducations,$categories,$tools);
-        }
-        function isSetSessionWork($request)
-        {
-            return $request->session()->has('works');
-        }
-
         // 教育與經歷清單
         $Educations = ['不拘','高中','專科','大學','碩士','博士'];
         $Experiences = ['不拘','1年','2年','3年','4年','5年','6年','7年','8年','9年','10年'];
         // 取得資料
-        if(isSetSessionWork($request)){
+        if($this->isSetSessionWork($request)){
             $works=session('works');
         }else{
             return Redirect::to('/user/saveWork/');
@@ -177,16 +208,51 @@ class WorkAnalysisController extends Controller
         // 設定Api參數
         $search = ['works'=>$works];
         // 取得職缺分析資訊
-        list($claimExperiences,$claimEducations,$categories,$tools) = getAnalysisVacancy($search);
+        list($claimExperiences,$claimEducations,$categories,$tools) =$this->getAnalysisVacancy($search);
         // 取得公司分析資訊
         list($industryCategories,$capitals,$workers) = getAnalysisCompany($search);
         // 取得使用者履歷資訊
-        list($resumes,$resumeTools,$resumeCategories) = getResumeInfo();
+        list($resumes,$resumeTools,$resumeCategories) = $this->getResumeInfo();
 
         return view('user.savework.analysis.detail',compact('claimExperiences','claimEducations','tools','categories','industryCategories','capitals','workers','resumes','resumeTools','resumeCategories','Educations','Experiences'));
     }
     public function suitable(Request $request)
     {
-        return view('user.savework.analysis.suitable');
+        if($this->isSetSessionWork($request)){
+            $works=session('works');
+        }else{
+            return Redirect::to('/user/saveWork/');
+        }
+        $statisticsTool=new StatisticsTool();
+        $weight=[];
+        $value=[];
+        $calScore=$this->getCalScore();
+        $search = ['works'=>$works];
+        list($Vacancies,$categories,$Tools)=$this->getVacancyInfo($search);
+        list($weight['category'],$weight['tool'])=$this->prepareWeight($categories,$Tools);
+        list($resumes,$resumeTools,$resumeCategories) = $this->getResumeInfo();
+        $handleCategory=$statisticsTool->handleData($categories,'vacancy_category',$resumeCategories);
+        $handleTools=$statisticsTool->handleData($Tools,'vacancy_tool',$resumeTools);
+        $prepareCategories=$statisticsTool->pearson($handleCategory);
+        $prepareTools=$statisticsTool->pearson($handleTools);
+        $resumeTool=array_pop($prepareTools);
+        $resumeCategory=array_pop($prepareCategories);
+        $value=$this->computeChartValue($Vacancies,$categories,$Tools,$resumes,$weight);
+        $type=$request->type;
+        if($type==null){
+            $score=$calScore->calScore($Vacancies,$categories,$Tools,$weight);
+        }else{
+            $score=$calScore->calScore($Vacancies,$categories,$Tools,$weight,$type);
+        }
+        foreach($Vacancies as $key=>$Vacancy){
+            $tool=$statisticsTool->computeCosine($prepareTools[$key],$resumeTool);
+            $category=$statisticsTool->computeCosine($prepareCategories[$key],$resumeCategory);
+            $value[$Vacancy['vacancy_name']]['tool']=round(($tool+1)*50,2);
+            $value[$Vacancy['vacancy_name']]['category']=round(($category+1)*50,2);
+            //$value[$Vacancy['vacancy_name']]['score']=($value[$Vacancy['vacancy_name']]['category']+$value[$Vacancy['vacancy_name']]['tool']+$value[$Vacancy['vacancy_name']]['claim_experience']+$value[$Vacancy['vacancy_name']]['claim_education'])/4;
+            $value[$Vacancy['vacancy_name']]['score']=round(($score[$key]+1)*50,2);
+        }
+        //dd($value);
+        return view('user.savework.analysis.suitable',compact('value'));
     }
 }

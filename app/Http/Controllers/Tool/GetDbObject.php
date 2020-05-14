@@ -13,7 +13,7 @@ class GetDbObject
     }
     public function getVacancyDbObject($selectCol,$selectWorks,$getall=False){
         if($getall){
-            $vacancies=Vacancy::all()->find($selectWorks)->toarray();
+            $vacancies=Vacancy::all()->find($selectWorks);
         }
         else{
             $vacancies=Vacancy::select($selectCol)->find($selectWorks);

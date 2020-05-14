@@ -7,50 +7,55 @@
 <script type="text/javascript">
     $(document).ready(function() {
         var suitableChart = document.getElementById('suitableChart').getContext('2d');
-        var company = ['A公司','B公司','C公司'];
+        var company ={!!json_encode($value);!!};
+        var category ={!!json_encode(array_column($value,'category'));!!};
+        var tool ={!!json_encode(array_column($value,'tool'));!!};
+        var claim_education ={!!json_encode(array_column($value,'claim_education'));!!};
+        var claim_experience ={!!json_encode(array_column($value,'claim_experience'));!!};
+        var score ={!!json_encode(array_column($value,'score'));!!};
+        
         var suitable = new Chart(suitableChart, {
             type: 'bar',
             data: {
-                labels: company,
+                labels: Object.keys(company),
                 datasets: [{
-                    label: '比較1',
+                    label: '希望職缺',
                     type:'bar',
-                    data: [10,20,30],
-                    backgroundColor: 'rgba(255, 159, 64, 0.2)',
-                    borderColor: 'rgba(255, 159, 64, 1)',
+                    data: category,
+                    backgroundColor: 'rgba(212, 33, 32, 0.2)',
+                    borderColor: 'rgba(212, 33, 32, 1)',
                     borderWidth: 1,
                 },{
-                    label: '比較2',
-                    data: [30,20,10],
+                    label: '擅長工具',
+                    data: tool,
                     type:'bar',
-                    backgroundColor: 'rgba(33, 122, 64, 0.2)',
-                    borderColor: 'rgba(33, 122, 64, 1)',
+                    backgroundColor: 'rgba(12, 33, 64, 0.2)',
+                    borderColor: 'rgba(12, 33, 64, 1)',
+                    borderWidth: 1,
+                },{
+                    label: '教育程度',
+                    data: claim_education,
+                    type:'bar',
+                    backgroundColor: 'rgba(54, 99, 96, 0.2)',
+                    borderColor: 'rgba(54, 99, 96, 1)',
                     borderWidth: 1,
                 },
                 {
-                    label: '比較3',
-                    data: [13,21,17],
+                    label: '工作經歷',
+                    data: claim_experience,
                     type:'bar',
-                    backgroundColor: 'rgba(99, 33, 22, 0.2)',
-                    borderColor: 'rgba(99, 33, 22, 1)',
+                    backgroundColor: 'rgba(123, 44, 128, 0.2)',
+                    borderColor: 'rgba(123, 44, 128, 1)',
+                    borderWidth: 1,
+                },{
+                    label: '綜合評分',
+                    data: score,
+                    type:'bar',
+                    backgroundColor: 'rgba(45,22, 128, 0.2)',
+                    borderColor: 'rgba(45, 22, 128, 1)',
                     borderWidth: 1,
                 },
-                {
-                    label: '比較4',
-                    data: [22,12,1],
-                    type:'bar',
-                    backgroundColor: 'rgba(255, 66, 64, 0.2)',
-                    borderColor: 'rgba(255, 66, 64, 1)',
-                    borderWidth: 1,
-                },
-                {
-                    label: '綜合',
-                    data: [44,23,11],
-                    type:'bar',
-                    backgroundColor: 'rgba(33, 44, 122, 0.2)',
-                    borderColor: 'rgba(33, 44, 122, 1)',
-                    borderWidth: 1,
-                }]
+                ]
             },
             options: {
                 scales: { 
@@ -77,6 +82,10 @@
 </script>
 
 <div class="m-lg-4 ">
+    <div id='link' style="float:right;">
+        <a class="nav-link" href="/analysis/suitable">使用Pearson</a>
+        <a class="nav-link" href="/analysis/suitable?type=noPearson">不使用Pearson</a>   
+    </div>
     <div class="bar_analysis">
        <dd><canvas id="suitableChart" width="1200" height="600"></canvas></dd>
     </div>
