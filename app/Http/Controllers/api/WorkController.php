@@ -93,7 +93,7 @@ class WorkController extends Controller
     
     public function saveWeight()
     {
-        $setWeight=new setWeight;
+        $setWeight=new SetWeight;
         $vacancyCategories=VacancyCategory::all();
         $vacancyTools=VacancyTool::all();
         $Vacancies=Vacancy::all('id','claim_education','claim_experience');
