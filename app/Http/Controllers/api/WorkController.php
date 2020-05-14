@@ -4,7 +4,7 @@ namespace App\Http\Controllers\api;
 
 use App\VacancyCategory;
 use App\VacancyTool;
-use App\Http\Controllers\Tool\setWeight;
+use App\Http\Controllers\Tool\SetWeight;
 use App\Vacancy;
 use App\Http\Controllers\Tool\GetDbObject;
 use App\Http\Controllers\Controller;
