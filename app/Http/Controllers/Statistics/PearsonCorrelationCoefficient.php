@@ -1,9 +1,9 @@
 <?php
 namespace App\Http\Controllers\Statistics;
-use App\Http\Controllers\Statistics\StatisticsMethods;
-class AdjustmentMethod
+use App\Http\Controllers\Statistics\PearsonCorrelationCoefficient;
+class PearsonCorrelationCoefficient
 {
-    public function adjustmentData($adjustmentArray){
+    public function pearson($adjustmentArray){
         $methods=new StatisticsMethods;
         $adjustmentArrayLen=count($adjustmentArray);
         $adjustment=[];
@@ -12,7 +12,7 @@ class AdjustmentMethod
         }
         foreach($adjustmentArray as $arrayItemIndex=>$arrayItem){
             foreach($arrayItem as $adjustmentItemIndex=>$adjustmentItem){
-                $adjustmentArray[$arrayItemIndex][$adjustmentItemIndex]-=$adjustment[$adjustmentItemIndex];
+                $adjustmentArray[$arrayItemIndex][$adjustmentItemIndex]=round(($adjustmentArray[$arrayItemIndex][$adjustmentItemIndex]-$adjustment[$adjustmentItemIndex]),2);
             }
         }
         return $adjustmentArray;

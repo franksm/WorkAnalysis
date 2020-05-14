@@ -27,6 +27,9 @@ class StatisticsMethods
 
     public function meanNormalization($targetNumber,$array,$max,$min){
         $averge=$this->avergeValue($array);
+        if (($max-$min)==0){
+            $max++;
+        }
         $normalization=(($targetNumber-$averge)/($max-$min));
         return $normalization;
     }

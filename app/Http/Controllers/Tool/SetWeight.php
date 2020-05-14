@@ -8,7 +8,7 @@ class SetWeight
             $weight[$weightType][$weightItem]++;
         }
         else if ($weightItem=="不拘"){
-            $weight[$weightType][$weightItem]=null;
+            $weight[$weightType][$weightItem]=1;
         }
         else{
             $weight[$weightType][$weightItem]=1;
@@ -20,20 +20,38 @@ class SetWeight
             $count++;
         }
     }
-    
+    private function setWeight(&$weight,$count){
+        foreach($weight as $weightType=>$weightItem){
+            foreach($weightItem as $weightCountKey=>$weightCount){
+                $weight[$weightType][$weightCountKey]=round($weight[$weightType][$weightCountKey]/$count[$weightType],2);
+            }
+        }
+    }
+    private function setCount(&$count){
+        $count['category']=0;
+        $count['tool']=0;
+        $count['education']=0;
+        $count['experience']=0;
+    }
     public function setVacancItemWeight($vacancies){
         $weight=[];
         $count=[];
-        $count['category']=0;
-        $count['tool']=0;
+        $this->setCount($count);
         foreach ($vacancies as $vacancy){
+            $this->checkInHash($weight,'education',$vacancy['claim_education']);
+            $this->checkInHash($weight,'experience',$vacancy['claim_experience']);
             foreach(array_column($vacancy['category'],'vacancy_category') as $category){
                 $this->checkInHash($weight,'category',$category);
+                $this->checkNull($category,$count['category']);
             }
             foreach(array_column($vacancy['tool'],'vacancy_tool') as $tool){
                 $this->checkInHash($weight,'tool',$tool);
+                $this->checkNull($tool,$count['tool']);
             }
+            $this->checkNull($vacancy['claim_experience'],$count['experience']);
+            $this->checkNull($vacancy['claim_education'],$count['education']);
         }
+        $this->setWeight($weight,$count);
         return $weight;
     }
 

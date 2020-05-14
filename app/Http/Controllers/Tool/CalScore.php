@@ -25,43 +25,65 @@ class CalScore
     private function prepareVacancies($weight,$vacancies){
         $vacanciesVector=[];
         $scoreArray=$this->setScore();
+        $expAndEduWeight=[];
         foreach($vacancies as $index=>$vacancy){
-            $vacanciesVector[$index]['experience']=$scoreArray['experience'][$vacancy['claim_experience']];
-            $vacanciesVector[$index]['education']=$scoreArray['education'][$vacancy['claim_education']];
+            $expAndEduWeight['experience'][$vacancy['claim_experience']]=$vacancy['weight_experience'];
+            $expAndEduWeight['education'][$vacancy['claim_education']]=$vacancy['weight_education'];
+            $vacanciesVector[$index]['experience']=$vacancy['weight_experience']*$scoreArray['experience'][$vacancy['claim_experience']];
+            $vacanciesVector[$index]['education']=$vacancy['weight_education']* $scoreArray['education'][$vacancy['claim_education']];
         }
-        return $vacanciesVector;
+        return [$vacanciesVector,$expAndEduWeight];
     }
     
-    private function prepareResume($weight,$resume){
+    private function prepareResume($weight,$resume,$prepareVacanciesVector){
         $resumeVector=[];
         $scoreArray=$this->setScore();
-        $resumeVector['experience']=$scoreArray['experience'][$resume['experience']];
-        $resumeVector['education']=$scoreArray['education'][$resume['education']];
+        $minExp=min($prepareVacanciesVector['experience']);
+        $minEdu=min($prepareVacanciesVector['education']);
+        if (isset($prepareVacanciesVector['experience'][$resume['experience']])){
+            $resumeVector['experience']=$prepareVacanciesVector['experience'][$resume['experience']]*$scoreArray['experience'][$resume['experience']];   
+        }
+        else{
+            $resumeVector['experience']=$minExp*$scoreArray['experience'][$resume['experience']];   
+        }
+        if (isset($prepareVacanciesVector['education'][$resume['education']])){
+            $resumeVector['education']=$prepareVacanciesVector['education'][$resume['education']]*$scoreArray['education'][$resume['education']];
+        }
+        else{
+            $resumeVector['education']=$minEdu*$scoreArray['education'][$resume['education']];
+        }
         return $resumeVector;
     }
     
-    public function calScore(&$vacancies,$categories,$tools,$weight){
+    public function calScore(&$vacancies,$categories,$tools,$weight,$type='Pearson'){
         $statisticsTool=new StatisticsTool;
         $categoryItem=[];
         $allCategory=[];
         list($resumeTools,$resumeCategories,$resume)=$this->getResume();
         $handleCategories=$statisticsTool->handleData($categories,'vacancy_category',$resumeCategories);
         $handleTools=$statisticsTool->handleData($tools,'vacancy_tool',$resumeTools);
-        $preparationResumeVector = $this->prepareResume($weight,$resume);
-        $preparationVacanciesVector = $this->prepareVacancies($weight,$vacancies);
-        $preparationVacanciesVector[]=$preparationResumeVector;
-        $prepareData=$statisticsTool->adjustmentMethod($preparationVacanciesVector);
-        foreach($prepareData as $index=>$prepareDataValue){
-            $prepareData[$index]=array_merge($prepareData[$index],$handleTools[$index],$handleCategories[$index]);
+        list($prepareVacanciesVector,$expAndEduWeight) = $this->prepareVacancies($weight,$vacancies);
+        $prepareResumeVector = $this->prepareResume($weight,$resume,$expAndEduWeight);
+        $prepareVacanciesVector[]=$prepareResumeVector;
+        $vacanciesVectorCount=count($prepareVacanciesVector);
+        foreach($prepareVacanciesVector as $index => $prepareVacancyVector){
+            $prepareVacancyVector['experience']/=$vacanciesVectorCount;
+            $prepareVacancyVector['education']/=$vacanciesVectorCount;
+            $prepareVacanciesVector[$index]=array_merge($prepareVacancyVector,$handleTools[$index],$handleCategories[$index]);
         }
-        
-        $preparationResumeVector=array_pop($prepareData);
+        if ($type=='Pearson'){
+            $prepareData=$statisticsTool->pearson($prepareVacanciesVector);
+        }
+        else{
+            $prepareData=$prepareVacanciesVector;
+        }
+        $prepareResumeVector=array_pop($prepareData);
         $sortVacancy=[];
         foreach($prepareData as $key=>$vacancyVector){
-            $score=$statisticsTool->computeCosine($vacancyVector,$preparationResumeVector);
+            $score=$statisticsTool->computeCosine($vacancyVector,$prepareResumeVector);
             $sortVacancy[$key]=$score;
         }
-        
+        //dd($prepareData);
         arsort($sortVacancy);
         return $sortVacancy;
     }

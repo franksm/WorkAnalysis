@@ -96,13 +96,20 @@ class WorkController extends Controller
         $setWeight=new setWeight;
         $vacancyCategories=VacancyCategory::all();
         $vacancyTools=VacancyTool::all();
-        $Vacancies=Vacancy::all('id');
+        $Vacancies=Vacancy::all('id','claim_education','claim_experience');
         foreach($Vacancies as $Vacancy){
             $Vacancy->category;
             $Vacancy->tool;
         }
         $vacanciesWeight=$Vacancies->toarray();
         $weight=$setWeight->setVacancItemWeight($vacanciesWeight);
+        
+        foreach($Vacancies as $vacancy){
+            $vacancy->weight_experience=$weight['experience'][$vacancy->claim_experience];
+            $vacancy->weight_education=$weight['education'][$vacancy->claim_education];
+            $vacancy->save();
+        }
+        
         foreach($vacancyCategories as $vacancyCategory){
             $vacancyCategory->weight=$weight['category'][$vacancyCategory->vacancy_category];
             $vacancyCategory->save();

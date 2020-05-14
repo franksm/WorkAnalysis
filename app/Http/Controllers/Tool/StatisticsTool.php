@@ -2,7 +2,7 @@
 namespace App\Http\Controllers\Tool;
 
 use App\Http\Controllers\Statistics\ComputeCosine;
-use App\Http\Controllers\Statistics\AdjustmentMethod;
+use App\Http\Controllers\Statistics\PearsonCorrelationCoefficient;
 use App\Http\Controllers\Tool\HandleData;
 
 class StatisticsTool
@@ -13,10 +13,10 @@ class StatisticsTool
         $strCosine=$computeCosine->getCosine($arrMark,$arrAnaly);
         return $strCosine;
     }
-    public function adjustmentMethod($adjustmentArray)
+    public function pearson($adjustmentArray)
     {   
-        $adjustmentMethod=new AdjustmentMethod;
-        $prepareData=$adjustmentMethod->adjustmentData($adjustmentArray);
+        $pearson=new PearsonCorrelationCoefficient;
+        $prepareData=$pearson->pearson($adjustmentArray);
         return $prepareData;
     }
     public function handleData($field,$fieldType,$resumeField)

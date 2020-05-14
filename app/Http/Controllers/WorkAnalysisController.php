@@ -57,7 +57,7 @@ class WorkAnalysisController extends Controller
             $tools = $useApi->CallApi('GET','api/toolCount',$search);
             return [$claimExperiences,$claimEducations,$categories,$tools];
     }
-    private function prepareCategoryAndTool($categories,$tools){
+    private function prepareWeight($categories,$tools){
         $prepareCategories=[];
         $prepareTools=[];
         foreach($categories as $index=>$category){
@@ -68,6 +68,7 @@ class WorkAnalysisController extends Controller
                 $prepareTools[$toolItem['vacancy_tool']]=$toolItem['weight'];
             }
         }
+        
         return [$prepareCategories,$prepareTools];
     }
     private function setScore(){
@@ -79,14 +80,25 @@ class WorkAnalysisController extends Controller
         $useApi =$this->useApi();
         $useApi->CallApi('GET','api/saveWeight');
     }
-    private function computeChartValue($Vacancies,$Categories,$Tools,$resumes,$resumeCategories,$resumeTools,$weight,$itemScore){
+    private function computeChartValue($Vacancies,$Categories,$Tools,$weight){
         $StatisticsMethods=new StatisticsMethods();
+        $setScore=$this->setScore();
         $value=[];
-        foreach ($Vacancies as $Vacancy) {
-                $value[$Vacancy['vacancy_name']]['claim_experience']=$StatisticsMethods->computePercent($itemScore['experience'][$resumes['experience']],$itemScore['experience'][$Vacancy['claim_experience']]);
-                $value[$Vacancy['vacancy_name']]['claim_education']=$StatisticsMethods->computePercent($itemScore['education'][$resumes['education']],$itemScore['education'][$Vacancy['claim_education']]);
-                // $value[$Vacancy['vacancy_name']]['category']=$StatisticsMethods->setSimilar(array_column($resumeCategories,'vacancy_category'),array_column($Categories[$Vacancy['id']],'vacancy_category'));
-                // $value[$Vacancy['vacancy_name']]['tool']=$StatisticsMethods->setSimilar(array_column($resumeTools,'vacancy_tool'),array_column($Tools[$Vacancy['id']],'vacancy_tool'));
+        $allExp=[];
+        $allEdu=[];
+        //$Vacancy['weight_experience']*
+        //$Vacancy['weight_education']*
+        foreach($Vacancies as $index => $Vacancy){
+            $allExp[$index]=0.1*$setScore['experience'][$Vacancy['claim_experience']];
+            $allEdu[$index]=0.1*$setScore['education'][$Vacancy['claim_education']];
+        }
+        $minEducation=min($allEdu);
+        $minExperience=min($allExp);
+        $maxEducation=max($allEdu);
+        $maxExperience=max($allExp);
+        foreach ($Vacancies as $index=>$Vacancy) {
+                $value[$Vacancy['vacancy_name']]['claim_experience']=round(($StatisticsMethods->meanNormalization($allExp[$index],$allExp,$maxExperience,$minExperience)+1)*50,2);
+                $value[$Vacancy['vacancy_name']]['claim_education']=round(($StatisticsMethods->meanNormalization($allEdu[$index],$allEdu,$maxEducation,$minEducation)+1)*50,2);
         }
         return $value;
     }
@@ -125,7 +137,7 @@ class WorkAnalysisController extends Controller
         $search = ['works'=>$works];
         $Companies=getCompanyInfo($Vacancies);
         list($Vacancies,$Categories,$Tools)=$this->getVacancyInfo($search);
-        list($weight['category'],$weight['tool'])=$this->prepareCategoryAndTool($Categories,$Tools);
+        list($weight['category'],$weight['tool'])=$this->prepareWeight($Categories,$Tools);
         $score=$calScore->calScore($Vacancies,$Categories,$Tools,$weight);
         // 取得職缺對應的公司名稱
         return view('user.savework.index',compact('Vacancies','Companies','score'));
@@ -162,7 +174,7 @@ class WorkAnalysisController extends Controller
         $search = ['works'=>$works];
         // 取得職缺資訊
         list($Vacancies,$Categories,$Tools)=$this->getVacancyInfo($search);
-        list($weight['category'],$weight['tool'])=$this->prepareCategoryAndTool($Categories,$Tools);
+        list($weight['category'],$weight['tool'])=$this->prepareWeight($Categories,$Tools);
         // 取得公司資訊
         $Companies=getCompanyInfo($search);
         // 計算職缺與使用者合適程度 & 取得使用者履歷資訊
@@ -217,24 +229,27 @@ class WorkAnalysisController extends Controller
         $weight=[];
         $value=[];
         $calScore=$this->getCalScore();
-        $itemScore=$this->setScore();
         $search = ['works'=>$works];
         list($Vacancies,$categories,$Tools)=$this->getVacancyInfo($search);
-        list($weight['category'],$weight['tool'])=$this->prepareCategoryAndTool($categories,$Tools);
+        list($weight['category'],$weight['tool'])=$this->prepareWeight($categories,$Tools);
         list($resumes,$resumeTools,$resumeCategories) = $this->getResumeInfo();
         $handleCategory=$statisticsTool->handleData($categories,'vacancy_category',$resumeCategories);
-        $handleTool=$statisticsTool->handleData($Tools,'vacancy_tool',$resumeTools);
-        $resumeTool=array_pop($handleTool);
-        $resumeCategory=array_pop($handleCategory);
-        $value=$this->computeChartValue($Vacancies,$categories,$Tools,$resumes,$resumeCategories,$resumeTools,$weight,$itemScore);
+        $handleTools=$statisticsTool->handleData($Tools,'vacancy_tool',$resumeTools);
+        $prepareCategories=$statisticsTool->pearson($handleCategory);
+        $prepareTools=$statisticsTool->pearson($handleTools);
+        $resumeTool=array_pop($prepareTools);
+        $resumeCategory=array_pop($prepareCategories);
+        $value=$this->computeChartValue($Vacancies,$categories,$Tools,$resumes,$weight);
         $score=$calScore->calScore($Vacancies,$categories,$Tools,$weight);
         foreach($Vacancies as $key=>$Vacancy){
-            $tool=$statisticsTool->computeCosine($handleTool[$key],$resumeTool);
-            $category=$statisticsTool->computeCosine($handleCategory[$key],$resumeCategory);
+            $tool=$statisticsTool->computeCosine($prepareTools[$key],$resumeTool);
+            $category=$statisticsTool->computeCosine($prepareCategories[$key],$resumeCategory);
             $value[$Vacancy['vacancy_name']]['tool']=round(($tool+1)*50,2);
             $value[$Vacancy['vacancy_name']]['category']=round(($category+1)*50,2);
+            //$value[$Vacancy['vacancy_name']]['score']=($value[$Vacancy['vacancy_name']]['category']+$value[$Vacancy['vacancy_name']]['tool']+$value[$Vacancy['vacancy_name']]['claim_experience']+$value[$Vacancy['vacancy_name']]['claim_education'])/4;
             $value[$Vacancy['vacancy_name']]['score']=round(($score[$key]+1)*50,2);
         }
+        //dd($value);
         return view('user.savework.analysis.suitable',compact('value'));
     }
 }
