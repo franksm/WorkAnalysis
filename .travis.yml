@@ -22,7 +22,7 @@ script:
   - vendor/bin/phpunit
 
 before_deploy:
-  - sed -in-place 's/localhost/workanalysis-env.eba-jmzwncax.us-west-2.elasticbeanstalk.com//g' .env.example
+  - sed -in-place 's/localhost/workanalysis-env.eba-jmzwncax.us-west-2.elasticbeanstalk.com/g' .env.example
   - rm .env.examplen-place
   - rm -r laradock/
 
