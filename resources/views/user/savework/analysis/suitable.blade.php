@@ -7,17 +7,27 @@
 <script type="text/javascript">
     $(document).ready(function() {
         var suitableChart = document.getElementById('suitableChart').getContext('2d');
-        var company ={!!json_encode($value);!!};
+        var vacancy ={!!json_encode($value);!!};
+        vacancy = Object.keys(vacancy);
         var category ={!!json_encode(array_column($value,'category'));!!};
         var tool ={!!json_encode(array_column($value,'tool'));!!};
         var claim_education ={!!json_encode(array_column($value,'claim_education'));!!};
         var claim_experience ={!!json_encode(array_column($value,'claim_experience'));!!};
         var score ={!!json_encode(array_column($value,'score'));!!};
+        $.each(vacancy, function(index, name){
+            var i = 0;
+            vacancy[index] = [];
+            while (name.length > 0) {
+                vacancy[index][i] = name.substring(0, 4); 
+                name = name.substring(4); 
+                i++;
+            }
+        });
         
         var suitable = new Chart(suitableChart, {
             type: 'bar',
             data: {
-                labels: Object.keys(company),
+                labels: vacancy,
                 datasets: [{
                     label: '希望職缺',
                     type:'bar',
