@@ -213,7 +213,9 @@ class WorkAnalysisController extends Controller
         list($industryCategories,$capitals,$workers) = getAnalysisCompany($search);
         // 取得使用者履歷資訊
         list($resumes,$resumeTools,$resumeCategories) = $this->getResumeInfo();
-
+        // 僅取工具與種類屬性 (id等等去除)
+        $resumeTools = array_column($resumeTools,'vacancy_tool');
+        $resumeCategories = array_column($resumeCategories,'vacancy_category');
         return view('user.savework.analysis.detail',compact('claimExperiences','claimEducations','tools','categories','industryCategories','capitals','workers','resumes','resumeTools','resumeCategories','Educations','Experiences'));
     }
     public function suitable(Request $request)
