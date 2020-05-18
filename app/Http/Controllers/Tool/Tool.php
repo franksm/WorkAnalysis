@@ -1,15 +1,15 @@
 <?php
 namespace App\Http\Controllers\Tool;
 
-use App\Http\Controllers\Statistics\ComputeCosine;
+use App\Http\Controllers\Statistics\CosineStatistics;
 use App\Http\Controllers\Statistics\PearsonCorrelationCoefficient;
 use App\Http\Controllers\Tool\HandleData;
 
-class StatisticsTool
+class Tool
 {
     public function computeCosine($arrMark,$arrAnaly)
     {   
-        $computeCosine=new ComputeCosine;
+        $computeCosine=new CosineStatistics;
         $strCosine=$computeCosine->getCosine($arrMark,$arrAnaly);
         return $strCosine;
     }

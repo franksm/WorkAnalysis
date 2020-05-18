@@ -22,10 +22,10 @@ class StatisticsMethods
             $proportion=$selfNumber/$benchMark;
             $percent=$proportion*100;
         }
-        return (int)$percent;
+        return $percent;
     }
 
-    public function meanNormalization($targetNumber,$array,$max,$min){
+    public function meanNormalization($targetNumber,$max,$min,$array){
         $averge=$this->avergeValue($array);
         if (($max-$min)==0){
             $max++;
@@ -35,6 +35,9 @@ class StatisticsMethods
     }
 
     public function normalization($targetNumber,$max,$min){
+        if(($max-$min)==0){
+            return $targetNumber-$min;
+        }
         $normalization=(($targetNumber-$min)/($max-$min));
         return $normalization;
     }

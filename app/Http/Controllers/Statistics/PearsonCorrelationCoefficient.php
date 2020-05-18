@@ -1,10 +1,8 @@
 <?php
 namespace App\Http\Controllers\Statistics;
-use App\Http\Controllers\Statistics\PearsonCorrelationCoefficient;
 class PearsonCorrelationCoefficient
 {
     public function pearson($adjustmentArray){
-        $methods=new StatisticsMethods;
         $adjustmentArrayLen=count($adjustmentArray);
         $adjustment=[];
         foreach(end($adjustmentArray) as $adjustmentKey=>$adjustmentValue){

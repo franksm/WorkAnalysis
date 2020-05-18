@@ -4,16 +4,17 @@ namespace App\Http\Controllers\Tool;
 use Illuminate\Support\Facades\Auth;
 use App\Http\Controllers\Tool\UseApi;
 use App\Http\Controllers\Tool\StatisticsTool;
+use App\Http\Controllers\Statistics\StatisticsMethods;
 use App\Http\Controllers\Tool\HandleData;
-use Phpml\Math\Statistic\Correlation;
 class CalScore
 {
     
     private function setScore(){
-        $Eductions = ['不拘'=>1,'高中'=>2,'專科'=>2,'大學'=>3,'碩士'=>4,'博士'=>5];
-        $Experiences = ['不拘'=>1,'1年'=>2,'2年'=>3,'3年'=>4,'4年'=>5,'5年'=>6,'6年'=>7,'7年'=>8,'8年'=>9,'9年'=>10,'10年'=>11];
+        $Eductions = ['不拘'=>1,'高中'=>2,'專科'=>3,'大學'=>5,'碩士'=>8,'博士'=>13];
+        $Experiences = ['不拘'=>1,'1年'=>2,'2年'=>3,'3年'=>5,'4年'=>8,'5年'=>13,'6年'=>21,'7年'=>34,'8年'=>55,'9年'=>89,'10年'=>144];
         return ['education'=>$Eductions,'experience'=>$Experiences];
     }
+
     private function getResume(){
             $search=['id'=>Auth::id()];
             $useApi = new UseApi();
@@ -22,6 +23,7 @@ class CalScore
             $resume = $useApi->CallApi('GET','api/Resume',$search);
             return [$resumeTools,$resumeCategories,$resume];
     }
+
     private function prepareVacancies($weight,$vacancies){
         $vacanciesVector=[];
         $scoreArray=$this->setScore();
@@ -30,7 +32,7 @@ class CalScore
             $expAndEduWeight['experience'][$vacancy['claim_experience']]=$vacancy['weight_experience'];
             $expAndEduWeight['education'][$vacancy['claim_education']]=$vacancy['weight_education'];
             $vacanciesVector[$index]['experience']=$vacancy['weight_experience']*$scoreArray['experience'][$vacancy['claim_experience']];
-            $vacanciesVector[$index]['education']=$vacancy['weight_education']* $scoreArray['education'][$vacancy['claim_education']];
+            $vacanciesVector[$index]['education']=$vacancy['weight_education']*$scoreArray['education'][$vacancy['claim_education']];
         }
         return [$vacanciesVector,$expAndEduWeight];
     }
@@ -54,9 +56,18 @@ class CalScore
         }
         return $resumeVector;
     }
-    
-    public function calScore(&$vacancies,$categories,$tools,$weight,$type='Pearson'){
-        $statisticsTool=new StatisticsTool;
+    private function getNormalizationNeedInfo($prepareVacanciesVector){
+        $experiences=array_column($prepareVacanciesVector,'experience');
+        $eductions=array_column($prepareVacanciesVector,'education');
+        $maxExp=max($experiences);
+        $minExp=min($experiences);
+        $maxEdu=max($eductions);
+        $minEdu=min($eductions);
+        return ['maxExp'=>$maxExp,'minExp'=>$minExp,'maxEdu'=>$maxEdu,'minEdu'=>$minEdu];
+    }
+    public function calScore(&$vacancies,$categories,$tools,$weight,$type=null){
+        $statisticsTool = new Tool;
+        $statisticsMethods = new StatisticsMethods;
         $categoryItem=[];
         $allCategory=[];
         list($resumeTools,$resumeCategories,$resume)=$this->getResume();
@@ -65,10 +76,11 @@ class CalScore
         list($prepareVacanciesVector,$expAndEduWeight) = $this->prepareVacancies($weight,$vacancies);
         $prepareResumeVector = $this->prepareResume($weight,$resume,$expAndEduWeight);
         $prepareVacanciesVector[]=$prepareResumeVector;
+        $normalizationInfo=$this->getNormalizationNeedInfo($prepareVacanciesVector);
         $vacanciesVectorCount=count($prepareVacanciesVector);
         foreach($prepareVacanciesVector as $index => $prepareVacancyVector){
-            $prepareVacancyVector['experience']/=$vacanciesVectorCount;
-            $prepareVacancyVector['education']/=$vacanciesVectorCount;
+            $prepareVacancyVector['experience']=$statisticsMethods->normalization($prepareVacancyVector['experience'],$normalizationInfo['maxExp'],$normalizationInfo['minExp']);
+            $prepareVacancyVector['education']=$statisticsMethods->normalization($prepareVacancyVector['education'],$normalizationInfo['maxEdu'],$normalizationInfo['minEdu']);
             $prepareVacanciesVector[$index]=array_merge($prepareVacancyVector,$handleTools[$index],$handleCategories[$index]);
         }
         if ($type=='Pearson'){
@@ -76,15 +88,15 @@ class CalScore
         }
         else{
             $prepareData=$prepareVacanciesVector;
-
         }
         $prepareResumeVector=array_pop($prepareData);
         $sortVacancy=[];
         foreach($prepareData as $key=>$vacancyVector){
-            $score=$statisticsTool->computeCosine($vacancyVector,$prepareResumeVector);
+            $score=$statisticsTool->computeCosine($vacancyVector,$prepareResumeVector,$type);
             $sortVacancy[$key]=$score;
         }
         arsort($sortVacancy);
         return $sortVacancy;
     }
+
 }
