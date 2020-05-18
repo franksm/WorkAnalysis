@@ -55,7 +55,7 @@ class CalScore
         return $resumeVector;
     }
     
-    public function calScore(&$vacancies,$categories,$tools,$weight,$type='Pearson'){
+    public function calScore(&$vacancies,$categories,$tools,$weight,$type=null){
         $statisticsTool=new StatisticsTool;
         $categoryItem=[];
         $allCategory=[];
@@ -76,7 +76,6 @@ class CalScore
         }
         else{
             $prepareData=$prepareVacanciesVector;
-
         }
         
         $prepareResumeVector=array_pop($prepareData);
