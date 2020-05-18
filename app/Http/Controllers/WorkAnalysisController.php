@@ -83,22 +83,9 @@ class WorkAnalysisController extends Controller
     private function computeChartValue($Vacancies,$resume){//,$Categories,$Tools,$weight,$type){
         $StatisticsMethods=new StatisticsMethods();
         $setScore=$this->setScore();
-        // $value=[];
-        // $allExp=[];
-        // $allEdu=[];
-        // foreach($Vacancies as $index => $Vacancy){
-        //     $allExp[$index]=$Vacancy['weight_experience']*$setScore['experience'][$Vacancy['claim_experience']];
-        //     $allEdu[$index]=$Vacancy['weight_education']*$setScore['education'][$Vacancy['claim_education']];
-        // }
-        // $minEducation=min($allEdu);
-        // $minExperience=min($allExp);
-        // $maxEducation=max($allEdu);
-        // $maxExperience=max($allExp);
         foreach ($Vacancies as $index=>$Vacancy) {
             $value[$Vacancy['vacancy_name']]['claim_experience']=round($StatisticsMethods->computePercent($setScore['experience'][$Vacancy['claim_experience']],$setScore['experience'][$resume['experience']]),2);
             $value[$Vacancy['vacancy_name']]['claim_education']=round($StatisticsMethods->computePercent($setScore['education'][$Vacancy['claim_education']],$setScore['education'][$resume['education']]),2);
-                // $value[$Vacancy['vacancy_name']]['claim_experience']=round(($StatisticsMethods->meanNormalization($allExp[$index],$maxExperience,$minExperience,$allExp)+1)*50,2);
-                // $value[$Vacancy['vacancy_name']]['claim_education']=round(($StatisticsMethods->meanNormalization($allEdu[$index],$maxEducation,$minEducation,$allEdu)+1)*50,2);
         }
         return $value;
     }
@@ -213,7 +200,9 @@ class WorkAnalysisController extends Controller
         list($industryCategories,$capitals,$workers) = getAnalysisCompany($search);
         // 取得使用者履歷資訊
         list($resumes,$resumeTools,$resumeCategories) = $this->getResumeInfo();
-
+        // 僅取工具與種類屬性 (id等等去除)
+        $resumeTools = array_column($resumeTools,'vacancy_tool');
+        $resumeCategories = array_column($resumeCategories,'vacancy_category');
         return view('user.savework.analysis.detail',compact('claimExperiences','claimEducations','tools','categories','industryCategories','capitals','workers','resumes','resumeTools','resumeCategories','Educations','Experiences'));
     }
     public function suitable(Request $request)

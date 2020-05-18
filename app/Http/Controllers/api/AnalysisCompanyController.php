@@ -40,7 +40,7 @@ class AnalysisCompanyController extends Controller
         foreach($companies as $company){
             $analysisTool->handleCompanySumCol($industryCategories,$company['industry_category'],$company,'company');
         }
-        $analysisTool->hashContentToPercent($industryCategories,$works);
+        $analysisTool->hashContentToPercent($industryCategories,$companies);
         return $industryCategories;
     }
 }

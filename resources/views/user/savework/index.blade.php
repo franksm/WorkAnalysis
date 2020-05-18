@@ -66,12 +66,15 @@
                 <th><input type="checkbox" name="all" onclick="check_all(this,'works[]')" /></th>
                 <th>職務名稱</th>
                 <th>公司名稱</th>
+                <!-- <th></th> -->
+
             </tr>
             @foreach ($score as $key=>$value)
                 <tr>
                     <td><input type="checkbox" name="works[]" value="{{$key+1}}"></td>
                     <td><a href="{{$Vacancies[$key]['link']}}">{{$Vacancies[$key]['vacancy_name']}}</a></td>
                     <td><a href="{{$Companies[$Vacancies[$key]['company_id']]['link']}}">{{$Companies[$Vacancies[$key]['company_id']]['company_name']}}</a></td>
+                    <!-- <td>相似度:{{$value}}</td> -->
                 </tr>
             @endforeach
         </table>

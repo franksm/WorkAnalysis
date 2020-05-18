@@ -315,7 +315,7 @@
                     </div>
                     <div class="bar_analysis" >
                         <div class="bar-title">
-                            <h3>員工人數</h3>
+                            <h3>公司規模</h3>
                         </div>
                         <div id="box_test">
                             <dl>

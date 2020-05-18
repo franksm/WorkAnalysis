@@ -4,7 +4,7 @@ namespace App\Http\Controllers\api;
 
 use App\VacancyCategory;
 use App\VacancyTool;
-use App\Http\Controllers\Tool\setWeight;
+use App\Http\Controllers\Tool\SetWeight;
 use App\Vacancy;
 use App\Http\Controllers\Tool\GetDbObject;
 use App\Http\Controllers\Controller;
@@ -93,7 +93,7 @@ class WorkController extends Controller
     
     public function saveWeight()
     {
-        $setWeight=new setWeight;
+        $setWeight=new SetWeight;
         $vacancyCategories=VacancyCategory::all();
         $vacancyTools=VacancyTool::all();
         $Vacancies=Vacancy::all('id','claim_education','claim_experience');
