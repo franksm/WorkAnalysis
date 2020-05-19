@@ -231,7 +231,7 @@ class WorkAnalysisController extends Controller
         list($resumes,$resumeTool,$resumeCategory) = $this->getResumeInfo();
         $handleCategory=$statisticsTool->handleData($categories,'vacancy_category',$resumeCategory);
         $handleTools=$statisticsTool->handleData($Tools,'vacancy_tool',$resumeTool);
-        $value=$this->computeChartValue($Vacancies,$resumes);//,$categories,$Tools,$resumes,$weight);
+        $value=$this->computeChartValue($Vacancies,$resumes);
         if($type==null){
             $prepareCategories=$handleCategory;
             $prepareTools=$handleTools;
