@@ -72,15 +72,15 @@ class WorkAnalysisController extends Controller
         return [$prepareCategories,$prepareTools];
     }
     private function setScore(){
-        $Eductions = ['不拘'=>1,'高中'=>2,'專科'=>2,'大學'=>3,'碩士'=>4,'博士'=>5];
-        $Experiences = ['不拘'=>1,'1年'=>2,'2年'=>3,'3年'=>4,'4年'=>5,'5年'=>6,'6年'=>7,'7年'=>8,'8年'=>9,'9年'=>10,'10年'=>11];
+        $Eductions = ['不拘'=>0,'高中'=>1,'專科'=>2,'大學'=>3,'碩士'=>4,'博士'=>5];
+        $Experiences = ['不拘'=>0,'1年'=>1,'2年'=>2,'3年'=>3,'4年'=>4,'5年'=>5,'6年'=>6,'7年'=>7,'8年'=>8,'9年'=>9,'10年'=>10];
         return ['education'=>$Eductions,'experience'=>$Experiences];
     }
     private function setWeight(){
         $useApi =$this->useApi();
         $useApi->CallApi('GET','api/saveWeight');
     }
-    private function computeChartValue($Vacancies,$resume){//,$Categories,$Tools,$weight,$type){
+    private function computeChartValue($Vacancies,$resume){
         $StatisticsMethods=new StatisticsMethods();
         $setScore=$this->setScore();
         foreach ($Vacancies as $index=>$Vacancy) {
@@ -231,7 +231,7 @@ class WorkAnalysisController extends Controller
         list($resumes,$resumeTool,$resumeCategory) = $this->getResumeInfo();
         $handleCategory=$statisticsTool->handleData($categories,'vacancy_category',$resumeCategory);
         $handleTools=$statisticsTool->handleData($Tools,'vacancy_tool',$resumeTool);
-        $value=$this->computeChartValue($Vacancies,$resumes);//,$categories,$Tools,$resumes,$weight);
+        $value=$this->computeChartValue($Vacancies,$resumes);
         if($type==null){
             $prepareCategories=$handleCategory;
             $prepareTools=$handleTools;
