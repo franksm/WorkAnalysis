@@ -67,6 +67,7 @@
                 <th>職務名稱</th>
                 <th>公司名稱</th>
                 <!-- <th></th> -->
+
             </tr>
             @foreach ($score as $key=>$value)
                 <tr>
