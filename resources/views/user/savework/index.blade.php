@@ -77,6 +77,7 @@
                     <!-- <td>相似度:{{$value}}</td> -->
                 </tr>
             @endforeach
+            
         </table>
         </form>
     </div>
