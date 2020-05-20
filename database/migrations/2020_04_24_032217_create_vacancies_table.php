@@ -22,9 +22,15 @@ class CreateVacanciesTable extends Migration
             $table->string('work_nature',4);//工作性質
             $table->string('company_id',20);//公司id
             $table->string('claim_education',10);//需求學歷
+<<<<<<< HEAD
             $table->float('weight_education')->nullable();//需求學歷權重
             $table->string('claim_experience',4);//工作經歷
             $table->float('weight_experience')->nullable();//需求學歷權重
+=======
+            $table->float('weight_experience')->nullable();
+            $table->string('claim_experience',4);//工作經歷
+            $table->float('weight_education')->nullable();
+>>>>>>> dimensions_calculated_dispersion
             $table->string('claim_people',4);//需求人數
             $table->string('management_responsibility',20);//是否附管理責任
             $table->string('expatriate',20);//是否出差外派
