@@ -74,6 +74,7 @@
                     <td><a href="{{$Companies[$Vacancies[$key]['company_id']]['link']}}">{{$Companies[$Vacancies[$key]['company_id']]['company_name']}}</a></td>
                 </tr>
             @endforeach
+            
         </table>
         </form>
     </div>

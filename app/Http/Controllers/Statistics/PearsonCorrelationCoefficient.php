@@ -1,7 +1,9 @@
 <?php
 namespace App\Http\Controllers\Statistics;
+
 class PearsonCorrelationCoefficient
 {
+
     public function pearson($adjustmentArray){
         $adjustmentArrayLen=count($adjustmentArray);
         $adjustment=[];
@@ -15,4 +17,5 @@ class PearsonCorrelationCoefficient
         }
         return $adjustmentArray;
     }
+
 }

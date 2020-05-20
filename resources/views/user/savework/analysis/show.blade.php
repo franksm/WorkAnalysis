@@ -95,6 +95,9 @@
                             </tr>
                         </thead>
                         <tbody>
+                            @if (count($score)==0)
+                                {{$score=$Vacancies}}
+                            @endif
                             @foreach ($score as $key=>$scoreItem)
                             <tr>
                                 <th>{{$Vacancies[$key]['vacancy_name']}}</th>

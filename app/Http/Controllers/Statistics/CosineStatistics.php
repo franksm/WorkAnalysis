@@ -6,6 +6,7 @@ class CosineStatistics
     /**
     * 
     * @param unknown_type $array 獲得分母的值;
+    *
     */
     private function getMarkMod($arrMultiply){
         $strModDouble = 0;
@@ -29,6 +30,7 @@ class CosineStatistics
     *
     * @param unknown_type $arrMark  自身的向量
     * @param unknown_type $arrAnaly 比較的向量
+    *
     */
     public function getCosine($arrMark,$arrAnaly){
         $strCosine = 0;

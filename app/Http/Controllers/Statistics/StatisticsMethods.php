@@ -10,9 +10,9 @@ class StatisticsMethods
         return $averge;
     }
     public function setScore(){
-        $Eductions = ['不拘'=>1,'高中'=>2,'專科'=>3,'大學'=>4,'碩士'=>5,'博士'=>6];
-        $Experiences = ['不拘'=>1,'1年'=>2,'2年'=>3,'3年'=>4,'4年'=>5,'5年'=>6,'6年'=>7,'7年'=>8,'8年'=>9,'9年'=>10,'10年'=>11];
-        return ['educations'=>$Eductions,'experiences'=>$Experiences];
+        $Eductions = ['不拘'=>0,'高中'=>1,'專科'=>2,'大學'=>3,'碩士'=>4,'博士'=>5];
+        $Experiences = ['不拘'=>0,'1年'=>1,'2年'=>2,'3年'=>3,'4年'=>4,'5年'=>5,'6年'=>6,'7年'=>7,'8年'=>8,'9年'=>9,'10年'=>10];
+        return ['education'=>$Eductions,'experience'=>$Experiences];
     }
     public function computePercent($benchMark,$selfNumber){
         if($benchMark<$selfNumber){
@@ -28,7 +28,7 @@ class StatisticsMethods
     public function meanNormalization($targetNumber,$max,$min,$array){
         $averge=$this->avergeValue($array);
         if (($max-$min)==0){
-            $max++;
+            $targetNumber-$averge;
         }
         $normalization=(($targetNumber-$averge)/($max-$min));
         return $normalization;
