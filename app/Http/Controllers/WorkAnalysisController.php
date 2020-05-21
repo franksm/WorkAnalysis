@@ -91,15 +91,15 @@ class WorkAnalysisController extends Controller
         }
         // 判斷職缺分類
         if(isSetCategory($request)){
-            $Vacancies=Vacancy::all('id','vacancy_category','claim_education','claim_experience','company_id')->where('vacancy_category',$request->vacancy_category);
+            $Vacancies=Vacancy::all('id','vacancy_category','company_id')->where('vacancy_category',$request->vacancy_category);
         }
         else if($this->isSetSessionWork($request)){
-            $Vacancies=Vacancy::all('id','vacancy_category','claim_education','claim_experience','company_id');
+            $Vacancies=Vacancy::all('id','vacancy_category','company_id');
         }
         else{
             $workController=new WorkController;
             $workController->saveWeight();
-            $Vacancies=Vacancy::all('id','vacancy_category','claim_education','claim_experience','company_id');
+            $Vacancies=Vacancy::all('id','vacancy_category','company_id');
         }
         $works=[];
         foreach($Vacancies as $Vacancy){

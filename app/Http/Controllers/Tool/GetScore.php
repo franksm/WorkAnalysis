@@ -22,34 +22,19 @@ class GetScore
         $vacanciesVector=[];
         $StatisticsMethods=new StatisticsMethods();
         $score=$StatisticsMethods->setScore();
-        $expAndEduWeight=[];
         foreach($vacancies as $index=>$vacancy){
-            $expAndEduWeight['experience'][$vacancy['claim_experience']]=$vacancy['weight_experience'];
-            $expAndEduWeight['education'][$vacancy['claim_education']]=$vacancy['weight_education'];
-            $vacanciesVector[$index]['experience']=$vacancy['weight_experience']*$score['experience'][$vacancy['claim_experience']];
-            $vacanciesVector[$index]['education']=$vacancy['weight_education']*$score['education'][$vacancy['claim_education']];
+            $vacanciesVector[$index]['experience']=$score['experience'][$vacancy['claim_experience']];
+            $vacanciesVector[$index]['education']=$score['education'][$vacancy['claim_education']];
         }
-        return [$vacanciesVector,$expAndEduWeight];
+        return $vacanciesVector;
     }
     
-    private function prepareResume($resume,$prepareVacanciesVector){
+    private function prepareResume($resume){
         $resumeVector=[];
         $StatisticsMethods=new StatisticsMethods();
         $score=$StatisticsMethods->setScore();
-        $minExp=min($prepareVacanciesVector['experience']);
-        $minEdu=min($prepareVacanciesVector['education']);
-        if (isset($prepareVacanciesVector['experience'][$resume['experience']])){
-            $resumeVector['experience']=$prepareVacanciesVector['experience'][$resume['experience']]*$score['experience'][$resume['experience']];   
-        }
-        else{
-            $resumeVector['experience']=$minExp*$score['experience'][$resume['experience']];   
-        }
-        if (isset($prepareVacanciesVector['education'][$resume['education']])){
-            $resumeVector['education']=$prepareVacanciesVector['education'][$resume['education']]*$score['education'][$resume['education']];
-        }
-        else{
-            $resumeVector['education']=$minEdu*$score['education'][$resume['education']];
-        }
+        $resumeVector['experience']=$score['experience'][$resume['experience']];
+        $resumeVector['education']=$score['education'][$resume['education']];
         return $resumeVector;
     }
 
@@ -63,16 +48,37 @@ class GetScore
         return ['maxExp'=>$maxExp,'minExp'=>$minExp,'maxEdu'=>$maxEdu,'minEdu'=>$minEdu];
     }
 
+    /*
+    *
+    *x=z-1/y;
+    *x=職缺會變成的數值;
+    *y=原始職缺的數值;
+    *z=履歷的數值;
+    *
+    */
+    private function hyperbola($prepareVacanciesVector,$prepareResumeVector){
+        foreach($prepareVacanciesVector as $index=>$vacancyVector){
+            if ($prepareResumeVector['experience']>$vacancyVector['experience']){
+                $prepareVacanciesVector[$index]['experience']=$prepareResumeVector['experience']-1/$vacancyVector['experience'];
+            }
+            if ($prepareResumeVector['education']>$vacancyVector['education']){
+                $prepareVacanciesVector[$index]['education']=$prepareResumeVector['education']-1/$vacancyVector['education'];
+            }
+        }
+        return $prepareVacanciesVector;
+    }
+
     public function getScore(&$vacancies,$categories,$tools,$type=null){
         $statisticsTool = new Tool;
         $statisticsMethods = new StatisticsMethods;
         $categoryItem=[];
         $allCategory=[];
+        $prepareVacanciesVector= $this->prepareVacancies($vacancies);
         list($resumeTools,$resumeCategories,$resume)=$this->getResume();
+        $prepareResumeVector = $this->prepareResume($resume);
         $handleCategories=$statisticsTool->handleData($categories,'vacancy_category',$resumeCategories);
         $handleTools=$statisticsTool->handleData($tools,'vacancy_tool',$resumeTools);
-        list($prepareVacanciesVector,$expAndEduWeight) = $this->prepareVacancies($vacancies);
-        $prepareResumeVector = $this->prepareResume($resume,$expAndEduWeight);
+        $prepareVacanciesVector=$this->hyperbola($prepareVacanciesVector,$prepareResumeVector);
         $prepareVacanciesVector[]=$prepareResumeVector;
         $normalizationInfo=$this->getNormalizationNeedInfo($prepareVacanciesVector);
         foreach($prepareVacanciesVector as $index => $prepareVacancyVector){
