@@ -14,7 +14,7 @@ use App\Http\Controllers\Tool\Tool;
 use App\Http\Controllers\api\WorkController;
 use App\Http\Controllers\api\ResumeController;
 use App\Vacancy;
-use App\Http\Controllers\Tool\getScore;
+use App\Http\Controllers\Tool\GetScore;
 use Redirect;
 class WorkAnalysisController extends Controller
 {
@@ -101,7 +101,6 @@ class WorkAnalysisController extends Controller
             $workController->saveWeight();
             $Vacancies=Vacancy::all('id','vacancy_category','claim_education','claim_experience','company_id');
         }
-        $getScore=$this->getScore();
         $works=[];
         foreach($Vacancies as $Vacancy){
             $works[]=$Vacancy['id'];
@@ -110,6 +109,7 @@ class WorkAnalysisController extends Controller
         $Companies=getCompanyInfo($Vacancies);
         list($Vacancies,$Categories,$Tools)=$this->getVacancyInfo($search);
         if ($this->checkResume()!=null){
+            $getScore=$this->getScore();
             $score=$getScore->getScore($Vacancies,$Categories,$Tools);
         }
         else{
@@ -194,6 +194,8 @@ class WorkAnalysisController extends Controller
         // 取得使用者履歷資訊
         if ($this->checkResume()!=null){
             list($resumes,$resumeTools,$resumeCategories)=$this->getResumeInfo();
+            $resumeTools = array_column($resumeTools,'vacancy_tool');
+            $resumeCategories = array_column($resumeCategories,'vacancy_category');
         }
         else{
             $resumes['experience']=[];
