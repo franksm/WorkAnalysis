@@ -194,6 +194,8 @@ class WorkAnalysisController extends Controller
         // 取得使用者履歷資訊
         if ($this->checkResume()!=null){
             list($resumes,$resumeTools,$resumeCategories)=$this->getResumeInfo();
+            $resumeTools = array_column($resumeTools,'vacancy_tool');
+            $resumeCategories = array_column($resumeCategories,'vacancy_category');
         }
         else{
             $resumes['experience']=[];
