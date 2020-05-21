@@ -14,11 +14,12 @@ class ResumeController extends Controller
         return $getDbObject;
     }
 
-    public function checkResume(){
+    public function checkResume($request){
         $getDbObject=$this->getGeneralTool();
-        $resume = $getDbObject->getResumeDbObject(['id'],0);
+        $resume = $getDbObject->getResumeDbObject(['id'],$request);
         return $resume;
     }
+
     /**
      * @OA\GET(
      *     path="/api/Resume",

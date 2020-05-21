@@ -50,9 +50,10 @@ class WorkAnalysisController extends Controller
         $Tools = $useApi->CallApi('GET','api/getTools',$search);
         return [$Vacancies,$Categories,$Tools];
     }
-    private function checkResume(){
+    private function checkResumeInWork(){
         $checkResume=new ResumeController;
-        return $checkResume->checkResume();
+        $search=Auth::id();
+        return $checkResume->checkResume($search);
     }
     private function getAnalysisVacancy($search){
             $useApi =$this->useApi();
@@ -108,7 +109,7 @@ class WorkAnalysisController extends Controller
         $search = ['works'=>$works];
         $Companies=getCompanyInfo($Vacancies);
         list($Vacancies,$Categories,$Tools)=$this->getVacancyInfo($search);
-        if ($this->checkResume()!=null){
+        if ($this->checkResumeInWork()!=null){
             $getScore=$this->getScore();
             $score=$getScore->getScore($Vacancies,$Categories,$Tools);
         }
@@ -152,7 +153,7 @@ class WorkAnalysisController extends Controller
         // 取得公司資訊
         $Companies=getCompanyInfo($search);
         // 計算職缺與使用者合適程度 & 取得使用者履歷資訊
-        if ($this->checkResume()!=null){
+        if ($this->checkResumeInWork()!=null){
             list($resume,$resumeTools,$resumeCategories)=$this->getResumeInfo();
             $score=$getScore->getScore($Vacancies,$Categories,$Tools);
         }
@@ -192,7 +193,7 @@ class WorkAnalysisController extends Controller
         // 取得公司分析資訊
         list($industryCategories,$capitals,$workers) = getAnalysisCompany($search);
         // 取得使用者履歷資訊
-        if ($this->checkResume()!=null){
+        if ($this->checkResumeInWork()!=null){
             list($resumes,$resumeTools,$resumeCategories)=$this->getResumeInfo();
             $resumeTools = array_column($resumeTools,'vacancy_tool');
             $resumeCategories = array_column($resumeCategories,'vacancy_category');
@@ -226,32 +227,31 @@ class WorkAnalysisController extends Controller
         $getScore=$this->getScore();
         $search = ['works'=>$works];
         list($Vacancies,$categories,$Tools)=$this->getVacancyInfo($search);
-        if ($this->checkResume()!=null){
-        list($resumes,$resumeTool,$resumeCategory) = $this->getResumeInfo();
-        $handleCategory=$statisticsTool->handleData($categories,'vacancy_category',$resumeCategory);
-        $handleTools=$statisticsTool->handleData($Tools,'vacancy_tool',$resumeTool);
-        $value=$this->computeChartValue($Vacancies,$resumes);
-        if($type==null){
-            $prepareCategories=$handleCategory;
-            $prepareTools=$handleTools;
+        if ($this->checkResumeInWork()!=null){
+            list($resumes,$resumeTool,$resumeCategory) = $this->getResumeInfo();
+            $handleCategory=$statisticsTool->handleData($categories,'vacancy_category',$resumeCategory);
+            $handleTools=$statisticsTool->handleData($Tools,'vacancy_tool',$resumeTool);
+            $value=$this->computeChartValue($Vacancies,$resumes);
+            if($type==null){
+                $prepareCategories=$handleCategory;
+                $prepareTools=$handleTools;
+            }
+            else{
+                $prepareCategories=$statisticsTool->pearson($handleCategory);
+                $prepareTools=$statisticsTool->pearson($handleTools);
+            }
+            $score=$getScore->getScore($Vacancies,$categories,$Tools,$type);
+            $resumeTool=array_pop($prepareTools);
+            $resumeCategory=array_pop($prepareCategories);
+            foreach($Vacancies as $key=>$Vacancy){
+                $tool=$statisticsTool->computeCosine($prepareTools[$key],$resumeTool);
+                $category=$statisticsTool->computeCosine($prepareCategories[$key],$resumeCategory);
+                $value[$Vacancy['vacancy_name']]['tool']=coefficient($tool,$type);
+                $value[$Vacancy['vacancy_name']]['category']=coefficient($category,$type);
+                $value[$Vacancy['vacancy_name']]['score']=coefficient($score[$key],$type);
+            }
         }
         else{
-            $prepareCategories=$statisticsTool->pearson($handleCategory);
-            $prepareTools=$statisticsTool->pearson($handleTools);
-        }
-        $score=$getScore->getScore($Vacancies,$categories,$Tools,$type);
-        $resumeTool=array_pop($prepareTools);
-        $resumeCategory=array_pop($prepareCategories);
-        foreach($Vacancies as $key=>$Vacancy){
-            $tool=$statisticsTool->computeCosine($prepareTools[$key],$resumeTool);
-            $category=$statisticsTool->computeCosine($prepareCategories[$key],$resumeCategory);
-            $value[$Vacancy['vacancy_name']]['tool']=coefficient($tool,$type);
-            $value[$Vacancy['vacancy_name']]['category']=coefficient($category,$type);
-            $value[$Vacancy['vacancy_name']]['score']=coefficient($score[$key],$type);
-        }
-    }
-        else{
-            
             foreach($Vacancies as $Vacancy){
                 $value[$Vacancy['vacancy_name']]['tool']=0;
                 $value[$Vacancy['vacancy_name']]['category']=0;

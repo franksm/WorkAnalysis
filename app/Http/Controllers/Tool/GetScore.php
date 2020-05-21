@@ -56,6 +56,7 @@ class GetScore
     *z=履歷的數值;
     *
     */
+    
     private function hyperbola($prepareVacanciesVector,$prepareResumeVector){
         foreach($prepareVacanciesVector as $index=>$vacancyVector){
             if ($prepareResumeVector['experience']>$vacancyVector['experience']){

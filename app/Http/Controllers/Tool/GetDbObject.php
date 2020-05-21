@@ -11,6 +11,7 @@ class GetDbObject
         $resumes=Resume::all($selectCol)->where('user_id',$selectWorks)->first();
         return $resumes;
     }
+
     public function getVacancyDbObject($selectCol,$selectWorks,$getall=False){
         if($getall){
             $vacancies=Vacancy::all()->find($selectWorks);
@@ -20,6 +21,7 @@ class GetDbObject
         }
         return $vacancies;
     }
+
     public function getCompanyDbObject($works)
     {
         $vacancies=$this->getVacancyDbObject(['id','company_id'],$works);
@@ -30,4 +32,5 @@ class GetDbObject
         $companies=Company::all()->find($vacancyArray);
         return $companies;
     }
+    
 }
