@@ -39,8 +39,7 @@ class ResumeController extends Controller
         $Resume->tool()->attach($Tools);
         $Resume->save();
         
-        return Redirect::to('/home')
-       ->with('success','Greate! Product created successfully.');
+        return Redirect::to('/home')->with('success','Greate! Product created successfully.');
     }
 
     public function edit($UserId)
@@ -81,8 +80,7 @@ class ResumeController extends Controller
         $Resume->tool()->sync($Tools);
         $Resume->save();
 
-        return Redirect::to('/home')
-       ->with('success','Great! Product updated successfully');
+        return Redirect::to('/home')->with('success','Great! Product updated successfully');
         
     }
     public function show($UserId)

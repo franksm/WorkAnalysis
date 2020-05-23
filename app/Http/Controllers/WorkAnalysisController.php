@@ -18,10 +18,6 @@ use App\Http\Controllers\Tool\GetScore;
 use Redirect;
 class WorkAnalysisController extends Controller
 {
-    private function getScore(){
-        $getScore=new GetScore;
-        return $getScore;
-    }
     private function useApi(){
         $useApi = new UseApi();
         return $useApi;
@@ -90,6 +86,7 @@ class WorkAnalysisController extends Controller
         {
             return $request->vacancy_category;
         }
+
         // 判斷職缺分類
         if(isSetCategory($request)){
             $Vacancies=Vacancy::all('id','vacancy_category','company_id')->where('vacancy_category',$request->vacancy_category);
@@ -102,6 +99,7 @@ class WorkAnalysisController extends Controller
             $workController->saveWeight();
             $Vacancies=Vacancy::all('id','vacancy_category','company_id');
         }
+        $getScore=new GetScore;
         $works=[];
         foreach($Vacancies as $Vacancy){
             $works[]=$Vacancy['id'];
@@ -110,7 +108,6 @@ class WorkAnalysisController extends Controller
         $Companies=getCompanyInfo($Vacancies);
         list($Vacancies,$Categories,$Tools)=$this->getVacancyInfo($search);
         if ($this->checkResumeInWork()!=null){
-            $getScore=$this->getScore();
             $score=$getScore->getScore($Vacancies,$Categories,$Tools);
         }
         else{
@@ -145,7 +142,7 @@ class WorkAnalysisController extends Controller
         else{
             return Redirect::to('/user/saveWork/');
         }
-        $getScore=$this->getScore();
+        $getScore=new GetScore;
         // 設定Api參數
         $search = ['works'=>$works];
         // 取得職缺資訊
@@ -224,7 +221,7 @@ class WorkAnalysisController extends Controller
         $statisticsTool=new Tool();
         $type=$request->type;
         $value=[];
-        $getScore=$this->getScore();
+        $getScore=new GetScore;
         $search = ['works'=>$works];
         list($Vacancies,$categories,$Tools)=$this->getVacancyInfo($search);
         if ($this->checkResumeInWork()!=null){

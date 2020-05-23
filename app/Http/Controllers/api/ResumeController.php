@@ -9,14 +9,10 @@ use App\Resume;
 
 class ResumeController extends Controller
 {
-    private function getGeneralTool(){
-        $getDbObject=new GetDbObject;
-        return $getDbObject;
-    }
 
     public function checkResume($request){
-        $getDbObject=$this->getGeneralTool();
-        $resume = $getDbObject->getResumeDbObject(['id'],$request);
+        $getDbObject=new GetDbObject;
+        $resume = $getDbObject->getResumeDbObject(['id','user_id'],$request);
         return $resume;
     }
 
@@ -35,7 +31,7 @@ class ResumeController extends Controller
      */
     public function getResume(Request $request){
         $user_id=$request->id;
-        $getDbObject=$this->getGeneralTool();
+        $getDbObject=new GetDbObject;
         $resume = $getDbObject->getResumeDbObject(['id','user_id','experience','education'],$user_id);
         return $resume;
     }
@@ -54,7 +50,7 @@ class ResumeController extends Controller
      */
     public function getResumeTool(Request $request){
         $user_id=$request->id;
-        $getDbObject=$this->getGeneralTool();
+        $getDbObject=new GetDbObject;
         $resume = $getDbObject->getResumeDbObject(['id','user_id'],$user_id);
         $resumeTools=$resume->tool->toarray();
         return $resumeTools;
@@ -74,7 +70,7 @@ class ResumeController extends Controller
      */
     public function getResumeCategory(Request $request){
         $user_id=$request->id;
-        $getDbObject=$this->getGeneralTool();
+        $getDbObject=new GetDbObject;
         $resume = $getDbObject->getResumeDbObject(['id','user_id'],$user_id);
         $resumeCategories=$resume->category->toarray();
         return $resumeCategories;
