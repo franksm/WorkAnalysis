@@ -15,6 +15,7 @@ class HandleData
         }
         return $fieldItemArray;
     }
+
     public function handleData($field,$fieldType,$resumeField){
         $fieldItemArray=[];
         $allFieldItemArray=[];
@@ -34,4 +35,5 @@ class HandleData
         $fieldItemArray=$this->handleFieldItemArray($fieldItemArray,$allFieldItemArray);
         return $fieldItemArray;
     }
+    
 }

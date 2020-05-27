@@ -12,18 +12,21 @@ use Redirect;
 
 class ResumeController extends Controller
 {
+
     public function index()
     {
         $Resume = Resume::where(['user_id' => Auth::id()])->first();
         $UserId = Auth::id();
         return view('user/resume/index',compact('Resume','UserId'));
     }
+
     public function create()
     {
         $CategoryAll = VacancyCategory::all();
         $ToolAll = VacancyTool::all();
         return view('user/resume/create',compact('CategoryAll','ToolAll'));
     }
+
     public function store(Request $request)
     {
         $request->validate([
@@ -81,8 +84,8 @@ class ResumeController extends Controller
         $Resume->save();
 
         return Redirect::to('/home')->with('success','Great! Product updated successfully');
-        
     }
+
     public function show($UserId)
     {
         $Resume = Resume::where(['user_id'=>$UserId])->first();
@@ -94,4 +97,5 @@ class ResumeController extends Controller
         $Tools = implode(",",$Tools);
         return view('user/resume/show',compact('Resume','Categories','Tools','UserId'));
     }
+
 }

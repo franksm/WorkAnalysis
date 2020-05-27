@@ -22,6 +22,7 @@ class WorkAnalysisController extends Controller
         $useApi = new UseApi();
         return $useApi;
     }
+
     private function getResumeInfo()
     {
         $useApi = new UseApi();
@@ -31,14 +32,17 @@ class WorkAnalysisController extends Controller
         $resumeCategories = $useApi->CallApi('GET','api/ResumeCategory',$search);
         return array($resumes,$resumeTools,$resumeCategories);
     }
+
     private function isSetSessionWork($request)
     {
         return $request->session()->has('works');
     }
+
     private function isSetSessionScore($request)
     {
         return $request->session()->has('score');
     }
+
     private function getVacancyInfo($search){
         $useApi = $this->useApi();
         $Vacancies = $useApi->CallApi('GET','api/getVacancies',$search);
@@ -46,11 +50,13 @@ class WorkAnalysisController extends Controller
         $Tools = $useApi->CallApi('GET','api/getTools',$search);
         return [$Vacancies,$Categories,$Tools];
     }
+
     private function checkResumeInWork(){
         $checkResume=new ResumeController;
         $search=Auth::id();
         return $checkResume->checkResume($search);
     }
+
     private function getAnalysisVacancy($search){
             $useApi =$this->useApi();
             $claimExperiences = $useApi->CallApi('GET','api/claimExperienceCount',$search);
@@ -59,6 +65,7 @@ class WorkAnalysisController extends Controller
             $tools = $useApi->CallApi('GET','api/toolCount',$search);
             return [$claimExperiences,$claimEducations,$categories,$tools];
     }
+    
     private function setWeight(){
         $useApi =$this->useApi();
         $useApi->CallApi('GET','api/saveWeight');

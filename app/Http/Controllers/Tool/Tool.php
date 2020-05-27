@@ -7,22 +7,22 @@ use App\Http\Controllers\Tool\HandleData;
 
 class Tool
 {
-    public function computeCosine($arrMark,$arrAnaly)
-    {   
+    public function computeCosine($arrMark,$arrAnaly){   
         $computeCosine=new CosineStatistics;
         $strCosine=$computeCosine->getCosine($arrMark,$arrAnaly);
         return $strCosine;
     }
-    public function pearson($adjustmentArray)
-    {   
+
+    public function pearson($adjustmentArray){   
         $pearson=new PearsonCorrelationCoefficient;
         $prepareData=$pearson->pearson($adjustmentArray);
         return $prepareData;
     }
-    public function handleData($field,$fieldType,$resumeField)
-    {   
+
+    public function handleData($field,$fieldType,$resumeField){   
         $handle=new HandleData;
         $handleData=$handle->handleData($field,$fieldType,$resumeField);
         return $handleData;
     }
+
 }

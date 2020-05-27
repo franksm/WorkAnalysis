@@ -4,7 +4,7 @@ use Illuminate\Http\Request;
 
 class UseApi
 {
-    function CallApi($method,$url,$data=false)
+    public function CallApi($method,$url,$data=false)
     {
         $request = Request::create(\env('APP_URL').$url, $method, $data);
         $response = app()->handle($request);

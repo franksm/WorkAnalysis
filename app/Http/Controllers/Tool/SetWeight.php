@@ -20,6 +20,7 @@ class SetWeight
             $count++;
         }
     }
+
     private function setWeight(&$weight,$count){
         foreach($weight as $weightType=>$weightItem){
             foreach($weightItem as $weightCountKey=>$weightCount){
@@ -27,12 +28,14 @@ class SetWeight
             }
         }
     }
+
     private function setCount(&$count){
         $count['category']=0;
         $count['tool']=0;
         $count['education']=0;
         $count['experience']=0;
     }
+    
     public function setVacancItemWeight($vacancies){
         $weight=[];
         $count=[];
